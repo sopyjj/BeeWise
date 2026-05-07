@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeeFriends - BeeWise Environmental Education</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+  <div class="container">
+<a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+  <img src="assets/logo_nobg.png" alt="BeeWise Logo" class="nav-logo2" />
+  <span>BeeWise</span>
+</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="beecure.html">BeeCure</a></li>
+        <li class="nav-item"><a class="nav-link active" href="beefriends.html">BeeFriends</a></li>
+<li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+  <button id="langToggle" class="btn btn-lang d-inline-flex align-items-center gap-2">
+    한국어
+    <span class="lang-pill">EN</span>
+  </button>
+</li>
+
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a
+            class="btn btn-bee3"
+            href="#contact">
+            Get Started
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <!-- Hero -->
+    <section class="hero section-pad">
+      <video class="hero-video" id="heroVideo" autoplay muted loop playsinline>
+        <source src="assets/BeeFriends.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <script>
+        // Video timing control with requestAnimationFrame
+        const video = document.getElementById('heroVideo');
+        if (video) {
+          // Set time immediately when video is ready
+          video.currentTime = 11;
+          
+          // Loop between 11-54 seconds using requestAnimationFrame
+          function checkVideoTime() {
+            if (video.currentTime >= 54) {
+              video.currentTime = 11;
+            }
+            requestAnimationFrame(checkVideoTime);
+          }
+          
+          // Start checking after a short delay
+          setTimeout(() => {
+            requestAnimationFrame(checkVideoTime);
+          }, 1000);
+        }
+      </script>
+      <div class="container text-center">
+        <h1 class="hero-title" data-kor="hero.title" data-aos="fade-up" data-aos-delay="250">
+        </h1>
+<p class="hero-lead mx-auto" data-kor="hero.lead" data-aos="fade-up">
+</p>
+<div class="d-flex gap-3 justify-content-center flex-wrap" data-aos="fade-up" data-aos-delay="450">
+  <a href="#steps" class="btn btn-bee" data-kor="hero.cta.learn"></a>
+  <a href="#achievements" class="btn btn-bee5" data-kor="hero.cta.impact"></a>
+</div>
+
+      </div>
+      <div class="wave"></div>
+    </section>
+
+<section id="steps" class="section section-pad">
+ <div class="container" data-aos="fade-up" data-aos-delay="60">
+  <div class="section-head mb-6 text-center">
+  </div>
+
+  <!-- Step 1 -->
+  <div class="row align-items-center step-row mb-5" data-aos="fade-right">
+    <div class="col-md-6 col-text">
+      <h3 class="step-title" data-kor="steps.1.title">Class 1: Curiosity</h3>
+      <p class="step-desc" data-kor="steps.1.p1">
+        Children begin their journey with the story of <em>"Bibi the Bee"</em>, discovering how
+        bees work together in harmony to support flowers, fruits, and life on Earth.
+      </p>
+      <p class="step-desc" data-kor="steps.1.p2">
+        Through guided discussions and observation of real hive footage, they learn
+        how pollination connects nature's cycles — sparking curiosity about the delicate
+        relationships between humans and ecosystems.
+      </p>
+      <p class="step-desc" data-kor="steps.1.p3">
+        This class encourages children to ask, <strong>"What would happen if bees disappeared?"</strong> —
+        fostering early awareness of environmental interdependence.
+      </p>
+    </div>
+    <div class="col-md-6 col-img text-center">
+      <div class="photo-cascade px-4 px-lg-0">
+        <img src="assets/steps/step1-2.png" alt="Step 1" class="shot s1">
+        <img src="assets/steps/step1-3.png" alt="Step 2" class="shot s2">
+        <img src="assets/steps/step1-1.png" alt="Step 3" class="shot s3">
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="row align-items-center flex-md-row-reverse step-row mb-5 mx-lg-3" data-aos="fade-left">
+    <div class="col-md-6 col-text">
+      <h3 class="step-title" data-kor="steps.2.title">Class 2: Experience</h3>
+      <p class="step-desc" data-kor="steps.2.p1">
+        Through fun, interactive environmental craft sessions, children deepen their
+        ecological understanding by creating something tangible that gives back to nature.
+      </p>
+      <div class="flower-step" data-aos="fade-up">
+        <p data-kor="steps.2.craft.title"><strong>Creating a Recycled Bottle Flowerpot</strong></p>
+        <ul>
+          <li data-kor="steps.2.craft.1">Gather empty bottles</li>
+          <li data-kor="steps.2.craft.2">Decorate and paint them</li>
+          <li data-kor="steps.2.craft.3">Plant flower seedballs</li>
+          <li data-kor="steps.2.craft.4">Watch them grow</li>
+        </ul>
+      </div>
+      <p class="step-desc" data-kor="steps.2.p2">
+        This hands-on activity helps students understand the cycle of life —
+        how simple recycled materials can support new growth and attract pollinators.
+      </p>
+    </div>
+    <div class="col-md-6 col-img text-center">
+      <div class="photo-cascade px-4 px-lg-0">
+        <img src="assets/steps/step2-2.png" alt="Step 1" class="shot s1">
+        <img src="assets/steps/step2-3.png" alt="Step 2" class="shot s2">
+        <img src="assets/steps/step2-1.png" alt="Step 3" class="shot s3">
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="row align-items-center step-row mb-5" data-aos="fade-right">
+    <div class="col-md-6 col-text">
+      <h3 class="step-title" data-kor="steps.3.title">Class 3: Empathy</h3>
+      <p class="step-desc" data-kor="steps.3.p1">
+        In the final session, children reflect on what they've learned by imagining life from
+        a bee's perspective — how it feels to work, explore, and care for its community.
+      </p>
+      <p class="step-desc" data-kor="steps.3.p2">
+        Through interactive storytelling, drawing, and sharing circles, they express their
+        feelings toward nature and discuss how small acts of kindness — like planting flowers
+        or reducing waste — can protect the environment.
+      </p>
+      <p class="step-desc" data-kor="steps.3.p3">
+        This class nurtures <strong>empathy and responsibility</strong>, helping children realize
+        that caring for bees means caring for the planet and for one another.
+      </p>
+    </div>
+    <div class="col-md-6 col-img text-center">
+      <div class="photo-cascade px-4 px-lg-0">
+        <img src="assets/steps/step3-2.png" alt="Step 1" class="shot s1">
+        <img src="assets/steps/step3-3.png" alt="Step 2" class="shot s2">
+        <img src="assets/steps/step3-4.jpeg" alt="Step 3" class="shot s4">
+      </div>
+    </div>
+  </div>
+
+  <div id="achievements" class="mt-5 pt-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="subsection-head text-center mb-4">
+      <h4 class="sub-title" data-kor="achievements.title">Program Achievements</h4>
+      <p class="lead" data-kor="achievements.lead">
+        Celebrating the measurable impact of our "To BEE Friends" journey —
+        inspiring young minds through environmental education and action.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center text-center">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="ach-card h-100">
+          <i class="bi bi-people-fill ach-icon"></i>
+          <h3 class="ach-stat" data-kor="achievements.sessions.stat">25+ Sessions</h3>
+          <p class="ach-sub" data-kor="achievements.sessions.sub">200+ Children participated</p>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="ach-card h-100">
+          <i class="bi bi-flower3 ach-icon"></i>
+          <h3 class="ach-stat" data-kor="achievements.kits.stat">1 000 Kits</h3>
+          <p class="ach-sub" data-kor="achievements.kits.sub">Seedballs distributed</p>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="ach-card h-100">
+          <i class="bi bi-book-half ach-icon"></i>
+          <h3 class="ach-stat" data-kor="achievements.books.stat">5 + eBooks</h3>
+          <p class="ach-sub" data-kor="achievements.books.sub">Created by students</p>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="ach-card h-100">
+          <i class="bi bi-easel2-fill ach-icon"></i>
+          <h3 class="ach-stat" data-kor="achievements.classes.stat">20 + Classes</h3>
+          <p class="ach-sub" data-kor="achievements.classes.sub">Requested nationwide</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</section>
+
+<!-- ============== Contact Section ============== -->
+<section id="contact" class="section section-pad text-center">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <h2 data-kor="contact.title">Contact Us</h2>
+    <p data-kor="contact.text">Have questions or want to collaborate with the BeeWise team?</p>
+    <a href="mailto:team@BeeWise.ai" class="email-link">team@BeeWise.ai</a>
+  </div>
+</section>
+
+<!-- ============== Footer ============== -->
+<footer class="text-center py-4" style="background:linear-gradient(90deg,var(--bee-yellow),var(--bee-orange)); color:#fff;">
+  <small>&copy; 2025 BeeWise · Innovation in Every Hive</small>
+</footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({ once:true, duration:900, easing:'ease-out-cubic' });
+    </script>
+        <script>
+    const I18N = {
+en: {
+  "hero.title": "BeeFriends <br> <span class=\"mt-2\" style=\"color:var(--bee-dark); font-size: clamp(1.8rem,3.4vw + 1rem,2.9rem);\">Environmental Education Program</span>",
+  "hero.lead": "From curiosity to empathy, each class helps children understand bees not just as insects, but as vital friends who keep our planet alive. Through stories, crafts, and reflection, the program nurtures both scientific understanding and emotional connection.",
+  "hero.cta.learn": "Learn More",
+  "hero.cta.impact": "Our Impact",
+  "steps.1.title": "Class 1: Curiosity",
+  "steps.1.p1": "Children begin their journey with the story of <em>\"Bibi the Bee\"</em>, discovering how bees work together in harmony to support flowers, fruits, and life on Earth.",
+  "steps.1.p2": "Through guided discussions and observation of real hive footage, they learn how pollination connects nature's cycles — sparking curiosity about the delicate relationships between humans and ecosystems.",
+  "steps.1.p3": "This class encourages children to ask, <strong>\"What would happen if bees disappeared?\"</strong> — fostering early awareness of environmental interdependence.",
+  "steps.2.title": "Class 2: Experience",
+  "steps.2.p1": "Through fun, interactive environmental craft sessions, children deepen their ecological understanding by creating something tangible that gives back to nature.",
+  "steps.2.craft.title": "Creating a Recycled Bottle Flowerpot",
+  "steps.2.craft.1": "Gather empty bottles",
+  "steps.2.craft.2": "Decorate and paint them",
+  "steps.2.craft.3": "Plant flower seedballs",
+  "steps.2.craft.4": "Watch them grow",
+  "steps.2.p2": "This hands-on activity helps students understand the cycle of life — how simple recycled materials can support new growth and attract pollinators.",
+  "steps.3.title": "Class 3: Empathy",
+  "steps.3.p1": "In the final session, children reflect on what they've learned by imagining life from a bee's perspective — how it feels to work, explore, and care for its community.",
+  "steps.3.p2": "Through interactive storytelling, drawing, and sharing circles, they express their feelings toward nature and discuss how small acts of kindness — like planting flowers or reducing waste — can protect the environment.",
+  "steps.3.p3": "This class nurtures <strong>empathy and responsibility</strong>, helping children realize that caring for bees means caring for the planet and for one another.",
+  "achievements.title": "Program Achievements",
+  "achievements.lead": "Celebrating the measurable impact of our \"To BEE Friends\" journey — inspiring young minds through environmental education and action.",
+  "achievements.sessions.stat": "25+ Sessions",
+  "achievements.sessions.sub": "200+ Children participated",
+  "achievements.kits.stat": "1,000 Kits",
+  "achievements.kits.sub": "Seedballs distributed",
+  "achievements.books.stat": "5+ eBooks",
+  "achievements.books.sub": "Created by students",
+  "achievements.classes.stat": "20+ Classes",
+  "achievements.classes.sub": "Requested nationwide",
+  "about.p1": "<strong>BeeWise</strong> was born in 2024 from a simple yet profound question — <em>\"How can AI heal our planet?\"</em> What began as a student-led exploration into honeybee decline grew into an AI-driven ecological project, combining <strong>computer vision, empathy, and environmental science.</strong>",
+  "about.p2": "Early experiments using YOLO object detection models proved that technology could identify <strong>Varroa mites</strong> on honeybees in real time. This breakthrough led to <strong>BeeCure</strong> — a mobile hive-monitoring app recognized globally at the <strong>Oxford Climate Change Challenge (COP29)</strong> for merging innovation with environmental ethics.",
+  "about.p3": "In 2025, BeeWise grew into a <strong>youth-led social venture</strong> that integrates <strong>artificial intelligence, ecology, and education.</strong> Its mission is to cultivate <strong>Ecological Intelligence</strong> — the ability for humans and machines to learn coexistence through empathy and innovation.",
+  "about.p4": "Through initiatives like <strong>\"To Bee Friends\"</strong>, the team reached over 200 children with workshops combining storytelling, seedball-making, and art. Collaborating with the <strong>Korea Beekeepers Association</strong> and <strong>Seoul National University's InValab</strong>, BeeWise now works toward building a <strong>global youth eco-tech network</strong> to inspire the next generation of sustainability leaders.",
+
+  "about-grace": "Grace leads the humanistic, analytical, and narrative vision of BeeWise. As a digital storyteller, she integrates ecological ethics with data-driven research—translating complex environmental data into compelling narratives that inspire understanding and empathy. Her work bridges sustainability, philosophy, and computational analysis, revealing how technology can mirror human responsibility toward nature. Through her leadership, BeeWise initiatives remain both scientifically rigorous and ethically grounded—turning data into stories that move people to act for the planet.",
+  "about-sophia": "Sophia drives the creative and technological development of BeeWise, leading the design of BeeCure 2.0 and Edge Box smart hive monitoring system. As a digital creator, she merges artificial intelligence, visual storytelling, and design thinking to craft immersive learning tools that connect youth to sustainability through creativity and innovation. Her approach transforms environmental education into a dynamic, tech-powered experience—redefining how the next generation learns, feels, and designs for ecological coexistence.",
+  "about-edward": "Edward leads the technological and scientific research division of BeeWise, focusing on the intersection of artificial intelligence, biodiversity, and agricultural resilience. His work explores seed sovereignty—the right of communities to preserve and control local melliferous plant species essential to pollinator survival—linking environmental data science with grassroots ecological justice. Through AI-powered seed mapping and sustainability modeling, he investigates how technology can empower local ecosystems rather than exploit them. Edward's research embodies a new paradigm of environmental justice, where innovation serves regeneration, and data becomes a tool for restoring both ecological and cultural balance.",
+  "hero.title": "BeeFriends <br> <span class=\"mt-2\" style=\"color:var(--bee-dark); font-size: clamp(1.8rem,3.4vw + 1rem,2.9rem);\">Environmental Education Program</span>",
+  "hero.lead": "From Curiosity to Empathy — Each class helps children understand bees not as simple insects, but as precious friends who support our planet. Through stories, crafts, and reflection, we grow scientific understanding and emotional connection together.",
+  "hero.cta.learn": "Learn More",
+  "hero.cta.impact": "Our Impact",
+
+  "contact-p": "Have questions or want to collaborate with the BeeWise team?",
+
+  "history.2024.summer.title": "April – August 2024",
+  "history.2024.summer.title2": "Idea Beginnings and Exploration",
+  "history.2024.summer.p1": "We began with a question: \"How can AI heal our planet?\"",
+  "history.2024.summer.p2": "During the summer, we studied global honeybee decline and explored how computer vision could help monitor hive health. Through YOLO-based image recognition experiments and consultation with Korean beekeepers and environmental NGOs, we saw how scientific inquiry can evolve into real-world impact.",
+
+  "history.2024.fall.title": "September – December 2024",
+  "history.2024.fall.title2": "BeeCure App Development & AI Modeling",
+  "history.2024.fall.p1": "We developed <strong>BeeCure</strong>, an AI-powered hive monitoring app that detects Varroa mites with a smartphone camera and alerts beekeepers in real time.",
+  "history.2024.fall.p2": "Collaborating with AI mentors and student developers, we trained YOLOv8 models and combined technical innovation with environmental ethics—earning international attention.",
+  "history.2024.fall.p3": "As a result, we presented at the COP29 youth environment section in Baku, Azerbaijan, and won <strong>Runner-Up</strong> at the Oxford Climate Change Challenge among 208 teams from 53 countries.",
+
+  "history.2024.winter.title2":"Establishing BeeWise",
+  "history.2025.winter.title": "January – March 2025",
+  "history.2025.winter.title2": "Establishing BeeWise Youth Social Venture",
+
+  "history.2025.winter.p1": "Building on BeeCure's success, we formally founded <strong>BeeWise</strong>, a youth-led social venture uniting artificial intelligence, ecology, and education.",
+  "history.2025.winter.p2": "We established partnerships with environmental organizations, educational institutions, and beekeeping communities to scale our impact and create meaningful change.",
+
+  "history.2025.spring.title": "April – June 2025",
+  "history.2025.spring.title2": "Program Launch & Community Building",
+  "history.2025.spring.p1": "Launched <strong>\"To Bee Friends\"</strong> educational program, reaching over 200 children with workshops on bee conservation, AI ethics, and environmental stewardship.",
+  "history.2025.spring.p2": "Developed curriculum combining hands-on beekeeping experiences with digital literacy, creating a new model for environmental education that engages both heart and mind.",
+
+  "history.2025.summer.title": "July – September 2025",
+  "history.2025.summer.title2": "Research Expansion & Innovation",
+  "history.2025.summer.p1": "Expanded research into biodiversity monitoring and seed sovereignty, exploring how AI can support ecosystem restoration beyond bee health.",
+  "history.2025.summer.p2": "Initiated collaborations with agricultural communities to develop sustainable practices that protect pollinators and preserve native plant species.",
+
+  "history.2025.fall.title": "October – December 2025",
+  "history.2025.fall.title2": "Global Recognition & Future Planning",
+  "history.2025.fall.p1": "Recognized internationally for innovation in ecological AI and youth leadership, with invitations to speak at environmental conferences and educational forums.",
+  "history.2025.fall.p2": "Planning next phase of growth, including expanding educational programs, developing new AI tools for environmental monitoring, and strengthening global partnerships for sustainable impact."
+},
+ko: {
+  "about.p1": "<strong>BeeWise</strong>는 2024년 간단한 질문에서 시작되었습니다. <em>\"AI가 어떻게 우리 지구를 치유할 수 있을까?\"</em> 학생 주도의 탐색에서 시작하여 꿀벌 벌 감소 문제를 다루는 AI 기반 생태 프로젝트로 성장했습니다. <strong>컴퓨터 비전, 공감, 그리고 환경 과학</strong>을 결합했습니다.",
+  "about.p2": "YOLO 객체 탐지 모델을 사용한 초기 실험을 통해 기술이 실시간으로 꿀벌에서 <strong>바로아 진드기</strong>를 탐지할 수 있음을 증명했습니다. 이 혁신은 <strong>Oxford Climate Change Challenge (COP29)</strong>에서 국제적으로 인정된 <strong>BeeCure</strong> — 모바일 하이브 모니터링 앱으로 이어졌습니다.",
+  "about.p3": "2025년, BeeWise는 <strong>인공지능, 생태학, 그리고 교육</strong>을 통합하는 <strong>청년 주도 사회적 기업</strong>으로 성장했습니다. 그 사명은 <strong>생태 지능</strong>을 기르는 것입니다. 이는 인간과 기계가 공감과 혁신을 통해 공존을 배우는 능력입니다.",
+  "about.p4": "<strong>\"To Bee Friends\"</strong>와 같은 프로그램을 통해 팀은 스토리텔링, 씨앗 공 만들기, 예술을 결합한 워크숍을 200명 이상의 어린이에게 제공했습니다. 한국양봉협회 및 <strong>서울대학교 인밸럽(InValab)</strong> 과의 협력을 바탕으로, BeeWise는 이제 다음 세대의 지속가능성 리더들을 양성하기 위한 글로벌 청소년 에코테크 네트워크 구축을 목표로 하고 있습니다.",
+
+  "about-grace": "Grace는 BeeWise의 인문학적, 분석적, 그리고 서사적 비전을 이끌고 있습니다. 그녀는 생태윤리와 데이터 기반 연구를 결합하여 기술이 인간의 자연에 대한 책임을 어떻게 반영할 수 있는지를 탐구합니다. 지속가능성, 철학, 그리고 계산적 분석을 아우르는 그녀의 연구는 BeeWise의 모든 프로젝트가 학문적으로 탄탄하면서도 윤리적으로 균형을 이루도록 이끕니다.",
+  "about-sophia": "Sophia는 BeeWise의 창의적이고 기술적인 개발을 이끌고 있으며, BeeCure 2.0과 Edge Box 스마트 하이브 모니터링 시스템의 설계를 주도하고 있습니다. 디지털 크리에이터로서, 그녀는 인공지능, 시각적 스토리텔링, 그리고 디자인 사고를 융합하여 청소년들이 창의성과 혁신을 통해 지속가능성에 연결되는 몰입적인 학습 도구를 만듭니다. 그녀의 접근법은 환경 교육을 역동적이고 기술 기반의 경험으로 변형시켜 다음 세대가 생태적 공존을 위해 어떻게 배우고, 느끼고, 설계하는지를 재정의합니다.",
+  "about-edward": "Edward는 BeeWise의 기술적이고 과학적인 연구 부문을 이끌고 있으며, 인공지능, 생물 다양성, 그리고 농업 회복력의 교차점에 중점을 둡니다. 그의 연구는 씨드 주권 — 지역 밀분 식물 종의 보존과 통제에 대한 지역 사회의 권리 —을 탐구하며, 환경 데이터 과학과 지역 사회 생태 정의를 연결합니다. AI 기반 씨드 매핑과 지속가능성 모델링을 통해, 기술이 생태계를 착취하는 대신 지원할 수 있는지를 조사합니다. Edward의 연구는 환경 정의, 혁신이 재생을 지원하고, 데이터가 생태적이고 문화적 균형을 복원하는 도구가 되는 새로운 패러다임을 구현합니다.",
+
+  "contact-p": "BeeWise에 대한 질문이 있거나, 협업을 하고 싶으시다면 아래 이메일로 연락주세요!",
+
+  "history.2024.summer.title": "2024년 4월 – 8월",
+  "history.2024.summer.title2": "아이디어 시작과 탐색",
+  "history.2024.summer.p1": "우리는 질문으로 시작했습니다: \"AI가 어떻게 우리 지구를 치유할 수 있을까?\"",
+  "history.2024.summer.p2": "여름 동안, 우리는 전 세계적인 꿀벌 감소 문제를 연구하고 컴퓨터 비전이 하이브 건강을 어떻게 도울 수 있는지 탐구했습니다. YOLO 기반 이미지 인식 실험과 한국 양봉사 및 환경 NGO와의 상담을 통해, 과학적 탐구가 실제 영향으로 발전할 수 있음을 보았습니다.",
+
+  "history.2024.fall.title": "2024년 9월 – 12월",
+  "history.2024.fall.title2": "BeeCure 앱 개발 및 AI 모델링",
+  "history.2024.fall.p1": "우리는 스마트폰 카메라로 바로아 진드기를 탐지하고 실시간으로 양봉사에게 알림을 보내는 AI 기반 하이브 모니터링 앱 <strong>BeeCure</strong>를 개발했습니다.",
+  "history.2024.fall.p2": "AI 멘토와 학생 개발자들과 협력하여 YOLOv8 모델을 훈련시키고 기술 혁신과 환경 윤리를 결합하여 국제적인 주목을 받았습니다.",
+  "history.2024.fall.p3": "그 결과, 우리는 아제르바이잔 바쿠에서 COP29 청년 환경 섹션에서 발표했으며, 53개국 208개 팀 중 Oxford Climate Change Challenge에서 <strong>준우승</strong>을 차지했습니다.",
+
+  "history.2024.winter.title2":"BeeWise 설립",
+  "history.2025.winter.title": "2025년 1월 – 3월",
+  "history.2025.winter.title2": "BeeWise 청년 사회적 기업 설립",
+
+  "history.2025.winter.p1": "BeeCure의 성공을 바탕으로, 우리는 인공지능, 생태학, 그리고 교육을 통합하는 <strong>청년 주도 사회적 기업 BeeWise</strong>를 공식적으로 설립했습니다.",
+  "history.2025.winter.p2": "우리는 영향력을 확장하고 의미 있는 변화를 만들기 위해 환경 단체, 교육 기관, 그리고 양봉사 커뮤니티와의 파트너십을 확립했습니다.",
+
+  "history.2025.spring.title": "2025년 4월 – 6월",
+  "history.2025.spring.title2": "프로그램 론칭 및 커뮤니티 구축",
+  "history.2025.spring.p1": "꿀벌 보존, AI 윤리, 그리고 환경 관리에 대한 워크숍을 통해 200명 이상의 어린이에게 도달한 <strong>\"To Bee Friends\"</strong> 교육 프로그램을 론칭했습니다.",
+  "history.2025.spring.p2": "실제 경험과 디지털 리터러시를 결합한 커리큘럼을 개발하여 마음과 정신 모두를 참여시키는 환경 교육의 새로운 모델을 만들었습니다.",
+
+  "history.2025.summer.title": "2025년 7월 – 9월",
+  "history.2025.summer.title2": "연구 확장 및 혁신",
+  "history.2025.summer.p1": "생물 다양성 모니터링과 씨드 주권을 탐구하며 꿀벌 건강을 넘어서 생태계 복원을 지원하는 AI를 탐구했습니다.",
+  "history.2025.summer.p2": "수분매개자를 보호하고 토참 식물 종을 보존하는 지속가능한 관행을 개발하기 위해 농업 커뮤니티와의 협력을 시작했습니다.",
+
+  "history.2025.fall.title": "2025년 10월 – 12월",
+  "history.2025.fall.title2": "글로벌 인식 및 미래 계획",
+  "history.2025.fall.p1": "생태 AI와 청년 리더십에서의 혁신으로 국제적으로 인정받았으며, 환경 컨퍼런스와 교육 포럼에서 발표하도록 초청받았습니다.",
+  "history.2025.fall.p2": "교육 프로그램 확장, 환경 모니터링을 위한 새로운 AI 도구 개발, 그리고 지속가능한 영향을 위한 글로벌 파트너십 강화를 포함한 성장의 다음 단계를 계획하고 있습니다.",
+
+  "steps.1.title": "1교시: 호기심",
+  "steps.1.p1": "아이들은 '비비 더 비(Bibi the Bee)' 이야기로 여정을 시작하며, 꽃과 과일, 지구의 생명을 지탱하기 위해 꿀벌이 조화롭게 협력하는 방식을 배웁니다.",
+  "steps.1.p2": "교사의 안내 대화와 실제 벌통 영상 관찰을 통해 수분 작용이 자연의 순환을 어떻게 연결하는지 이해하며, 인간과 생태계의 섬세한 관계에 대한 호기심을 키웁니다.",
+  "steps.1.p3": "이 수업은 \"꿀벌이 사라지면 어떻게 될까?\"라는 질문을 통해 환경 상호의존성에 대한 초기 인식을 길러 줍니다.",
+
+  "steps.2.title": "2교시: 체험",
+  "steps.2.p1": "재미있고 상호작용적인 환경 공예 활동을 통해, 아이들은 자연에 보탬이 되는 '만들기'를 하며 생태 이해를 심화합니다.",
+  "steps.2.craft.title": "재활용 병 화분 만들기",
+  "steps.2.craft.1": "빈 플라스틱 병 모으기",
+  "steps.2.craft.2": "꾸미고 색칠하기",
+  "steps.2.craft.3": "꽃 시드볼 심기",
+  "steps.2.craft.4": "함께 자라는 과정 지켜보기",
+  "steps.2.p2": "이 실습은 간단한 재활용 재료가 새 생장을 돕고 수분 곤충을 끌어들이는 생명의 순환을 이해하도록 돕습니다.",
+
+  "steps.3.title": "3교시: 공감",
+  "steps.3.p1": "마지막 수업에서는 꿀벌의 시선으로 상상하며 일하고 탐험하고 공동체를 돌보는 느낌을 떠올려 봅니다.",
+  "steps.3.p2": "스토리텔링·그리기·나눔 활동을 통해 자연에 대한 감정을 표현하고, 꽃 심기나 쓰레기 줄이기 같은 작은 실천이 환경을 지키는 방법임을 배웁니다.",
+  "steps.3.p3": "이 수업은 공감과 책임을 길러 주며, 꿀벌을 돌보는 일이 곧 지구와 서로를 아끼는 일임을 깨닫게 합니다.",
+
+  "achievements.title": "프로그램 성과",
+  "achievements.lead": "\"To BEE Friends\"가 만들어 낸 측정 가능한 변화를 함께 축하합니다 — 환경 교육과 실천으로 어린이들의 마음을 깨웠습니다.",
+  "achievements.sessions.stat": "25회 이상 세션",
+  "achievements.sessions.sub": "어린이 200명 이상 참여",
+  "achievements.kits.stat": "1 000세트",
+  "achievements.kits.sub": "씨드볼 키트 배포",
+  "achievements.books.stat": "전자책 5권+",
+  "achievements.books.sub": "학생들이 직접 제작",
+  "achievements.classes.stat": "수업 20회+",
+  "achievements.classes.sub": "전국에서 요청",
+
+  "contact.title": "문의하기",
+  "contact.text": "BeeWise 팀과 질문이 있거나 협업을 원하시나요?"
+}
+    };
+    function applyLang(lang) {
+      const dict = I18N[lang] || I18N.en;
+      document.querySelectorAll("[data-kor]").forEach(el => {
+        const key = el.getAttribute("data-kor");
+        if (dict[key]) el.innerHTML = dict[key]; // innerHTML to preserve spans
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem("lang", lang);
+      const btn = document.getElementById("langToggle");
+      if (btn) btn.textContent = lang === "en" ? "한국어" : "English";
+    }
+
+    (function(){
+      const saved = localStorage.getItem("lang") || "en";
+      applyLang(saved);
+      const btn = document.getElementById("langToggle");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const current = localStorage.getItem("lang") || "en";
+          const next = current === "en" ? "ko" : "en";
+          localStorage.setItem("lang", next);
+          applyLang(next);
+        });
+      }
+    })();
+    </script>
+  </body>
+</html>

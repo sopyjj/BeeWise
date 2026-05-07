@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeeWise - Youth Beekeeping Project</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+  <div class="container">
+<a class="navbar-brand d-flex align-items-center gap-2" href="#">
+  <img src="assets/logo_nobg.png" alt="BeeWise Logo" class="nav-logo2" />
+  <span>BeeWise</span>
+</a>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="beecure.html">BeeCure</a></li>
+        <li class="nav-item"><a class="nav-link" href="beefriends.html">BeeFriends</a></li>
+<li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+  <button id="langToggle" class="btn btn-lang d-inline-flex align-items-center gap-2">
+    한국어
+    <span class="lang-pill">EN</span>
+  </button>
+</li>
+
+
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a
+            class="btn btn-bee3"
+            href="#contact">
+            Get Started
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+    <!-- Hero -->
+    <section class="hero section-pad">
+      <video class="hero-video" id="heroVideo" autoplay muted loop playsinline>
+        <source src="assets/Bees.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <script>
+        // Video timing control with requestAnimationFrame
+        const video = document.getElementById('heroVideo');
+        if (video) {
+          // Set time immediately when video is ready
+          video.currentTime = 11;
+          
+          // Loop between 11-54 seconds using requestAnimationFrame
+          function checkVideoTime() {
+            if (video.currentTime >= 54) {
+              video.currentTime = 11;
+            }
+            requestAnimationFrame(checkVideoTime);
+          }
+          
+          // Start checking after a short delay
+          setTimeout(() => {
+            requestAnimationFrame(checkVideoTime);
+          }, 1000);
+        }
+      </script>
+      <div class="container text-center">
+        <h1 class="hero-title" data-aos="fade-up" data-aos-delay="250">
+          BeeWise <br> <span class="mt-2" style="color:var(--bee-dark); font-size: clamp(1.8rem,3.4vw + 1rem,2.9rem);">Innovation in Every Hive</span>
+        </h1>
+<p class="hero-lead mx-auto" data-kor="hero.lead" data-aos="fade-up">
+  Youth social enterprise harnessing AI to protect bees and restore biodiversity.
+</p>
+<div class="d-flex gap-3 justify-content-center flex-wrap" data-aos="fade-up" data-aos-delay="450">
+  <a href="#about" class="btn btn-bee">Get Started</a>
+</div>
+
+      </div>
+      <div class="wave"></div>
+    </section>
+
+    <!-- Download App Modal -->
+<div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius:16px;">
+      <div class="modal-header" style="border:0;">
+        <h5 class="modal-title fw-bold" id="downloadModalLabel">Download BeeWise App</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-3" style="color:var(--bee-ink);">
+          The BeeWise mobile app is launching soon. Get notified the moment it’s available.
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap mb-3">
+          <button class="btn btn-outline-secondary rounded-pill px-3" disabled>
+            <i class="bi bi-apple"></i> App Store (Soon)
+          </button>
+          <button class="btn btn-outline-secondary rounded-pill px-3" disabled>
+            <i class="bi bi-android2"></i> Google Play (Soon)
+          </button>
+        </div>
+
+        <form id="notifyForm" class="d-flex gap-2">
+          <input type="email" class="form-control" id="notifyEmail" placeholder="your@email.com" required>
+          <button type="submit" class="btn btn-bee fw-semibold">Notify me</button>
+        </form>
+
+        <div id="notifyThanks" class="mt-3 d-none" style="color:var(--bee-dark);">
+          Thanks—we’ll email you as soon as the app is live.
+        </div>
+      </div>
+
+      <div class="modal-footer" style="border:0;">
+        <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="about" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+<section id="about" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Row 1: Origins & Mission -->
+    <div class="row align-items-center gy-4 mb-5">
+      <!-- Left Text -->
+      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="150">
+        <h2>About BeeWise</h2>
+        <p class="mt-3" data-kor="about.p1"  style="text-align: left;">
+          <strong >BeeWise</strong> was born in 2024 from a simple yet profound question —
+          <em>“How can AI heal our planet?”</em> What began as a student-led exploration into
+          honeybee decline grew into an AI-driven ecological project, combining
+          <strong>computer vision, empathy, and environmental science.</strong>
+        </p>
+        <p  data-kor="about.p2"  style="text-align: left;">
+          Early experiments using YOLO object detection models proved that technology could
+          identify <strong>Varroa mites</strong> on honeybees in real time. This breakthrough led to
+          <strong>BeCure</strong> — a mobile hive-monitoring app recognized globally at the
+          <strong>Oxford Climate Change Challenge (COP29)</strong> for merging innovation
+          with environmental ethics.
+        </p>
+      </div>
+
+
+
+      <!-- Right Image -->
+      <div class="col-lg-6 text-center" data-aos="fade-left" data-aos-delay="200">
+        <img src="assets/aipis.png" alt="BeeWise early development and field testing" 
+             class="about-img img-fluid d-block mx-auto" style="width:90%;">
+      </div>
+    </div>
+
+    <!-- Row 2: Growth & Education -->
+    <div class="row align-items-center gy-4 flex-lg-row-reverse mt-lg-5">
+      <!-- Right Text -->
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="150">
+        <h2>Building Ecological Intelligence</h2>
+        <p class="mt-3" data-kor="about.p3"  style="text-align: left;">
+          In 2025, BeeWise grew into a <strong>youth-led social venture</strong> that integrates
+          <strong>artificial intelligence, ecology, and education.</strong> Its mission is to cultivate
+          <strong>Ecological Intelligence</strong> — the ability for humans and machines to learn coexistence
+          through empathy and innovation.
+        </p>
+        <p data-kor="about.p4"  style="text-align: left;">
+          Through initiatives like <strong>“To Bee Friends”</strong>, the team reached over 200 children
+          with workshops combining storytelling, seedball-making, and art. Collaborating with
+          <strong>Korea Beekeepers Association</strong> and <strong>Seoul National University’s InValab</strong>,
+          BeeWise now works toward building a <strong>global youth eco-tech network</strong> to inspire
+          the next generation of sustainability leaders.
+        </p>
+      </div>
+
+      <!-- Left Image -->
+<div class="col-lg-6 text-center" data-aos="fade-right" data-aos-delay="200">
+  <video class="about-video" 
+         controls 
+         playsinline 
+         preload="metadata" 
+         poster="assets/poster.png" 
+         style="width:90%;">
+    <source src="assets/video2_2.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+    </div>
+
+  </div>
+</section>
+<section id="history" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="60">
+    <div class="section-head mb-4 text-center">
+      <span class="kicker">Our Journey</span>
+      <h2 class="title">BeeWise Youth Social Venture History</h2>
+<p class="lead" data-kor="history.lead">
+  From a student idea to an internationally recognized youth platform merging AI, ecology, and ethics.
+</p>
+    </div>
+
+    <span class="spine" aria-hidden="true"></span>
+
+    <!-- 2024 Summer -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="80">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2024.summer.title">June – August 2024</span>
+        <h3 data-kor="history.2024.summer.title2">Origins of BeeWise</h3>
+        <p data-kor="history.2024.summer.p1">
+          We began with a question: <strong>“How can AI heal our planet?”</strong>
+        </p>
+        <p data-kor="history.2024.summer.p2">
+          During the summer, we studied global honeybee decline and explored how computer vision could help monitor hive health. With YOLO-based experiments and guidance from Korean beekeepers and environmental NGOs, we saw how scientific inquiry can evolve into real-world impact.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2024 Fall -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="100">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2024.fall.title">September – December 2024</span>
+        <h3 data-kor="history.2024.fall.title2">BeCure App Development</h3>
+        <p data-kor="history.2024.fall.p1">
+          We developed <strong>BeCure</strong>, an AI-powered hive monitoring app that detects Varroa mites with a smartphone camera and alerts beekeepers in real time.
+        </p>
+        <p data-kor="history.2024.fall.p2">
+          Collaborating with AI mentors and student developers, we trained YOLO models and combined technical innovation with environmental ethics—earning international attention.
+        </p>
+        <p data-kor="history.2024.fall.p3">
+          As a result, we presented at the COP29 youth environment section in Baku, Azerbaijan, and won <strong>Runner-Up</strong> at the Oxford Climate Change Challenge among 208 teams from 53 countries.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2025 Winter -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="120">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2025.winter.title">January – March 2025</span>
+        <h3 data-kor="history.2025.winter.title2">Establishing BeeWise</h3>
+        <p data-kor="history.2025.winter.p1">
+          Building on BeCure’s success, we formally founded <strong>BeeWise</strong>, a youth-led social venture uniting artificial intelligence, ecology, and education.
+        </p>
+        <p data-kor="history.2025.winter.p2">
+          Our aim goes beyond problem-solving: we cultivate <strong>Ecological Intelligence</strong>—the capacity for humans and machines to learn coexistence through empathy and innovation.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2025 Spring -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="140">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2025.spring.title">April – June 2025</span>
+        <h3 data-kor="history.2025.spring.title2">To Bee Friends Environmental Education Program</h3>
+        <p data-kor="history.2025.spring.p1">
+          We believe environmental awareness starts with empathy in early childhood. <strong>“To Bee Friends”</strong> helps children see bees not as something to fear, but as living beings to protect and respect.
+        </p>
+        <p data-kor="history.2025.spring.p2">
+          Designed entirely by the BeeWise team, the program blends environmental storytelling, melliferous seedball-making, and upcycled art—connecting scientific understanding with emotional experience.
+        </p>
+        <p data-kor="history.2025.spring.p3">
+          Working with the Korea Beekeepers Association and the Korean Youth Beekeepers Association, we incorporated ecological consultation and field feedback. The program was selected Top 5 in the Gyeonggi Volunthon (₩1,000,000 grant) and advanced with Seoul National University’s InValab.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2025 Summer -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="160">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2025.summer.title">July – September 2025</span>
+        <h3 data-kor="history.2025.summer.title2">Implementation and Impact</h3>
+        <p data-kor="history.2025.summer.p1">
+          We implemented the curriculum in 25+ kindergartens across Suwon, engaging over 200 students through creative, hands-on workshops.
+        </p>
+        <p data-kor="history.2025.summer.p2">
+          We also launched an online TBF learning app and distributed 800 seedball kits to broaden access—earning the <strong>2025 Gyeonggi Province Volunteer Grand Prize</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2025 & Beyond -->
+    <div class="trow" data-aos="fade-up" data-aos-delay="180">
+      <span class="dot" aria-hidden="true"></span>
+      <div class="tcard">
+        <span class="date-badge" data-kor="history.2025.future.title">October 2025 & Beyond</span>
+        <h3 data-kor="history.2025.future.title2">Global Partnership and Vision</h3>
+        <p data-kor="history.2025.future.p1">
+          We are building a youth-centered environmental & technology network linking Asia and the United States, partnering with international NGOs and universities to scale our <strong>AI-Edu ecological education platform</strong> globally.
+        </p>
+        <p data-kor="history.2025.future.p2">
+          We have initiated a youth bee-conservation partnership with <strong>Frosch</strong> and are preparing collaborations with <strong>UNFCCC/YOUNGO</strong> to contribute to global climate and innovation dialogue.
+        </p>
+        <p data-kor="history.2025.future.p3">
+          BeeWise aims to nurture a generation that heals the planet with technology—elevating AI from a tool to a language of coexistence and responsibility.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="team" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="60">
+    <div class="section-head text-center mb-5">
+      <span class="kicker">Meet Our Team</span>
+      <h2 class="title">The BeeWise Team</h2>
+      <p class="lead" data-kor="team.lead">
+        United by a shared mission to merge technology, ecology, and empathy, our founders lead BeeWise in transforming environmental innovation through data, design, and education.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <!-- Grace Kim -->
+      <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="team-card text-center">
+          <img src="assets/team/grace.jpeg" alt="Grace Kim" class="team-photo">
+          <div class="team-body">
+            <h4 class="team-name">Grace Kim</h4>
+            <p class="team-role"><em>Co-founder<br><span class="subrole">Director of Environmental Humanities & Data Analysis</span></em></p>
+            <p class="team-school">Phillips Academy Andover</p>
+            <p class="team-desc" data-kor="about-grace">
+              Grace leads the humanistic, analytical, and narrative vision of BeeWise.
+              As a digital storyteller, she integrates ecological ethics with data-driven research—translating complex environmental data into compelling narratives that inspire understanding and empathy.
+              Her work bridges sustainability, philosophy, and computational analysis, revealing how technology can mirror human responsibility toward nature.
+              Through her leadership, BeeWise initiatives remain both scientifically rigorous and ethically grounded—turning data into stories that move people to act for the planet.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sophia Kim -->
+      <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
+        <div class="team-card text-center">
+          <img src="assets/team/sophia.jpeg" alt="Sophia Kim" class="team-photo">
+          <div class="team-body">
+            <h4 class="team-name">Sophia Kim</h4>
+            <p class="team-role"><em>Co-founder<br><span class="subrole">Director of Environmental Arts & Technology</span></em></p>
+            <p class="team-school">Phillips Academy Andover</p>
+            <p class="team-desc" data-kor="about-sophia">
+              Sophia drives the creative and technological development of BeeWise, leading the design of BeeCure 2.0 and the Edge Box smart hive monitoring system.
+              As a digital creator, she merges artificial intelligence, visual storytelling, and design thinking to craft immersive learning tools that connect youth to sustainability through creativity and innovation.
+              Her approach transforms environmental education into a dynamic, tech-powered experience—redefining how the next generation learns, feels, and designs for ecological coexistence.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edward Yoon -->
+      <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="220">
+        <div class="team-card text-center">
+          <img src="assets/team/edward2.png" alt="Edward Yoon" class="team-photo">
+          <div class="team-body">
+            <h4 class="team-name">Edward Yoon</h4>
+            <p class="team-role"><em>Co-founder<br><span class="subrole">Director of Environmental Technology & Environmental Justice</span></em></p>
+            <p class="team-school">Seoul International School</p>
+            <p class="team-desc" data-kor="about-edward">
+              Edward leads the technological and scientific research division of BeeWise, focusing on the intersection of artificial intelligence, biodiversity, and agricultural resilience.
+              His work explores seed sovereignty—the right of communities to preserve and control local melliferous plant species essential to pollinator survival—linking environmental data science with grassroots ecological justice.
+              Through AI-powered seed mapping and sustainability modeling, he investigates how technology can empower local ecosystems rather than exploit them.
+              Edward’s research embodies a new paradigm of environmental justice, where innovation serves regeneration, and data becomes a tool for restoring both ecological and cultural balance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <div class="partners mt-5" data-aos="fade-up" data-aos-delay="300">
+      <div class="text-center mb-4">
+        <span class="kicker">Our Collaborations</span>
+        <h3 class="title">Moments of BeeWise</h3>
+      </div>
+      <div class="row g-4 text-center">
+
+        <div class="col-12 col-md-4">
+          <div class="partner-card">
+            <img src="assets/history/frosch.png" alt="BeeWise team with Samsung CSR group" class="partner-img">
+            <p class="caption mt-2">Moment with <strong>Frosch: Grant Ceremony</strong></p>
+          </div> 
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="partner-card">
+            <img src="assets/history/history1.png" alt="BeeWise team with Samsung CSR group" class="partner-img">
+            <p class="caption mt-2">Moment with <strong>ESG Assiociaton</strong></p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="partner-card">
+            <img src="assets/history/history2.png" alt="BeeWise with Frosch Korea" class="partner-img">
+            <p class="caption mt-2">Moment with <strong>SK Innovation</strong></p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="partner-card">
+            <img src="assets/history/history3.png" alt="BeeWise with Korea Beekeeping Association" class="partner-img">
+            <p class="caption mt-2">Moment with <strong>Korea Beekeeping Association</strong></p>
+          </div>
+        </div>
+                <div class="col-12 col-md-4">
+          <div class="partner-card">
+            <img src="assets/history/award.png" alt="BeeWise with UN Youth Group" class="partner-img">
+            <p class="caption mt-2"><strong>Volunteer Award</strong> from Gyeonggi-do, South Korea</p>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<!-- ============== Future Plans ============== -->
+<section id="future-plans" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="section-head text-center mb-5">
+      <span class="kicker" data-kor="steps.future.h">What's Next</span>
+      <h2 class="title" data-kor="steps.future.h">Future Plans</h2>
+      <p class="lead" data-kor="steps.future.lead">
+        Continuing our mission to connect technology, ecology, and education — expanding impact locally and globally.
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center text-center">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="plan-card h-100">
+          <i class="bi bi-flower2 plan-icon"></i>
+          <h3 class="plan-stat" data-kor="steps.future.p1.stat">300+ Seedballs</h3>
+          <p class="plan-sub" data-kor="steps.future.p1.sub">
+            Proceeds from sales will be donated to beekeepers in fire-affected areas of Gyeongbuk Province.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="plan-card h-100">
+          <i class="bi bi-lightbulb plan-icon"></i>
+          <h3 class="plan-stat" data-kor="steps.future.p2.stat">AI Innovation Labs</h3>
+          <p class="plan-sub" data-kor="steps.future.p2.sub">
+            Launch youth-led research hubs combining AI, ecology, and design thinking —
+            promoting creative technology for sustainable solutions.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="plan-card h-100">
+          <i class="bi bi-people-fill plan-icon"></i>
+          <h3 class="plan-stat" data-kor="steps.future.p3.stat">Partnerships</h3>
+          <p class="plan-sub" data-kor="steps.future.p3.sub">
+            Collaborating with Chollipo Arboretum Foundation, InvaLab, and Korean Beekeeping Associations.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="plan-card h-100">
+          <i class="bi bi-globe2 plan-icon"></i>
+          <h3 class="plan-stat" data-kor="steps.future.p4.stat">Global Expansion</h3>
+          <p class="plan-sub" data-kor="steps.future.p4.sub">
+            The BeeWise Youth Beekeepers Network will expand environmental education across Korea, USA, EU, and Asia.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Problem  ============== -->
+<!-- <section id="problem" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="60">
+    <div class="section-head mb-6">
+      <span class="kicker">What is the problems?</span>
+      <h2 class="title">Understanding the Problems</h2>
+      <p class="lead">
+        Honeybees pollinate a huge share of our food, yet Varroa mites accelerate colony decline and threaten food security.
+        BeeWise gives beekeepers an early-warning layer that’s fast, accurate, and fits everyday work.
+      </p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-12 col-lg-4" data-aos="flip-right" data-aos-delay="0">
+        <div class="prob-card is-yellow">
+          <h3 class="prob-title">Bee Crisis</h3>
+          <ul class="prob-list">
+            <li>Rapid decline in bee population</li>
+            <li>Global environmental risk</li>
+            <li>Food insecurity</li>
+            <li>Ecosystem imbalance</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4" data-aos="flip-right" data-aos-delay="80">
+        <div class="prob-card is-green">
+          <h3 class="prob-title">Lack of Education</h3>
+          <ul class="prob-list">
+            <li>Low awareness of the climate crisis</li>
+            <li>Few hands-on learning opportunities</li>
+            <li>Rigid, standardized curricula</li>
+            <li>Little focus on ecological sensitivity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4" data-aos="flip-right" data-aos-delay="140">
+        <div class="prob-card is-yellow">
+          <h3 class="prob-title">Ecological Sensitivity</h3>
+          <ul class="prob-list">
+            <li>Emotional connection with nature</li>
+            <li>Empathetic engagement for children</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== News Section ============== -->
+<section id="news" class="section section-pad">
+  <div class="container" data-aos="fade-up" data-aos-delay="60">
+    <div class="section-head text-center mb-5">
+      <span class="kicker">Latest Updates</span>
+      <h2 class="title">Honeybee News</h2>
+<p class="lead" data-kor="news.lead">
+  Fresh headlines on colony health, Varroa, policy, and invasive species.
+</p>    </div>
+
+    <div class="row g-4">
+<div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="160">
+  <article class="news-card h-100">
+    <figure class="news-media">
+      <img src="assets/history/history1.png" alt="BeeWise youth team working on AI model" class="news-thumb" loading="lazy">
+    </figure>
+    <div class="news-body">
+      <h3 class="news-title">
+        <a href="#" target="_blank" rel="noopener">Mock news: Placeholder</a>
+      </h3>
+      <p class="news-meta">EcoTech Journal (Mock) · Oct 2025</p>
+      <p class="news-blurb">
+        BeeWise, the youth-led AI ecology venture, was recognized for integrating artificial intelligence with environmental ethics.
+        Judges highlighted the group's "unique blend of empathy, design, and data science" shaping the future of green innovation.
+      </p>
+    </div>
+  </article>
+</div>
+
+<div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+  <article class="news-card h-100">
+    <figure class="news-media">
+      <img src="assets/history/history2.png" alt="BeeCure mobile app interface" class="news-thumb" loading="lazy">
+    </figure>
+    <div class="news-body">
+      <h3 class="news-title">
+        <a href="#" target="_blank" rel="noopener">Mock news: Placeholder</a>
+      </h3>
+      <p class="news-meta">BeeWise Press (Mock) · Sep 2025</p>
+      <p class="news-blurb">
+        Following pilot programs in Korea and the U.S., BeeCure now supports hive data uploads in multiple regions.
+        Its latest update introduces improved Varroa-detection AI and a shared "Hive Health Index" for international collaboration.
+      </p>
+    </div>
+  </article>
+</div>
+</div>
+</section>
+
+<!-- ============== Contact Section ============== -->
+<section id="contact" class="section section-pad text-center">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <h2>Contact Us</h2>
+    <p data-kor="contact-p">Have questions or want to collaborate with the BeeWise team?</p>
+    <a href="mailto:team@BeeWise.ai" class="email-link">team@BeeWise.ai</a>
+  </div>
+</section>
+
+<!-- ============== Footer ============== -->
+<footer class="text-center py-4" style="background:linear-gradient(90deg,var(--bee-yellow),var(--bee-orange)); color:#fff;">
+  <small>&copy; 2025 BeeWise · Innovation in Every Hive</small>
+</footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({ once:true, duration:900, easing:'ease-out-cubic' });
+    </script>
+         <script>
+    (function(){
+      const rail = document.getElementById('problem-rail');
+      if(!rail) return;
+      const steps = rail.querySelectorAll('.step');
+      const sections = [document.getElementById('p1'), document.getElementById('p2'), document.getElementById('p3')];
+
+      const onScroll = () => {
+        let idx = 0;
+        const y = window.scrollY + 140;
+        sections.forEach((sec, i) => {
+          const rect = sec.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+          if (y >= top - 80) idx = i;
+        });
+        steps.forEach((s,i)=> s.classList.toggle('active', i===idx));
+      };
+      document.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+    })();
+  </script>
+  <script>
+  const I18N = {
+en: {
+  "about.p1": "<strong>BeeWise</strong> was born in 2024 from a simple yet profound question — <em>“How can AI heal our planet?”</em> What began as a student-led exploration into honeybee decline grew into an AI-driven ecological project, combining <strong>computer vision, empathy, and environmental science.</strong>",
+  "about.p2": "Early experiments using YOLO object detection models proved that technology could identify <strong>Varroa mites</strong> on honeybees in real time. This breakthrough led to <strong>BeeCure</strong> — a mobile hive-monitoring app recognized globally at the <strong>Oxford Climate Change Challenge (COP29)</strong> for merging innovation with environmental ethics.",
+  "about.p3": "In 2025, BeeWise grew into a <strong>youth-led social venture</strong> that integrates <strong>artificial intelligence, ecology, and education.</strong> Its mission is to cultivate <strong>Ecological Intelligence</strong> — the ability for humans and machines to learn coexistence through empathy and innovation.",
+  "about.p4": "Through initiatives like <strong>“To Bee Friends”</strong>, the team reached over 200 children with workshops combining storytelling, seedball-making, and art. Collaborating with the <strong>Korea Beekeepers Association</strong> and <strong>Seoul National University’s InValab</strong>, BeeWise now works toward building a <strong>global youth eco-tech network</strong> to inspire the next generation of sustainability leaders.",
+
+  "about-grace": "Grace leads the humanistic, analytical, and narrative vision of BeeWise. As a digital storyteller, she integrates ecological ethics with data-driven research—translating complex environmental data into compelling narratives that inspire understanding and empathy. Her work bridges sustainability, philosophy, and computational analysis, revealing how technology can mirror human responsibility toward nature. Through her leadership, BeeWise initiatives remain both scientifically rigorous and ethically grounded—turning data into stories that move people to act for the planet.",
+  "about-sophia": "Sophia drives the creative and technological development of BeeWise, leading the design of BeeCure 2.0 and the Edge Box smart hive monitoring system. As a digital creator, she merges artificial intelligence, visual storytelling, and design thinking to craft immersive learning tools that connect youth to sustainability through creativity and innovation. Her approach transforms environmental education into a dynamic, tech-powered experience—redefining how the next generation learns, feels, and designs for ecological coexistence.",
+  "about-edward": "Edward leads the technological and scientific research division of BeeWise, focusing on the intersection of artificial intelligence, biodiversity, and agricultural resilience. His work explores seed sovereignty—the right of communities to preserve and control local melliferous plant species essential to pollinator survival—linking environmental data science with grassroots ecological justice. Through AI-powered seed mapping and sustainability modeling, he investigates how technology can empower local ecosystems rather than exploit them. Edward’s research embodies a new paradigm of environmental justice, where innovation serves regeneration, and data becomes a tool for restoring both ecological and cultural balance.",
+
+  "contact-p": "Have questions or want to collaborate with the BeeWise team?",
+
+  "history.2024.summer.title": "April – August 2024",
+   "history.2024.summer.title2": "Idea Beginnings and Exploration",
+  "history.2024.summer.p1": "We began with a question: “How can AI heal our planet?”",
+  "history.2024.summer.p2": "During the summer, we studied global honeybee decline and explored how computer vision could help monitor hive health. Through YOLO-based image recognition experiments and consultation with Korean beekeepers and environmental NGOs, we saw how scientific inquiry can evolve into real-world impact.",
+
+  "history.2024.fall.title": "September – December 2024",
+    "history.2024.fall.title2": "BeeCure App Development & AI Modeling",
+  "history.2024.fall.p1": "We developed <strong>BeeCure</strong>, an AI-powered hive monitoring app that detects Varroa mites with a smartphone camera and alerts beekeepers in real time.",
+  "history.2024.fall.p2": "Collaborating with AI mentors and student developers, we trained YOLOv8 models and combined technical innovation with environmental ethics—earning international attention.",
+  "history.2024.fall.p3": "As a result, we presented at the COP29 youth environment section in Baku, Azerbaijan, and won <strong>Runner-Up</strong> at the Oxford Climate Change Challenge among 208 teams from 53 countries.",
+  "history.2024.winter.title2":"Establishing BeeWise",
+  "history.2025.winter.title": "January – March 2025",
+    "history.2025.winter.title2": "Establishing the BeeWise Youth Social Venture",
+
+  "history.2025.winter.p1": "Building on BeeCure’s success, we formally founded <strong>BeeWise</strong>, a youth-led social venture uniting artificial intelligence, ecology, and education.",
+  "history.2025.winter.p2": "Our aim goes beyond problem-solving: we cultivate <strong>Ecological Intelligence</strong>—the capacity for humans and machines to learn coexistence through empathy and innovation.",
+
+  "history.2025.spring.title": "April – June 2025",
+    "history.2025.spring.title2": "To Bee Friends Environmental Education Program",
+  "history.2025.spring.p1": "We believe environmental awareness starts with empathy in early childhood. <strong>“To Bee Friends”</strong> helps children see bees not as something to fear, but as living beings to protect and respect.",
+  "history.2025.spring.p2": "Designed entirely by the BeeWise team, the program blends environmental storytelling, melliferous seedball-making, and upcycled art—connecting scientific understanding with emotional experience.",
+  "history.2025.spring.p3": "Working with the Korea Beekeepers Association and the Korean Youth Beekeepers Association, we incorporated ecological consultation and field feedback. The program was selected Top 5 in the Gyeonggi Volunthon (₩1,000,000 grant) and advanced with Seoul National University’s InValab.",
+
+  "history.2025.summer.title": "July – September 2025",
+    "history.2025.summer.title2": "Implementation and Local Expansion",
+  "history.2025.summer.p1": "We implemented the curriculum in 25+ kindergartens across Suwon, engaging over 200 students through creative, hands-on workshops.",
+  "history.2025.summer.p2": "We also launched an online TBF learning app and distributed 800 seedball kits to broaden access—earning the <strong>2025 Gyeonggi Province Volunteer Grand Prize</strong>.",
+
+  "history.2025.future.title": "October 2025 & Beyond",
+    "history.2025.future.title2": "Global Partnerships and Vision",
+
+  "history.2025.future.p1": "We are building a youth-centered environmental and technology network linking Asia and the United States, partnering with international NGOs and universities to scale our <strong>AI-Edu ecological education platform</strong> globally.",
+  "history.2025.future.p2": "We have initiated a youth bee-conservation partnership with <strong>Frosch</strong> and are preparing collaborations with <strong>UNFCCC/YOUNGO</strong> to contribute to global climate and innovation dialogue.",
+  "history.2025.future.p3": "BeeWise aims to nurture a generation that heals the planet with technology—elevating AI from a tool to a language of coexistence and responsibility.",
+    "app.purpose.h": "Our Purpose",
+  "app.purpose.p1": "Bees are essential pollinators, contributing to over 30% of the world’s food production and sustaining biodiversity. However, <strong>Varroa mites</strong> weaken bees’ immune systems, spread disease, and threaten entire colonies—causing annual agricultural losses of up to <strong>$57.7 billion USD</strong> worldwide.",
+  "app.purpose.p2": "<strong>BeCure</strong> empowers beekeepers everywhere to monitor hives using only their smartphones, detect early signs of infestation, and take preventive action—ensuring both ecological balance and sustainable agriculture.",
+
+  "app.features.h": "Main Features",
+  "app.features.li1": "<strong>AI-Powered Detection:</strong> Powered by the <strong>YOLOX</strong> algorithm for small-object identification, achieving over <strong>95% accuracy</strong> in Varroa mite detection.",
+  "app.features.li2": "<strong>Bee Segmentation:</strong> Integrated <strong>Fully Convolutional Network (FCN)</strong> model isolates bees for more precise monitoring.",
+  "app.features.li3": "<strong>Global Adaptability:</strong> Easily customized for different local environments and apiary conditions worldwide.",
+  "app.features.li4": "<strong>Real-Time Alerts:</strong> Sends instant notifications for early intervention and improved colony survival rates up to <strong>85%</strong>.",
+
+  "app.vision.h": "Our Vision",
+  "app.vision.p1": "<strong>BeCure</strong> isn’t just a tool—it’s part of a global movement to restore balance between humans, technology, and nature. By integrating AI into beekeeping, we ensure earlier detection, stronger hives, and healthier ecosystems.",
+  "app.vision.p2": "With an estimated <strong>$810 million market potential</strong> and a <strong>20% boost in global crop yields</strong>, BeCure shows how youth-led AI innovation can create real impact for both the environment and the economy.",
+  "app.vision.cta": "Download BeCure",
+  "app.vision.cta2": "Oxford Challenge",
+    "steps.c1.h": "Class 1: Curiosity",
+  "steps.c1.p1": "Children begin their journey with the story of <em>“Bibi the Bee”</em>, discovering how bees work together in harmony to support flowers, fruits, and life on Earth.",
+  "steps.c1.p2": "Through guided discussions and observation of real hive footage, they learn how pollination connects nature’s cycles — sparking curiosity about the delicate relationships between humans and ecosystems.",
+  "steps.c1.p3": "This class encourages children to ask, <strong>“What would happen if bees disappeared?”</strong> — fostering early awareness of environmental interdependence.",
+
+  "steps.c2.h": "Class 2: Experience",
+  "steps.c2.p1": "Through fun, interactive environmental craft sessions, children deepen their ecological understanding by creating something tangible that gives back to nature.",
+  "steps.c2.list.h": "<strong>Creating a Recycled Bottle Flowerpot</strong>",
+  "steps.c2.li1": "Gather empty bottles",
+  "steps.c2.li2": "Decorate and paint them",
+  "steps.c2.li3": "Plant flower seedballs",
+  "steps.c2.li4": "Watch them grow",
+  "steps.c2.p2": "This hands-on activity helps students understand the cycle of life — how simple recycled materials can support new growth and attract pollinators.",
+
+  "steps.c3.h": "Class 3: Empathy",
+  "steps.c3.p1": "In the final session, children reflect on what they’ve learned by imagining life from a bee’s perspective — how it feels to work, explore, and care for its community.",
+  "steps.c3.p2": "Through interactive storytelling, drawing, and sharing circles, they express their feelings toward nature and discuss how small acts of kindness — like planting flowers or reducing waste — can protect the environment.",
+  "steps.c3.p3": "This class nurtures <strong>empathy and responsibility</strong>, helping children realize that caring for bees means caring for the planet and for one another.",
+
+  "steps.ach.h": "Program Achievements",
+  "steps.ach.lead": "Celebrating the measurable impact of our “To BEE Friends” journey — inspiring young minds through environmental education and action.",
+  "steps.ach.stat1": "25+ Sessions",
+  "steps.ach.sub1": "200+ Children participated",
+  "steps.ach.stat2": "1 000 Kits",
+  "steps.ach.sub2": "Seedballs distributed",
+  "steps.ach.stat3": "5 + eBooks",
+  "steps.ach.sub3": "Created by students",
+  "steps.ach.stat4": "20 + Classes",
+  "steps.ach.sub4": "Requested nationwide",
+
+  "steps.future.h": "Future Plans",
+  "steps.future.lead": "Continuing our mission to connect technology, ecology, and education — expanding impact locally and globally.",
+  "steps.future.p1.stat": "300+ Seedballs",
+  "steps.future.p1.sub": "Proceeds from sales will be donated to beekeepers in fire-affected areas of Gyeongbuk Province.",
+  "steps.future.p2.stat": "AI Innovation Labs",
+  "steps.future.p2.sub": "Launch youth-led research hubs combining AI, ecology, and design thinking — promoting creative technology for sustainable solutions.",
+  "steps.future.p3.stat": "Partnerships",
+  "steps.future.p3.sub": "Collaborating with Chollipo Arboretum Foundation, InvaLab, and Korean Beekeeping Associations.",
+  "steps.future.p4.stat": "Global Expansion",
+  "steps.future.p4.sub": "The BeeWise Youth Beekeepers Network will expand environmental education across Korea, USA, EU, and Asia.",
+    "news.lead": "Fresh headlines on colony health, Varroa, policy, and invasive species.",
+      "steps.lead": "From curiosity to empathy, each class helps children understand bees not just as insects, but as vital friends who keep our planet alive. Through stories, crafts, and reflection, the program nurtures both scientific understanding and emotional connection.",
+
+  "app.lead": "<strong>BeCure</strong> is an AI-powered hive monitoring app developed by the <strong>BeeWise</strong> team to help beekeepers detect <em>Varroa destructor</em> infestations early, prevent colony collapse, and protect global food security through real-time analysis.",
+    "history.lead": "From a student idea to an internationally recognized youth platform merging AI, ecology, and ethics.",
+      "team.lead": "United by a shared mission to merge technology, ecology, and empathy, our founders lead BeeWise in transforming environmental innovation through data, design, and education.",
+        "hero.lead": "Youth social enterprise harnessing AI to protect bees and restore biodiversity.",
+
+  "legacy.kicker": "Earlier Innovation",
+  "legacy.title": "BeCure — Legacy Version",
+  "legacy.lead":
+    "The first BeCure prototype proved our mission: simple tools + smart AI can protect pollinators. Explore the original YOLO-based build we used in early tests — the foundation of today’s BeCure.",
+  "legacy.download": "Download Old Version",
+  "legacy.disclaimer":"Preserved for learning and research — performance and compatibility may vary.",
+
+
+"app.web.lead":"Manage multiple hives from any browser, sync data from the mobile app, and visualize mite trends, hive health, and alerts in real time.",
+"app.web.h":"What You Get",
+"app.web.li1":"<strong>Dashboard Analytics:</strong> Hive health index, mite density, temperature/humidity overview.",
+"app.web.li2":"<strong>Cloud Sync:</strong> Securely syncs with the mobile app for continuous monitoring.",
+"app.web.li3":"<strong>AI Insights:</strong> Trend forecasting and early-risk warnings.",
+"app.web.li4":"<strong>Multi-Hive View:</strong> Filter, search, and compare hives at a glance.",
+
+  "app.web.s1.h": "Upload & Scan",
+  "app.web.s1.p": "Drop a hive photo and perform AI scan for Varroa risk.",
+  "app.web.s2.h": "AI Detection Result",
+  "app.web.s2.p": "Save the annotated image and log the finding to your hive record.",
+  "app.web.s3.h": "Apiary Map",
+  "app.web.s3.p": "See detections and apiaries by location.",
+  "app.web.s4.h": "Statistics & Trends",
+  "app.web.s4.p": "Track mite counts and Hive Health Index over time.",
+    "app.web.thumb1": "Upload",
+  "app.web.thumb2": "Detection",
+  "app.web.thumb3": "Map",
+  "app.web.thumb4": "Stats",
+  "app.web.card1.h": "Real-Time Dashboard",
+  "app.web.card1.p": "Live mite counts, hive health index, and quick status at a glance.",
+  "app.web.card2.h": "Cloud Sync",
+  "app.web.card2.p": "Seamless sync with the mobile app for continuous monitoring.",
+  "app.web.card3.h": "AI Insights",
+  "app.web.card3.p": "Trend forecasting with early-risk warnings and suggestions.",
+  "app.web.card4.h": "Multi-Hive Compare",
+  "app.web.card4.p": "Filter, search, and compare hives side-by-side across sites."
+
+}
+,
+
+    ko: {
+
+      "about.p1" :"BeeWise는 2024년 <strong>'AI가 어떻게 지구를 치유할 수 있을까'</strong> 라는 간단하면서도 깊은 질문에서 시작되었습니다. 처음에는 학생 주도로 꿀벌 감소 문제를 탐구하던 것이 컴퓨터 비전, 공감, 환경 과학을 결합한 AI 주도 생태 프로젝트로 발전했습니다.",
+      "about.p2" :"초기 실험에서 YOLO 객체 탐지 모델을 활용해 기술이 꿀벌 위의 Varroa 진드기를 실시간으로 식별할 수 있음을 입증했습니다. 이 성과는 환경 윤리와 혁신을 융합한 모바일 벌통 모니터링 앱인 BeCure로 이어졌으며, 이 앱은 <strong>옥스퍼드 기후 변화 챌린지(COP29)</strong>에서 글로벌하게 인정받았습니다.",
+      "about.p3" :"2025년, BeeWise는 인공지능, 생태학, 교육을 통합한 청소년 주도의 사회적 벤처 기업으로 성장했습니다. 그 목적은 <strong>생태적 지능(Ecological Intelligence)</strong> 을 함양하는 것으로, 이는 인간과 기계가 공감과 혁신을 통해 공존하는 능력을 배우는 것을 의미합니다.",
+      "about.p4" :"‘To Bee Friends’와 같은 프로그램을 통해 팀은 스토리텔링, 씨앗 공 만들기, 예술을 결합한 워크숍을 200명 이상의 어린이에게 제공했습니다. 한국양봉협회 및 <strong>서울대학교 인밸럽(InValab)</strong> 과의 협력을 바탕으로, BeeWise는 이제 다음 세대의 지속가능성 리더들을 양성하기 위한 글로벌 청소년 에코테크 네트워크 구축을 목표로 하고 있습니다.",
+
+      "about-grace":"Grace는 BeeWise의 인문학적 통찰과 분석적 비전을 이끌고 있습니다. 그녀는 생태윤리와 데이터 기반 연구를 결합하여 기술이 인간의 자연에 대한 책임을 어떻게 반영할 수 있는지를 탐구합니다. 지속가능성, 철학, 그리고 계산적 분석을 아우르는 그녀의 연구는 BeeWise의 모든 프로젝트가 학문적으로 탄탄하면서도 윤리적으로 균형을 이루도록 이끕니다.",
+      "about-sophia":"Sophia는 BeeWise의 창의적이고 기술적인 개발을 총괄하며, BeCure 2.0 앱과 Edge Box 스마트 벌통 시스템을 비롯한 주요 프로젝트를 이끌고 있습니다. 그녀는 인공지능(AI), 디지털 스토리텔링, 그리고 디자인 씽킹을 융합하여 청소년이 지속가능성과 소통할 수 있는 인터랙티브한 도구를 만듭니다. 소피아의 비전은 환경 학습을 창의성, 생태학, 그리고 지능형 기술이 조화를 이루는 흥미로운 경험으로 변화시킵니다.",
+      "about-edward":"Edward는 BeCure 앱과 Edge Box 시스템의 인공지능 및 공학 개발을 이끌며, 컴퓨터 비전과 환경 데이터 분석을 통합하는 역할을 맡고 있습니다. 또한 그는 밀원식물의 생물다양성과 지속 가능한 서식지 설계를 중심으로 환경 과학 및 종자 연구를 수행하며, 데이터 기반의 생태 복원을 통해 꿀벌 보전을 실현하고자 합니다.",
+      "contact-p":"BeeWise에 대한 질문이 있거나, 협업을 하고 싶으시다면 아래 이메일로 연락주세요!",
+
+"history.2024.summer.title": "2024년 4월 – 8월",
+"history.2024.summer.title2": "아이디어의 시작과 탐구",
+"history.2024.summer.p1": "우리는 “기술이 어떻게 지구를 치유할 수 있을까?”라는 질문에서 출발했습니다.",
+"history.2024.summer.p2": "여름 동안 꿀벌 개체수 감소 문제를 집중적으로 연구하며, 컴퓨터비전 기술을 활용해 벌통 건강을 관찰하는 실험을 진행했습니다. YOLO 모델 기반 이미지 인식 실험과 한국 양봉가·환경 NGO 자문을 통해 과학적 탐구가 사회문제 해결로 이어질 수 있음을 확인했습니다.",
+
+"history.2024.fall.title": "2024년 9월 – 12월",
+"history.2024.fall.title2": "BeCure 앱 개발과 AI 모델링",
+"history.2024.fall.p1": "스마트폰 카메라로 벌통 속 바로아 진드기를 탐지하고 양봉가에게 실시간 알림을 제공하는 AI 기반 벌통 모니터링 앱 ‘BeCure’를 개발했습니다.",
+"history.2024.fall.p2": "AI 멘토 및 학생 개발자들과 협력해 YOLOv8 모델을 학습시켰으며, 기술 혁신과 환경 윤리를 결합한 시도로 국제적 주목을 받았습니다.",
+"history.2024.fall.p3": "그 결과, 2024년 아제르바이잔 바쿠 COP29 청소년 환경 섹션에서 발표했고, 옥스퍼드 기후변화 챌린지에서 53개국 208개 팀 중 준우승을 차지했습니다.",
+"history.2025.winter.title": "2025년 1월 – 3월",
+"history.2025.winter.title2": "BeeWise 청소년 사회적 벤처 설립",
+"history.2025.winter.p1": "BeCure의 성공을 바탕으로 인공지능·생태학·교육을 융합한 청소년 사회적 벤처 ‘BeeWise’를 공식 설립했습니다.",
+"history.2025.winter.p2": "BeeWise의 목표는 문제 해결을 넘어 인간과 기계가 함께 배워가는 ‘생태적 지능(Ecological Intelligence)’을 육성하는 것입니다.",
+
+"history.2025.spring.title": "2025년 4월 – 6월",
+"history.2025.spring.title2": " To Bee Friends 환경 교육 프로그램",
+"history.2025.spring.p1": "우리는 환경 감수성의 출발점을 어린 세대의 경험과 공감에서 찾았습니다. 유아 환경 감수성 교육 프로그램 ‘To Bee Friends’는 꿀벌을 두려움의 대상이 아닌 ‘함께 지켜야 할 생명’으로 인식시키는 데 초점을 맞춥니다.",
+"history.2025.spring.p2": "BeeWise가 직접 개발한 커리큘럼으로, 환경 동화·밀원수 시드볼 만들기·업사이클링 미술 활동을 결합해 과학적 이해와 감성적 체험을 아우르는 새로운 교육 모델을 제시했습니다.",
+"history.2025.spring.p3": "대한양봉협회·대한청년양봉회와 협력해 생태 자문과 현장 피드백을 반영했고, 경기도 볼런톤 대회 Top 5 선정(₩1,000,000 지원) 및 서울대학교 환경 스타트업 InValab과의 협업으로 발전시켰습니다.",
+
+"history.2025.summer.title": "2025년 7월 – 9월",
+"history.2025.summer.title2": "교육 실행 및 지역 확산",
+"history.2025.summer.p1": "수원시 소재 25곳 이상의 유아기관에 커리큘럼을 도입해 200명 이상의 어린이가 참여하는 워크숍을 운영했습니다.",
+"history.2025.summer.p2": "비대면 학습을 위한 TBF 온라인 앱과 800개의 씨드볼 키트를 배포해 접근성을 높였으며, 이러한 공로로 2025 경기도 자원봉사 대상을 수상했습니다.",
+
+"history.2025.future.title": "2025년 10월 이후",
+"history.2025.future.title2": "글로벌 파트너십과 미래 비전",
+"history.2025.future.p1": "아시아와 미국을 잇는 청소년 중심 환경·기술 네트워크를 구축하고, 국제 NGO·대학 연구기관과 협력해 AI-Edu 생태 교육 플랫폼을 전 세계로 확장할 계획입니다.",
+"history.2025.future.p2": "친환경 브랜드 Frosch와의 청소년 꿀벌 보호 파트너십을 진행 중이며, UNFCCC의 YOUNGO와 글로벌 협업을 추진하고 있습니다.",
+"history.2025.future.p3": "BeeWise는 “기술로 지구를 치유하는 세대”를 양성하며, AI를 공존과 책임의 언어로 발전시키는 세계적 청소년 허브로 성장하고 있습니다.",
+
+  "app.purpose.h": "목표",
+  "app.purpose.p1": "꿀벌은 세계 식량 생산의 30% 이상을 담당하는 핵심 수분 곤충으로 생물다양성을 지탱합니다. 그러나 <strong>바로아 진드기</strong>는 꿀벌의 면역을 약화시키고 질병을 전파해 군체 전체를 위협하며, 전 세계적으로 연간 <strong>577억 달러</strong>의 농업 손실을 유발합니다.",
+  "app.purpose.p2": "<strong>BeCure</strong>는 스마트폰만으로 벌통을 모니터링하고, 감염 초기 신호를 감지해 선제 대응을 돕습니다. 이를 통해 생태 균형과 지속 가능한 농업을 동시에 실현합니다.",
+
+  "app.features.h": "주요 기능",
+  "app.features.li1": "<strong>AI 기반 탐지:</strong> <strong>YOLOX</strong> 알고리즘으로 소형 객체를 정밀 식별하여 바로아 진드기를 <strong>95% 이상 정확도</strong>로 탐지합니다.",
+  "app.features.li2": "<strong>벌 개체 분할:</strong> <strong>FCN(완전 합성곱 신경망)</strong>을 적용해 벌을 분리, 모니터링 정확도를 높입니다.",
+  "app.features.li3": "<strong>글로벌 적응성:</strong> 지역 환경과 양봉 조건에 맞춰 손쉽게 커스터마이즈할 수 있습니다.",
+  "app.features.li4": "<strong>실시간 알림:</strong> 즉각적인 알림으로 빠른 대응을 지원하고 군체 생존율을 최대 <strong>85%</strong>까지 향상합니다.",
+
+  "app.vision.h": "비전",
+  "app.vision.p1": "<strong>BeCure</strong>는 단순한 도구가 아니라 인간·기술·자연의 균형을 회복하는 글로벌 움직임의 일부입니다. AI를 양봉에 접목해 더 이른 탐지, 더 강한 군체, 더 건강한 생태계를 실현합니다.",
+  "app.vision.p2": "예상 <strong>8억 1천만 달러 규모</strong>의 시장성과 <strong>세계 작물 수확량 20% 향상</strong> 잠재력으로, BeCure는 청소년 주도의 AI 혁신이 환경과 경제 모두에 실제 변화를 만들 수 있음을 보여줍니다.",
+  "app.vision.cta": "BeCure 다운로드",
+    "steps.c1.h": "1교시: 호기심",
+  "steps.c1.p1": "아이들은 <em>‘비비 더 비(Bibi the Bee)’</em> 이야기로 여정을 시작하며, 꽃과 과일, 지구의 생명을 지탱하기 위해 꿀벌이 조화롭게 협력하는 방식을 배웁니다.",
+  "steps.c1.p2": "교사의 안내 대화와 실제 벌통 영상 관찰을 통해 수분 작용이 자연의 순환을 어떻게 연결하는지 이해하며, 인간과 생태계의 섬세한 관계에 대한 호기심을 키웁니다.",
+  "steps.c1.p3": "이 수업은 <strong>“꿀벌이 사라지면 어떻게 될까?”</strong>라는 질문을 통해 환경 상호의존성에 대한 초기 인식을 길러 줍니다.",
+
+  "steps.c2.h": "2교시: 체험",
+  "steps.c2.p1": "재미있고 상호작용적인 환경 공예 활동을 통해, 아이들은 자연에 보탬이 되는 ‘만들기’를 하며 생태 이해를 심화합니다.",
+  "steps.c2.list.h": "<strong>재활용 병 화분 만들기</strong>",
+  "steps.c2.li1": "빈 플라스틱 병 모으기",
+  "steps.c2.li2": "꾸미고 색칠하기",
+  "steps.c2.li3": "꽃 시드볼 심기",
+  "steps.c2.li4": "함께 자라는 과정 지켜보기",
+  "steps.c2.p2": "이 실습은 간단한 재활용 재료가 새 생장을 돕고 수분 곤충을 끌어들이는 생명의 순환을 이해하도록 돕습니다.",
+
+  "steps.c3.h": "3교시: 공감",
+  "steps.c3.p1": "마지막 수업에서는 꿀벌의 시선으로 상상하며 일하고 탐험하고 공동체를 돌보는 느낌을 떠올려 봅니다.",
+  "steps.c3.p2": "스토리텔링·그리기·나눔 활동을 통해 자연에 대한 감정을 표현하고, 꽃 심기나 쓰레기 줄이기 같은 작은 실천이 환경을 지키는 방법임을 배웁니다.",
+  "steps.c3.p3": "이 수업은 <strong>공감과 책임</strong>을 길러 주며, 꿀벌을 돌보는 일이 곧 지구와 서로를 아끼는 일임을 깨닫게 합니다.",
+
+  "steps.ach.h": "프로그램 성과",
+  "steps.ach.lead": "“To BEE Friends”가 만들어 낸 측정 가능한 변화를 함께 축하합니다 — 환경 교육과 실천으로 어린이들의 마음을 깨웠습니다.",
+  "steps.ach.stat1": "25회 이상 세션",
+  "steps.ach.sub1": "어린이 200명 이상 참여",
+  "steps.ach.stat2": "1 000세트",
+  "steps.ach.sub2": "씨드볼 키트 배포",
+  "steps.ach.stat3": "전자책 5권+",
+  "steps.ach.sub3": "학생들이 직접 제작",
+  "steps.ach.stat4": "수업 20회+",
+  "steps.ach.sub4": "전국에서 요청",
+
+  "steps.future.h": "향후 계획",
+  "steps.future.lead": "기술·생태·교육을 잇는 우리의 사명을 이어가며, 지역과 세계로 영향력을 확장합니다.",
+  "steps.future.p1.stat": "씨드볼 300+",
+  "steps.future.p1.sub": "판매 수익은 경북 산불 피해 지역의 양봉가 지원에 기부됩니다.",
+  "steps.future.p2.stat": "AI 이노베이션 랩",
+  "steps.future.p2.sub": "AI·생태·디자인 씽킹을 결합한 청소년 주도 연구 허브를 개설해 지속가능한 창의 기술을 촉진합니다.",
+  "steps.future.p3.stat": "파트너십",
+  "steps.future.p3.sub": "천리포수목원재단, 인바랩(InvaLab), 대한양봉협회 등과 협력합니다.",
+  "steps.future.p4.stat": "글로벌 확장",
+  "steps.future.p4.sub": "BeeWise 청소년 양봉 네트워크를 한국·미국·EU·아시아로 확대합니다.",
+
+    "news.lead": "BeeWise와 꿀벌에  관한 최신 소식을 전합니다.",
+      "steps.lead": "호기심에서 공감으로 — 각 수업은 아이들이 꿀벌을 단순한 곤충이 아닌 지구를 지탱하는 소중한 친구로 이해하도록 돕습니다. 이야기와 공예, 성찰을 통해 과학적 이해와 정서적 연결을 함께 키웁니다.",
+        "app.lead": "<strong>BeCure</strong>는 <strong>BeeWise</strong> 팀이 개발한 AI 기반 벌통 모니터링 앱으로, 양봉가들이 <em>바로아 진드기</em> 감염을 조기에 탐지하고 군체 붕괴를 예방하며, 실시간 분석을 통해 전 세계 식량 안보를 지킬 수 있도록 돕습니다.",
+          "history.lead": "학생들의 작은 아이디어에서 시작해, AI·생태·윤리를 융합한 국제적으로 인정받는 청소년 플랫폼으로 성장했습니다.",
+            "team.lead": "기술, 생태, 공감을 융합한다는 공통된 사명 아래, 우리의 공동 창립자들은 데이터·디자인·교육을 통해 환경 혁신을 이끌어가고 있습니다.",
+
+
+
+  "hero.lead": "AI를 활용해 꿀벌을 보호하고 생물다양성을 회복하는 청소년 사회적 기업입니다.",
+
+  "legacy.lead":
+    "BeCure의 첫 프로토타입은 ‘간단한 도구 + 스마트 AI’가 수분 매개자를 보호할 수 있음을 증명했습니다. 초기 테스트에 사용했던 YOLO 기반 빌드를 확인해 보세요 — 오늘의 BeCure가 시작된 기반입니다.",
+  "legacy.download": "이전 버전 다운로드",
+  "legacy.disclaimer":
+    "학습 및 연구 보존용이며, 성능과 호환성은 기기에 따라 달라질 수 있습니다.",
+
+
+      "app.web.lead": "브라우저에서 여러 양봉장을 관리하고, 모바일 앱과 데이터를 동기화하며, 진드기 추세·벌 건강·알림을 실시간으로 시각화합니다.",
+      "app.web.h": "주요 기능",
+      "app.web.li1": "<strong>대시보드 분석:</strong> 양봉장 건강 지수.",
+      "app.web.li2": "<strong>클라우드 동기화:</strong> 모바일 앱과 안전하게 연동해 상시 모니터링.",
+      "app.web.li3": "<strong>AI 인사이트:</strong> 추세 예측 및 위험 조기 경보.",
+      "app.web.li4": "<strong>다중 양봉장 보기:</strong> 필터/검색으로 양봉장 상태를 한눈에 비교.",
+
+
+  "app.web.s1.h": "업로드 & 스캔",
+  "app.web.s1.p": "벌 사진을 올리고 AI 스캔으로 바로아 위험을 확인합니다.",
+  "app.web.s2.h": "AI 탐지 결과",
+  "app.web.s2.p": "주석 이미지를 저장하고 탐지 결과를 벌 기록에 등록합니다.",
+  "app.web.s3.h": "양봉장 지도",
+  "app.web.s3.p": "지역별 탐지 결과와 양봉장 위치를 한눈에 봅니다.",
+  "app.web.s4.h": "통계 & 추세",
+  "app.web.s4.p": "감염된 벌의 수와 벌 건강 지수(HHI)를 시간에 따라 추적합니다.",
+  "app.web.thumb1": "업로드",
+  "app.web.thumb2": "탐지",
+  "app.web.thumb3": "지도",
+  "app.web.thumb4": "통계",
+    "app.web.card1.h": "실시간 대시보드",
+  "app.web.card1.p": "감염된 벌의 실시간 수치, 벌 건강 지수, 핵심 상태를 한눈에 확인합니다.",
+  "app.web.card2.h": "클라우드 동기화",
+  "app.web.card2.p": "모바일 앱과 끊김 없이 동기화되어 상시 모니터링을 제공합니다.",
+  "app.web.card3.h": "AI 인사이트",
+  "app.web.card3.p": "추세 예측과 위험 조기 경보, 대응 제안을 제공합니다.",
+  "app.web.card4.h": "다중 양봉장 비교",
+  "app.web.card4.p": "여러 양봉장의 데이터를 나란히 비교합니다."
+
+
+    }
+  };
+
+  function applyLang(lang) {
+    const dict = I18N[lang] || I18N.en;
+    document.querySelectorAll("[data-kor]").forEach(el => {
+      const key = el.getAttribute("data-kor");
+      if (lang === "ko" && dict[key]) {
+        el.innerHTML = dict[key]; // innerHTML to preserve spans
+      } else if (lang === "en" && I18N.en[key]) {
+        el.innerHTML = I18N.en[key]; // innerHTML to preserve spans
+      }
+    });
+    document.documentElement.lang = lang;
+    localStorage.setItem("lang", lang);
+    const btn = document.getElementById("langToggle");
+    if (btn) btn.textContent = lang === "en" ? "한국어" : "English";
+  }
+
+  (function(){
+    const saved = localStorage.getItem("lang") || "en";
+    applyLang(saved);
+    const btn = document.getElementById("langToggle");
+    if (btn) {
+      btn.addEventListener("click", () => {
+          const current = localStorage.getItem("lang") || "en";
+          const next = current === "en" ? "ko" : "en";
+          localStorage.setItem("lang", next);
+          applyLang(next);
+        });
+    }
+  })();
+</script>
+<script>
+(function(){
+  const id = 'webGallery';
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  const thumbs = Array.from(document.querySelectorAll('.thumb-rail .thumb-btn'));
+
+  el.addEventListener('slid.bs.carousel', (e) => {
+    const idx = e.to || 0;
+    thumbs.forEach((b,i)=>{
+      b.classList.toggle('active', i===idx);
+      b.setAttribute('aria-selected', i===idx ? 'true' : 'false');
+    });
+  });
+
+})();
+</script>
+
+  </body>
+</html>
