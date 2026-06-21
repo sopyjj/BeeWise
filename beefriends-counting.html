@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mite Counter — BeeFriends · BeeWise</title>
+
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/logo_nobg.png" alt="BeeWise Logo" class="nav-logo2" />
+          <span>BeeWise</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="beecure.html">BeeCure</a></li>
+            <li class="nav-item"><a class="nav-link active" href="beefriends.html">BeeFriends</a></li>
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <button id="langToggle" class="btn btn-lang d-inline-flex align-items-center gap-2">
+                한국어 <span class="lang-pill">EN</span>
+              </button>
+            </li>
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <a class="btn btn-bee3" href="beefriends.html#contact">Get Started</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sub-nav -->
+    <div class="bf-page-wrap">
+      <nav class="bf-subnav">
+        <div class="container d-flex align-items-center gap-2 flex-wrap">
+          <a href="beefriends.html" class="bf-back"><i class="bi bi-arrow-left me-1"></i>BeeFriends</a>
+          <span class="text-muted mx-1" style="opacity:.35">|</span>
+          <a href="beefriends-ebook.html"    class="nav-link" data-kor="subnav.ebook">E-Book</a>
+          <a href="beefriends-game.html"     class="nav-link" data-kor="subnav.game">Game</a>
+          <a href="beefriends-counting.html" class="nav-link bf-active" data-kor="subnav.counter">Mite Counter</a>
+        </div>
+      </nav>
+
+      <!-- ══════════════════ ACTIVITY SECTION ══════════════════ -->
+      <section class="mc-section">
+        <div class="container">
+
+          <!-- ── INTRO ─────────────────────────────────────────── -->
+          <div id="screen-intro" class="mc-screen mc-active">
+            <div class="mc-intro-card">
+              <div class="mc-intro-icon"><i class="bi bi-search"></i></div>
+              <h2 class="mc-intro-title" data-kor="mc.intro.title">Can you spot the mites?</h2>
+              <p class="mc-intro-desc" data-kor="mc.intro.desc">
+                Varroa mites are tiny parasites that attack honeybee colonies.
+                Real scientists count them to monitor hive health — and now it's your turn!
+              </p>
+              <ul class="mc-steps">
+                <li>
+                  <span class="step-num">1</span>
+                  <span data-kor="mc.intro.step1">Study the hive image carefully.</span>
+                </li>
+                <li>
+                  <span class="step-num">2</span>
+                  <span data-kor="mc.intro.step2">Click on every mite you can spot — an orange dot will mark it.</span>
+                </li>
+                <li>
+                  <span class="step-num">3</span>
+                  <span data-kor="mc.intro.step3">Click a dot again to remove it if you change your mind.</span>
+                </li>
+                <li>
+                  <span class="step-num">4</span>
+                  <span data-kor="mc.intro.step4">Hit <strong>Submit</strong> to see how close you were to the expert count!</span>
+                </li>
+              </ul>
+              <button class="btn btn-bee px-5" id="btn-start" data-kor="mc.intro.start">
+                Start Counting
+              </button>
+            </div>
+          </div>
+
+          <!-- ── ANNOTATE ───────────────────────────────────────── -->
+          <div id="screen-annotate" class="mc-screen">
+            <div class="mc-annotate-wrap">
+              <p class="mc-progress-label" id="progress-label">Image 1 of 3</p>
+
+              <div class="img-annotate-wrap" id="annotate-wrap">
+                <img id="hive-img" src="" alt="Hive image" draggable="false">
+                <svg id="dot-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+              </div>
+
+              <div class="mc-counter-bar">
+                <div class="dot-counter">
+                  <span data-kor="mc.annotate.youMarked">You marked</span>
+                  <span id="dot-count">0</span>
+                  <span data-kor="mc.annotate.mites">mite(s)</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-bee5" id="btn-clear" data-kor="mc.annotate.clear">Clear All</button>
+                  <button class="btn btn-bee"  id="btn-submit" data-kor="mc.annotate.submit">Submit</button>
+                </div>
+              </div>
+              <p class="text-center mt-2" style="color:var(--bee-ink);opacity:.55;font-size:.85rem" data-kor="mc.annotate.hint">
+                Tap the image to place a marker · Tap a marker to remove it
+              </p>
+            </div>
+          </div>
+
+          <!-- ── FEEDBACK ───────────────────────────────────────── -->
+          <div id="screen-feedback" class="mc-screen">
+            <div class="mc-feedback-card">
+              <div id="score-chip" class="score-chip green">10 / 10</div>
+              <h3 style="font-weight:800;color:var(--bee-dark);margin-bottom:.3rem" id="score-msg" data-kor="mc.feedback.great">
+                Excellent! 🎉
+              </h3>
+
+              <div class="mc-counts">
+                <div class="mc-count-block">
+                  <div class="mc-count-num" id="fb-student">0</div>
+                  <div class="mc-count-label" data-kor="mc.feedback.yourCount">Your count</div>
+                </div>
+                <div class="mc-count-block">
+                  <div class="mc-count-num" id="fb-expert">0</div>
+                  <div class="mc-count-label" data-kor="mc.feedback.expertCount">Expert count</div>
+                </div>
+              </div>
+
+              <div class="mc-fact-box">
+                <strong>🐝 Did you know?</strong><br>
+                <span id="bee-fact"></span>
+              </div>
+
+              <button class="btn btn-bee w-100" id="btn-next" data-kor="mc.feedback.next">Next Image →</button>
+            </div>
+          </div>
+
+          <!-- ── SUMMARY ────────────────────────────────────────── -->
+          <div id="screen-summary" class="mc-screen">
+            <div class="mc-summary-card">
+              <div class="mc-intro-icon"><i class="bi bi-trophy-fill" style="color:var(--bee-orange)"></i></div>
+              <h2 class="mc-intro-title" data-kor="mc.summary.title">Activity Complete!</h2>
+              <div class="mc-total-score" id="total-score">0</div>
+              <p class="mc-total-label">
+                <span data-kor="mc.summary.outOf">points out of</span>
+                <span id="total-possible">0</span>
+              </p>
+              <p style="color:var(--bee-ink);font-size:1rem;margin-bottom:1.8rem" id="summary-msg" data-kor="mc.summary.msg">
+                Great job helping scientists count Varroa mites!
+              </p>
+              <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <button class="btn btn-bee"  id="btn-restart" data-kor="mc.summary.restart">Try Again</button>
+                <a class="btn btn-bee5" href="beefriends.html" data-kor="mc.summary.back">Back to BeeFriends</a>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /container -->
+      </section>
+    </div><!-- /bf-page-wrap -->
+
+    <!-- Footer -->
+    <footer class="text-center py-4" style="background:linear-gradient(90deg,var(--bee-yellow),var(--bee-orange)); color:#fff;">
+      <small>&copy; 2025 BeeWise · Innovation in Every Hive</small>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // ═══════════════════════════════════════════════════════════════
+    // IMAGE REGISTRY — add entries here when you upload hive images
+    // Each entry: { src, expertCount, fact }
+    // ═══════════════════════════════════════════════════════════════
+    const IMAGES = [
+      // TODO: add real hive images to assets/mite-images/ then register them here, e.g.:
+      // { src: 'assets/mite-images/hive-01.jpg', expertCount: 5,
+      //   fact: 'Varroa mites are about 1.5 mm wide — roughly the size of a sesame seed!' },
+    ];
+
+    // ── Fallback placeholder shown when no images are registered ──
+    const PLACEHOLDER = {
+      src: 'assets/steps/step1-1.png',
+      expertCount: 0,
+      fact: 'Add real hive images to assets/mite-images/ and register them in the IMAGES array in beefriends-counting.html!'
+    };
+    const activeImages = IMAGES.length > 0 ? IMAGES : [PLACEHOLDER];
+
+    // ═══════════════════════════════════════════════════════════════
+    // State
+    // ═══════════════════════════════════════════════════════════════
+    let currentIdx   = 0;
+    let annotations  = [];   // [{cx, cy}] percentages
+    let sessionScores = [];  // scores per image
+    const DOT_R = 12;        // dot radius in SVG user-units (% * 100 space)
+
+    // ═══════════════════════════════════════════════════════════════
+    // Screen management
+    // ═══════════════════════════════════════════════════════════════
+    function showScreen(id) {
+      document.querySelectorAll('.mc-screen').forEach(s => s.classList.remove('mc-active'));
+      document.getElementById(id).classList.add('mc-active');
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Annotation
+    // ═══════════════════════════════════════════════════════════════
+    const svg       = document.getElementById('dot-svg');
+    const countEl   = document.getElementById('dot-count');
+    const hiveImg   = document.getElementById('hive-img');
+    const wrapEl    = document.getElementById('annotate-wrap');
+
+    function updateCount() {
+      countEl.textContent = annotations.length;
+    }
+
+    function redrawDots() {
+      svg.innerHTML = '';
+      annotations.forEach((a, i) => {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        // Convert % coords back to SVG viewBox space (0–100)
+        circle.setAttribute('cx', a.cx);
+        circle.setAttribute('cy', a.cy);
+        circle.setAttribute('r',  DOT_R * 0.6 + '%');  // small % radius
+        circle.setAttribute('class', 'mc-dot');
+        circle.style.fill   = 'var(--bee-orange)';
+        circle.style.stroke = '#fff';
+        circle.style.strokeWidth = '1.5%';
+        circle.style.cursor = 'pointer';
+        circle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          annotations.splice(i, 1);
+          redrawDots();
+          updateCount();
+        });
+        svg.appendChild(circle);
+      });
+      updateCount();
+    }
+
+    // SVG viewBox is always 100×100 (we use %)
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+
+    function getClickPct(e) {
+      const rect = wrapEl.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        cx: ((clientX - rect.left) / rect.width)  * 100,
+        cy: ((clientY - rect.top)  / rect.height) * 100,
+      };
+    }
+
+    svg.addEventListener('click', (e) => {
+      const pos = getClickPct(e);
+      annotations.push(pos);
+      redrawDots();
+    });
+
+    svg.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const pos = getClickPct(e);
+      annotations.push(pos);
+      redrawDots();
+    }, { passive: false });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Load an image into the annotation screen
+    // ═══════════════════════════════════════════════════════════════
+    function loadImage(idx) {
+      annotations = [];
+      redrawDots();
+      hiveImg.src = activeImages[idx].src;
+      const progressLabel = document.getElementById('progress-label');
+      const dict = I18N_MC[localStorage.getItem('lang') || 'en'] || I18N_MC.en;
+      progressLabel.textContent =
+        (dict['mc.annotate.image'] || 'Image') + ' ' +
+        (idx + 1) + ' ' +
+        (dict['mc.annotate.of'] || 'of') + ' ' +
+        activeImages.length;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Scoring
+    // ═══════════════════════════════════════════════════════════════
+    function calcScore(studentCount, expertCount) {
+      return Math.max(0, 10 - Math.abs(studentCount - expertCount) * 2);
+    }
+
+    function scoreClass(score) {
+      if (score >= 8) return 'green';
+      if (score >= 4) return 'yellow';
+      return 'red';
+    }
+
+    function scoreMsg(score) {
+      const lang = localStorage.getItem('lang') || 'en';
+      const dict = I18N_MC[lang] || I18N_MC.en;
+      if (score >= 8) return dict['mc.feedback.great']  || 'Excellent! 🎉';
+      if (score >= 4) return dict['mc.feedback.close']  || 'Close! 🐝';
+      return dict['mc.feedback.keep'] || 'Keep practising! 🔍';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Button wiring
+    // ═══════════════════════════════════════════════════════════════
+    document.getElementById('btn-start').addEventListener('click', () => {
+      currentIdx    = 0;
+      sessionScores = [];
+      loadImage(currentIdx);
+      showScreen('screen-annotate');
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      annotations = [];
+      redrawDots();
+    });
+
+    document.getElementById('btn-submit').addEventListener('click', () => {
+      const expertCount  = activeImages[currentIdx].expertCount;
+      const studentCount = annotations.length;
+      const score        = calcScore(studentCount, expertCount);
+      sessionScores.push(score);
+
+      const chip = document.getElementById('score-chip');
+      chip.textContent  = score + ' / 10';
+      chip.className    = 'score-chip ' + scoreClass(score);
+
+      document.getElementById('score-msg').textContent = scoreMsg(score);
+      document.getElementById('fb-student').textContent = studentCount;
+      document.getElementById('fb-expert').textContent  = expertCount;
+      document.getElementById('bee-fact').textContent   = activeImages[currentIdx].fact;
+
+      showScreen('screen-feedback');
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      currentIdx++;
+      if (currentIdx < activeImages.length) {
+        loadImage(currentIdx);
+        showScreen('screen-annotate');
+      } else {
+        const total    = sessionScores.reduce((a, b) => a + b, 0);
+        const possible = activeImages.length * 10;
+        document.getElementById('total-score').textContent    = total;
+        document.getElementById('total-possible').textContent = possible;
+        showScreen('screen-summary');
+      }
+    });
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      showScreen('screen-intro');
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // i18n
+    // ═══════════════════════════════════════════════════════════════
+    const I18N_MC = {
+      en: {
+        "subnav.ebook":  "E-Book",
+        "subnav.game":   "Game",
+        "subnav.counter":"Mite Counter",
+        "mc.intro.title":  "Can you spot the mites?",
+        "mc.intro.desc":   "Varroa mites are tiny parasites that attack honeybee colonies. Real scientists count them to monitor hive health — and now it's your turn!",
+        "mc.intro.step1":  "Study the hive image carefully.",
+        "mc.intro.step2":  "Click on every mite you can spot — an orange dot will mark it.",
+        "mc.intro.step3":  "Click a dot again to remove it if you change your mind.",
+        "mc.intro.step4":  "Hit <strong>Submit</strong> to see how close you were to the expert count!",
+        "mc.intro.start":  "Start Counting",
+        "mc.annotate.youMarked": "You marked",
+        "mc.annotate.mites":     "mite(s)",
+        "mc.annotate.clear":     "Clear All",
+        "mc.annotate.submit":    "Submit",
+        "mc.annotate.hint":      "Tap the image to place a marker · Tap a marker to remove it",
+        "mc.annotate.image":     "Image",
+        "mc.annotate.of":        "of",
+        "mc.feedback.yourCount": "Your count",
+        "mc.feedback.expertCount":"Expert count",
+        "mc.feedback.great":     "Excellent! 🎉",
+        "mc.feedback.close":     "Close! 🐝",
+        "mc.feedback.keep":      "Keep practising! 🔍",
+        "mc.feedback.next":      "Next Image →",
+        "mc.summary.title":      "Activity Complete!",
+        "mc.summary.outOf":      "points out of",
+        "mc.summary.msg":        "Great job helping scientists count Varroa mites!",
+        "mc.summary.restart":    "Try Again",
+        "mc.summary.back":       "Back to BeeFriends"
+      },
+      ko: {
+        "subnav.ebook":  "전자책",
+        "subnav.game":   "게임",
+        "subnav.counter":"응애 카운터",
+        "mc.intro.title":  "응애를 찾을 수 있을까요?",
+        "mc.intro.desc":   "바로아 응애는 꿀벌 군집을 공격하는 작은 기생충입니다. 과학자들은 벌통 건강을 모니터링하기 위해 응애를 셉니다 — 이제 여러분 차례예요!",
+        "mc.intro.step1":  "벌통 이미지를 자세히 살펴보세요.",
+        "mc.intro.step2":  "발견한 응애마다 클릭하세요 — 주황색 점이 표시됩니다.",
+        "mc.intro.step3":  "마음이 바뀌면 점을 다시 클릭하여 제거하세요.",
+        "mc.intro.step4":  "<strong>제출</strong>을 눌러 전문가 수치와 얼마나 가까운지 확인하세요!",
+        "mc.intro.start":  "카운팅 시작",
+        "mc.annotate.youMarked": "표시한 응애",
+        "mc.annotate.mites":     "마리",
+        "mc.annotate.clear":     "전체 지우기",
+        "mc.annotate.submit":    "제출",
+        "mc.annotate.hint":      "이미지를 탭하여 마커 배치 · 마커를 탭하여 제거",
+        "mc.annotate.image":     "이미지",
+        "mc.annotate.of":        "/",
+        "mc.feedback.yourCount": "내 개수",
+        "mc.feedback.expertCount":"전문가 개수",
+        "mc.feedback.great":     "훌륭해요! 🎉",
+        "mc.feedback.close":     "거의 맞았어요! 🐝",
+        "mc.feedback.keep":      "계속 연습해봐요! 🔍",
+        "mc.feedback.next":      "다음 이미지 →",
+        "mc.summary.title":      "활동 완료!",
+        "mc.summary.outOf":      "점 / 총",
+        "mc.summary.msg":        "바로아 응애 세기를 도와주셔서 감사합니다!",
+        "mc.summary.restart":    "다시 하기",
+        "mc.summary.back":       "BeeFriends로 돌아가기"
+      }
+    };
+
+    function applyLang(lang) {
+      const dict = I18N_MC[lang] || I18N_MC.en;
+      document.querySelectorAll("[data-kor]").forEach(el => {
+        const key = el.getAttribute("data-kor");
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem("lang", lang);
+      const btn = document.getElementById("langToggle");
+      if (btn) btn.textContent = lang === "en" ? "한국어" : "English";
+    }
+    (function(){
+      const saved = localStorage.getItem("lang") || "en";
+      applyLang(saved);
+      const btn = document.getElementById("langToggle");
+      if (btn) btn.addEventListener("click", () => {
+        const next = (localStorage.getItem("lang") || "en") === "en" ? "ko" : "en";
+        applyLang(next);
+      });
+    })();
+    </script>
+  </body>
+</html>

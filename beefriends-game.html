@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Colony Under Threat — BeeFriends · BeeWise</title>
+
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link href="assets/styles.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="assets/logo_nobg.png" alt="BeeWise Logo" class="nav-logo2" />
+          <span>BeeWise</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="beecure.html">BeeCure</a></li>
+            <li class="nav-item"><a class="nav-link active" href="beefriends.html">BeeFriends</a></li>
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <button id="langToggle" class="btn btn-lang d-inline-flex align-items-center gap-2">
+                한국어 <span class="lang-pill">EN</span>
+              </button>
+            </li>
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <a class="btn btn-bee3" href="beefriends.html#contact">Get Started</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sub-nav -->
+    <div class="bf-page-wrap">
+      <nav class="bf-subnav">
+        <div class="container d-flex align-items-center gap-2 flex-wrap">
+          <a href="beefriends.html" class="bf-back"><i class="bi bi-arrow-left me-1"></i>BeeFriends</a>
+          <span class="text-muted mx-1" style="opacity:.35">|</span>
+          <a href="beefriends-ebook.html" class="nav-link" data-kor="subnav.ebook">E-Book</a>
+          <a href="beefriends-game.html" class="nav-link bf-active" data-kor="subnav.game">Game</a>
+          <a href="beefriends-counting.html" class="nav-link" data-kor="subnav.counter">Mite Counter</a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Game iframe -->
+    <section class="game-iframe-section">
+      <div class="game-iframe-wrap">
+        <iframe
+          src="game/index.html"
+          title="Colony Under Threat"
+          allow="autoplay"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- How to play in real life -->
+    <section id="real-life" class="section section-pad" style="background:linear-gradient(180deg,#fffdf7 0%,#fff9e6 100%)">
+      <div class="container" data-aos="fade-up">
+        <div class="text-center mb-5">
+          <h2 style="font-weight:800;color:var(--bee-dark)" data-kor="irl.title">How to Play in Real Life</h2>
+          <p class="lead" style="color:var(--bee-ink);max-width:680px;margin:0 auto" data-kor="irl.lead">
+            Bring the Colony Under Threat experience into the classroom with this card-based role-playing game.
+          </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+          <!-- Materials -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="ach-card h-100" data-aos="fade-up" data-aos-delay="100">
+              <i class="bi bi-clipboard2-check-fill ach-icon"></i>
+              <h4 style="font-weight:800;color:var(--bee-dark);margin-bottom:.6rem" data-kor="irl.materials.title">Materials</h4>
+              <ul style="color:var(--bee-ink);font-size:1rem;line-height:1.7;padding-left:1.3rem" data-kor="irl.materials.list">
+                <li>Role cards (Healthy Bee / Infected Bee)</li>
+                <li>Question cards</li>
+                <li>5-minute timer</li>
+                <li>Quarantine token for each player</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Rules -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="ach-card h-100" data-aos="fade-up" data-aos-delay="200">
+              <i class="bi bi-list-ol ach-icon"></i>
+              <h4 style="font-weight:800;color:var(--bee-dark);margin-bottom:.6rem" data-kor="irl.rules.title">How to Play</h4>
+              <ol style="color:var(--bee-ink);font-size:1rem;line-height:1.7;padding-left:1.3rem" data-kor="irl.rules.list">
+                <li>Players secretly draw role cards — most are Healthy Bees, 1–3 are Infected.</li>
+                <li>The Beekeeper asks each bee a question. Healthy bees answer truthfully; Infected bees may hesitate or slip up.</li>
+                <li>The Beekeeper nominates bees they suspect are infected.</li>
+                <li>Nominated bees reveal their cards. Correctly quarantined bees are removed from the game.</li>
+                <li>Win by quarantining all infected bees before time runs out!</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Tips -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="ach-card h-100" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-lightbulb-fill ach-icon"></i>
+              <h4 style="font-weight:800;color:var(--bee-dark);margin-bottom:.6rem" data-kor="irl.tips.title">Beekeeper Tips</h4>
+              <ul style="color:var(--bee-ink);font-size:1rem;line-height:1.7;padding-left:1.3rem" data-kor="irl.tips.list">
+                <li>Watch for hesitation or inconsistent answers.</li>
+                <li>Infected bees may avoid eye contact or change their story.</li>
+                <li>Ask follow-up questions to compare answers across rounds.</li>
+                <li>Don't quarantine too quickly — a wrongly accused bee stays in the colony!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- TODO: Replace with actual real-life game instructions provided by the BeeFriends team -->
+        <p class="text-center mt-4" style="color:rgba(75,59,31,.45);font-size:.88rem">
+          <i class="bi bi-pencil me-1"></i>Placeholder instructions — to be updated with the official BeeFriends classroom guide.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4" style="background:linear-gradient(90deg,var(--bee-yellow),var(--bee-orange)); color:#fff;">
+      <small>&copy; 2025 BeeWise · Innovation in Every Hive</small>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init({ once:true, duration:900, easing:'ease-out-cubic' });</script>
+    <script>
+    const I18N_GAME = {
+      en: {
+        "subnav.ebook": "E-Book",
+        "subnav.game": "Game",
+        "subnav.counter": "Mite Counter",
+        "irl.title": "How to Play in Real Life",
+        "irl.lead": "Bring the Colony Under Threat experience into the classroom with this card-based role-playing game."
+      },
+      ko: {
+        "subnav.ebook": "전자책",
+        "subnav.game": "게임",
+        "subnav.counter": "응애 카운터",
+        "irl.title": "실제로 플레이하는 방법",
+        "irl.lead": "이 카드 기반 롤플레잉 게임으로 교실에서 \"위협받는 군집\" 경험을 즐겨 보세요."
+      }
+    };
+    function applyLang(lang) {
+      const dict = I18N_GAME[lang] || I18N_GAME.en;
+      document.querySelectorAll("[data-kor]").forEach(el => {
+        const key = el.getAttribute("data-kor");
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem("lang", lang);
+      const btn = document.getElementById("langToggle");
+      if (btn) btn.textContent = lang === "en" ? "한국어" : "English";
+    }
+    (function(){
+      const saved = localStorage.getItem("lang") || "en";
+      applyLang(saved);
+      const btn = document.getElementById("langToggle");
+      if (btn) btn.addEventListener("click", () => {
+        const next = (localStorage.getItem("lang") || "en") === "en" ? "ko" : "en";
+        applyLang(next);
+      });
+    })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Large / binary assets — store outside git or use LFS
+*.pdf
+
+# Node / Next.js (BeeCure-main and bee-friends)
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+
+# Environment variables
+.env*
+
+# Python
+__pycache__/
+*.pyc
