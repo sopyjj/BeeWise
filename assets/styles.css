@@ -1571,6 +1571,27 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   margin-top: .1rem;
 }
 
+/* Tutorial */
+.tut-badge {
+  display: inline-block;
+  background: var(--bee-orange); color: #fff;
+  font-size: .72rem; font-weight: 700; letter-spacing: .07em;
+  padding: .2rem .65rem; border-radius: 20px;
+  text-transform: uppercase; margin-bottom: .8rem;
+}
+.tut-task-hint {
+  text-align: center; color: var(--bee-ink);
+  font-size: .95rem; opacity: .7; margin-bottom: .75rem;
+}
+.tut-reveal-hint {
+  background: #fff9e6;
+  border-left: 4px solid var(--bee-orange);
+  border-radius: 0 10px 10px 0;
+  padding: .8rem 1.1rem;
+  color: var(--bee-ink); font-size: .95rem;
+  margin-bottom: 1rem;
+}
+
 /* Annotation */
 .mc-annotate-wrap {
   max-width: 860px;

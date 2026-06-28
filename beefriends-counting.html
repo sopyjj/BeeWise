@@ -59,8 +59,92 @@
       <section class="mc-section">
         <div class="container">
 
-          <!-- ── INTRO ─────────────────────────────────────────── -->
-          <div id="screen-intro" class="mc-screen mc-active">
+          <!-- ── TUTORIAL INTRO ────────────────────────────────── -->
+          <div id="screen-tutorial-intro" class="mc-screen mc-active">
+            <div class="mc-intro-card">
+              <div class="tut-badge" data-kor="tut.badge">Tutorial</div>
+              <div class="mc-intro-icon"><i class="bi bi-book-fill"></i></div>
+              <h2 class="mc-intro-title" data-kor="tut.intro.title">How to Spot a Varroa Mite</h2>
+              <p class="mc-intro-desc" data-kor="tut.intro.desc">
+                Before you start counting, learn what to look for. Study 5 real bee images —
+                then see the expert's answer with the mite highlighted.
+              </p>
+              <ul class="mc-steps">
+                <li>
+                  <span class="step-num">1</span>
+                  <span data-kor="tut.tip1">Varroa mites are <strong>reddish-brown and oval/circular</strong> — like a small rust-coloured button attached to the bee.</span>
+                </li>
+                <li>
+                  <span class="step-num">2</span>
+                  <span data-kor="tut.tip2">They attach to the <strong>bee's abdomen</strong> (the striped rear section). Look for a round, dark-reddish speck that doesn't match the bee's natural pattern.</span>
+                </li>
+                <li>
+                  <span class="step-num">3</span>
+                  <span data-kor="tut.tip3">Mites are about <strong>1–1.8 mm wide</strong> — roughly a sesame seed — so they stand out as a distinct shape against the bee's body.</span>
+                </li>
+                <li>
+                  <span class="step-num">4</span>
+                  <span data-kor="tut.tip4">Click where you think the mite is, then hit <strong>See Answer</strong> to reveal the correct location with a red circle.</span>
+                </li>
+              </ul>
+              <button class="btn btn-bee px-5" id="btn-start-tutorial" data-kor="tut.start">
+                Start Tutorial (5 images)
+              </button>
+            </div>
+          </div>
+
+          <!-- ── TUTORIAL ANNOTATE ─────────────────────────────── -->
+          <div id="screen-tutorial-annotate" class="mc-screen">
+            <div class="mc-annotate-wrap">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="tut-badge" data-kor="tut.badge">Tutorial</span>
+                <p class="mc-progress-label mb-0" id="tut-progress-label">Tutorial 1 of 5</p>
+              </div>
+              <p class="tut-task-hint" data-kor="tut.task">Can you spot the Varroa mite? Click where you think it is — then reveal the answer.</p>
+
+              <div class="img-annotate-wrap" id="tut-annotate-wrap">
+                <canvas id="tut-canvas"></canvas>
+                <svg id="tut-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+              </div>
+
+              <div class="mc-counter-bar">
+                <div class="dot-counter">
+                  <span data-kor="mc.annotate.youMarked">You marked</span>
+                  <span id="tut-dot-count">0</span>
+                  <span data-kor="mc.annotate.mites">mite(s)</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-bee5" id="btn-tut-clear" data-kor="mc.annotate.clear">Clear All</button>
+                  <button class="btn btn-bee"  id="btn-see-answer" data-kor="tut.seeAnswer">See Answer →</button>
+                </div>
+              </div>
+              <p class="text-center mt-2" style="color:var(--bee-ink);opacity:.55;font-size:.85rem" data-kor="mc.annotate.hint">
+                Tap the image to place a marker · Tap a marker to remove it
+              </p>
+            </div>
+          </div>
+
+          <!-- ── TUTORIAL REVEAL ───────────────────────────────── -->
+          <div id="screen-tutorial-reveal" class="mc-screen">
+            <div class="mc-annotate-wrap">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="tut-badge" data-kor="tut.badge">Tutorial</span>
+                <p class="mc-progress-label mb-0" id="tut-reveal-label">Tutorial 1 of 5 — Answer</p>
+              </div>
+              <div class="tut-reveal-hint" id="tut-reveal-hint"></div>
+
+              <div class="img-annotate-wrap" style="cursor:default">
+                <canvas id="tut-reveal-canvas"></canvas>
+              </div>
+
+              <div class="mc-counter-bar" style="justify-content:flex-end;margin-top:.75rem">
+                <button class="btn btn-bee" id="btn-tut-next" data-kor="tut.next">Next →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── MAIN ACTIVITY INTRO ───────────────────────────── -->
+          <div id="screen-intro" class="mc-screen">
             <div class="mc-intro-card">
               <div class="mc-intro-icon"><i class="bi bi-search"></i></div>
               <h2 class="mc-intro-title" data-kor="mc.intro.title">Can you spot the mites?</h2>
@@ -209,6 +293,22 @@
         fact: 'Organic treatments like oxalic acid are used to control Varroa without harming bees or honey.' },
     ];
 
+    // ═══════════════════════════════════════════════════════════════
+    // TUTORIAL DATA — pairs of plain bee image + annotated answer
+    // ═══════════════════════════════════════════════════════════════
+    const TUTORIAL = [
+      { plain:  'tutorial/003_034 copy.png', answer: 'tutorial/1_redcircle.png',
+        hint: 'The red circle marks the Varroa mite on the bee\'s abdomen — notice the reddish-brown oval shape that stands out against the bee\'s body.' },
+      { plain:  'tutorial/004_270 copy.png', answer: 'tutorial/2_redcircle.png',
+        hint: 'The small reddish speck clinging to the bee\'s body is the mite. Its circular shape and rust colour make it distinct from the bee\'s own features.' },
+      { plain:  'tutorial/004_329 copy.png', answer: 'tutorial/3_redcircle.png',
+        hint: 'The mite appears as a round reddish-brown dot between the bee\'s abdominal segments — look for a colour that doesn\'t belong.' },
+      { plain:  'tutorial/008_078 copy.png', answer: 'tutorial/4_redcircle.png',
+        hint: 'This Varroa mite is attached to the bee\'s abdomen. Its flat, circular body is a different shade from the bee — darker and more uniform red-brown.' },
+      { plain:  'tutorial/008_087 copy.png', answer: 'tutorial/5_redcircle.png',
+        hint: 'The mite shows as a bright reddish-brown oval. Once you\'ve spotted the colour and shape, you\'ll recognise Varroa mites quickly in the real activity!' },
+    ];
+
     // ── Fallback placeholder shown when no images are registered ──
     const PLACEHOLDER = {
       src: 'assets/steps/step1-1.png',
@@ -220,10 +320,14 @@
     // ═══════════════════════════════════════════════════════════════
     // State
     // ═══════════════════════════════════════════════════════════════
-    let currentIdx   = 0;
-    let annotations  = [];   // [{cx, cy}] percentages
-    let sessionScores = [];  // scores per image
-    const DOT_R = 12;        // dot radius in SVG user-units (% * 100 space)
+    let currentIdx    = 0;
+    let annotations   = [];   // [{cx, cy}] percentages
+    let sessionScores = [];   // scores per image
+    const DOT_R = 12;         // dot radius in SVG user-units (% * 100 space)
+
+    // Tutorial state
+    let tutIdx         = 0;
+    let tutAnnotations = [];
 
     // ═══════════════════════════════════════════════════════════════
     // Screen management
@@ -236,11 +340,19 @@
     // ═══════════════════════════════════════════════════════════════
     // Annotation
     // ═══════════════════════════════════════════════════════════════
+    // Main activity DOM
     const svg        = document.getElementById('dot-svg');
     const countEl    = document.getElementById('dot-count');
     const hiveCanvas = document.getElementById('hive-canvas');
     const hiveCtx    = hiveCanvas.getContext('2d');
     const wrapEl     = document.getElementById('annotate-wrap');
+
+    // Tutorial DOM
+    const tutSvg      = document.getElementById('tut-svg');
+    const tutCountEl  = document.getElementById('tut-dot-count');
+    const tutCanvas   = document.getElementById('tut-canvas');
+    const tutCtx      = tutCanvas.getContext('2d');
+    const tutWrap     = document.getElementById('tut-annotate-wrap');
 
     // Sharpening convolution — 8-neighbour kernel, applied after upscaling
     function applySharpen(ctx, w, h) {
@@ -263,6 +375,116 @@
       ctx.putImageData(new ImageData(out, w, h), 0, 0);
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // Tutorial annotation (separate dots/SVG from main activity)
+    // ═══════════════════════════════════════════════════════════════
+    tutSvg.setAttribute('viewBox', '0 0 100 100');
+    tutSvg.setAttribute('preserveAspectRatio', 'none');
+
+    function redrawTutDots() {
+      tutSvg.innerHTML = '';
+      tutAnnotations.forEach((a, i) => {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', a.cx);
+        circle.setAttribute('cy', a.cy);
+        circle.setAttribute('r',  DOT_R * 0.6 + '%');
+        circle.setAttribute('class', 'mc-dot');
+        circle.style.fill        = 'var(--bee-orange)';
+        circle.style.stroke      = '#fff';
+        circle.style.strokeWidth = '1.5%';
+        circle.style.cursor      = 'pointer';
+        circle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          tutAnnotations.splice(i, 1);
+          redrawTutDots();
+        });
+        tutSvg.appendChild(circle);
+      });
+      tutCountEl.textContent = tutAnnotations.length;
+    }
+
+    tutSvg.addEventListener('click', (e) => {
+      const rect = tutWrap.getBoundingClientRect();
+      tutAnnotations.push({
+        cx: ((e.clientX - rect.left) / rect.width)  * 100,
+        cy: ((e.clientY - rect.top)  / rect.height) * 100,
+      });
+      redrawTutDots();
+    });
+    tutSvg.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const rect = tutWrap.getBoundingClientRect();
+      tutAnnotations.push({
+        cx: ((e.touches[0].clientX - rect.left) / rect.width)  * 100,
+        cy: ((e.touches[0].clientY - rect.top)  / rect.height) * 100,
+      });
+      redrawTutDots();
+    }, { passive: false });
+
+    async function loadTutImage(idx) {
+      tutAnnotations = [];
+      redrawTutDots();
+      const lang = localStorage.getItem('lang') || 'en';
+      const dict = I18N_MC[lang] || I18N_MC.en;
+      document.getElementById('tut-progress-label').textContent =
+        (dict['tut.label'] || 'Tutorial') + ' ' + (idx + 1) + ' / ' + TUTORIAL.length;
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const UPSCALE_W = 800;
+          const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
+          const w = Math.round(img.naturalWidth  * scale);
+          const h = Math.round(img.naturalHeight * scale);
+          tutCanvas.width  = w;
+          tutCanvas.height = h;
+          tutCtx.imageSmoothingEnabled = true;
+          tutCtx.imageSmoothingQuality = 'high';
+          tutCtx.drawImage(img, 0, 0, w, h);
+          applySharpen(tutCtx, w, h);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = TUTORIAL[idx].plain;
+      });
+    }
+
+    async function loadRevealImage(idx) {
+      const lang = localStorage.getItem('lang') || 'en';
+      const dict = I18N_MC[lang] || I18N_MC.en;
+      const isLast = idx === TUTORIAL.length - 1;
+      document.getElementById('tut-reveal-label').textContent =
+        (dict['tut.label'] || 'Tutorial') + ' ' + (idx + 1) + ' / ' + TUTORIAL.length +
+        ' — ' + (dict['tut.answer'] || 'Answer');
+      document.getElementById('tut-reveal-hint').textContent = TUTORIAL[idx].hint;
+      document.getElementById('btn-tut-next').textContent =
+        isLast
+          ? (dict['tut.startActivity'] || 'Start the Activity →')
+          : (dict['tut.next'] || 'Next →');
+
+      const revCanvas = document.getElementById('tut-reveal-canvas');
+      const revCtx    = revCanvas.getContext('2d');
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const UPSCALE_W = 800;
+          const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
+          const w = Math.round(img.naturalWidth  * scale);
+          const h = Math.round(img.naturalHeight * scale);
+          revCanvas.width  = w;
+          revCanvas.height = h;
+          revCtx.imageSmoothingEnabled = true;
+          revCtx.imageSmoothingQuality = 'high';
+          revCtx.drawImage(img, 0, 0, w, h);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = TUTORIAL[idx].answer;
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Main activity annotation
+    // ═══════════════════════════════════════════════════════════════
     function updateCount() {
       countEl.textContent = annotations.length;
     }
@@ -378,7 +600,37 @@
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // Button wiring
+    // Tutorial button wiring
+    // ═══════════════════════════════════════════════════════════════
+    document.getElementById('btn-start-tutorial').addEventListener('click', async () => {
+      tutIdx = 0;
+      showScreen('screen-tutorial-annotate');
+      await loadTutImage(tutIdx);
+    });
+
+    document.getElementById('btn-tut-clear').addEventListener('click', () => {
+      tutAnnotations = [];
+      redrawTutDots();
+    });
+
+    document.getElementById('btn-see-answer').addEventListener('click', async () => {
+      showScreen('screen-tutorial-reveal');
+      await loadRevealImage(tutIdx);
+    });
+
+    document.getElementById('btn-tut-next').addEventListener('click', async () => {
+      tutIdx++;
+      if (tutIdx < TUTORIAL.length) {
+        showScreen('screen-tutorial-annotate');
+        await loadTutImage(tutIdx);
+      } else {
+        // Tutorial complete — go to main activity intro
+        showScreen('screen-intro');
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Main activity button wiring
     // ═══════════════════════════════════════════════════════════════
     document.getElementById('btn-start').addEventListener('click', async () => {
       currentIdx    = 0;
@@ -436,6 +688,20 @@
         "subnav.ebook":  "E-Book",
         "subnav.game":   "Game",
         "subnav.counter":"Mite Counter",
+        "tut.badge":        "Tutorial",
+        "tut.intro.title":  "How to Spot a Varroa Mite",
+        "tut.intro.desc":   "Before you start counting, learn what to look for. Study 5 real bee images — then see the expert's answer with the mite highlighted.",
+        "tut.tip1":         "Varroa mites are <strong>reddish-brown and oval/circular</strong> — like a small rust-coloured button attached to the bee.",
+        "tut.tip2":         "They attach to the <strong>bee's abdomen</strong> (the striped rear section). Look for a round, dark-reddish speck that doesn't match the bee's natural pattern.",
+        "tut.tip3":         "Mites are about <strong>1–1.8 mm wide</strong> — roughly a sesame seed — so they stand out as a distinct shape against the bee's body.",
+        "tut.tip4":         "Click where you think the mite is, then hit <strong>See Answer</strong> to reveal the correct location with a red circle.",
+        "tut.start":        "Start Tutorial (5 images)",
+        "tut.task":         "Can you spot the Varroa mite? Click where you think it is — then reveal the answer.",
+        "tut.seeAnswer":    "See Answer →",
+        "tut.label":        "Tutorial",
+        "tut.answer":       "Answer",
+        "tut.next":         "Next →",
+        "tut.startActivity":"Start the Activity →",
         "mc.intro.title":  "Can you spot the mites?",
         "mc.intro.desc":   "Varroa mites are tiny parasites that attack honeybee colonies. Real scientists count them to monitor hive health — and now it's your turn!",
         "mc.intro.step1":  "Study the hive image carefully.",
@@ -466,6 +732,20 @@
         "subnav.ebook":  "전자책",
         "subnav.game":   "게임",
         "subnav.counter":"응애 카운터",
+        "tut.badge":        "튜토리얼",
+        "tut.intro.title":  "바로아 응애 식별 방법",
+        "tut.intro.desc":   "카운팅을 시작하기 전에 무엇을 찾아야 할지 배워보세요. 실제 꿀벌 이미지 5장을 살펴보고 전문가의 정답을 확인하세요.",
+        "tut.tip1":         "바로아 응애는 <strong>적갈색이며 타원형/원형</strong>입니다 — 꿀벌에 붙어 있는 작은 녹슨 색의 단추처럼 보입니다.",
+        "tut.tip2":         "응애는 <strong>꿀벌의 복부</strong>(줄무늬가 있는 뒷부분)에 붙어 있습니다. 꿀벌의 자연스러운 패턴과 맞지 않는 둥글고 짙은 붉은 색 점을 찾으세요.",
+        "tut.tip3":         "응애는 너비가 약 <strong>1–1.8mm</strong>로 — 참깨 씨앗 크기 — 꿀벌 몸에서 뚜렷한 모양으로 눈에 띕니다.",
+        "tut.tip4":         "응애가 있다고 생각하는 곳을 클릭한 다음 <strong>정답 보기</strong>를 눌러 빨간 원으로 표시된 정확한 위치를 확인하세요.",
+        "tut.start":        "튜토리얼 시작 (이미지 5장)",
+        "tut.task":         "바로아 응애를 찾을 수 있나요? 있다고 생각하는 곳을 클릭하고 정답을 확인하세요.",
+        "tut.seeAnswer":    "정답 보기 →",
+        "tut.label":        "튜토리얼",
+        "tut.answer":       "정답",
+        "tut.next":         "다음 →",
+        "tut.startActivity":"활동 시작 →",
         "mc.intro.title":  "응애를 찾을 수 있을까요?",
         "mc.intro.desc":   "바로아 응애는 꿀벌 군집을 공격하는 작은 기생충입니다. 과학자들은 벌통 건강을 모니터링하기 위해 응애를 셉니다 — 이제 여러분 차례예요!",
         "mc.intro.step1":  "벌통 이미지를 자세히 살펴보세요.",
