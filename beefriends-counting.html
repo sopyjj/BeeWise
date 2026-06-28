@@ -98,7 +98,7 @@
               <p class="mc-progress-label" id="progress-label">Image 1 of 3</p>
 
               <div class="img-annotate-wrap" id="annotate-wrap">
-                <img id="hive-img" src="" alt="Hive image" draggable="false">
+                <canvas id="hive-canvas"></canvas>
                 <svg id="dot-svg" xmlns="http://www.w3.org/2000/svg"></svg>
               </div>
 
@@ -236,10 +236,32 @@
     // ═══════════════════════════════════════════════════════════════
     // Annotation
     // ═══════════════════════════════════════════════════════════════
-    const svg       = document.getElementById('dot-svg');
-    const countEl   = document.getElementById('dot-count');
-    const hiveImg   = document.getElementById('hive-img');
-    const wrapEl    = document.getElementById('annotate-wrap');
+    const svg        = document.getElementById('dot-svg');
+    const countEl    = document.getElementById('dot-count');
+    const hiveCanvas = document.getElementById('hive-canvas');
+    const hiveCtx    = hiveCanvas.getContext('2d');
+    const wrapEl     = document.getElementById('annotate-wrap');
+
+    // Sharpening convolution — 8-neighbour kernel, applied after upscaling
+    function applySharpen(ctx, w, h) {
+      const id  = ctx.getImageData(0, 0, w, h);
+      const src = id.data;
+      const out = new Uint8ClampedArray(src); // border pixels copied unchanged
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          const i = (y * w + x) * 4;
+          for (let c = 0; c < 3; c++) {
+            out[i+c] = Math.min(255, Math.max(0,
+              9 * src[i+c]
+              - src[((y-1)*w+(x-1))*4+c] - src[((y-1)*w+x)*4+c] - src[((y-1)*w+(x+1))*4+c]
+              - src[(y*w+(x-1))*4+c]                              - src[(y*w+(x+1))*4+c]
+              - src[((y+1)*w+(x-1))*4+c] - src[((y+1)*w+x)*4+c] - src[((y+1)*w+(x+1))*4+c]
+            ));
+          }
+        }
+      }
+      ctx.putImageData(new ImageData(out, w, h), 0, 0);
+    }
 
     function updateCount() {
       countEl.textContent = annotations.length;
@@ -298,11 +320,12 @@
 
     // ═══════════════════════════════════════════════════════════════
     // Load an image into the annotation screen
+    // Upscales to 800 px wide with bicubic smoothing + sharpening.
     // ═══════════════════════════════════════════════════════════════
-    function loadImage(idx) {
+    async function loadImage(idx) {
       annotations = [];
       redrawDots();
-      hiveImg.src = activeImages[idx].src;
+
       const progressLabel = document.getElementById('progress-label');
       const dict = I18N_MC[localStorage.getItem('lang') || 'en'] || I18N_MC.en;
       progressLabel.textContent =
@@ -310,6 +333,27 @@
         (idx + 1) + ' ' +
         (dict['mc.annotate.of'] || 'of') + ' ' +
         activeImages.length;
+
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const UPSCALE_W = 800;
+          const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
+          const w = Math.round(img.naturalWidth  * scale);
+          const h = Math.round(img.naturalHeight * scale);
+
+          hiveCanvas.width  = w;
+          hiveCanvas.height = h;
+          hiveCtx.imageSmoothingEnabled = true;
+          hiveCtx.imageSmoothingQuality = 'high';
+          hiveCtx.drawImage(img, 0, 0, w, h);
+
+          applySharpen(hiveCtx, w, h);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = activeImages[idx].src;
+      });
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -336,11 +380,11 @@
     // ═══════════════════════════════════════════════════════════════
     // Button wiring
     // ═══════════════════════════════════════════════════════════════
-    document.getElementById('btn-start').addEventListener('click', () => {
+    document.getElementById('btn-start').addEventListener('click', async () => {
       currentIdx    = 0;
       sessionScores = [];
-      loadImage(currentIdx);
       showScreen('screen-annotate');
+      await loadImage(currentIdx);
     });
 
     document.getElementById('btn-clear').addEventListener('click', () => {
@@ -366,11 +410,11 @@
       showScreen('screen-feedback');
     });
 
-    document.getElementById('btn-next').addEventListener('click', () => {
+    document.getElementById('btn-next').addEventListener('click', async () => {
       currentIdx++;
       if (currentIdx < activeImages.length) {
-        loadImage(currentIdx);
         showScreen('screen-annotate');
+        await loadImage(currentIdx);
       } else {
         const total    = sessionScores.reduce((a, b) => a + b, 0);
         const possible = activeImages.length * 10;
