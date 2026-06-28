@@ -184,10 +184,29 @@
     // IMAGE REGISTRY — add entries here when you upload hive images
     // Each entry: { src, expertCount, fact }
     // ═══════════════════════════════════════════════════════════════
+    // expertCount = number of mites visible in each image.
+    // TODO: visually inspect each image and update expertCount to the correct value.
     const IMAGES = [
-      // TODO: add real hive images to assets/mite-images/ then register them here, e.g.:
-      // { src: 'assets/mite-images/hive-01.jpg', expertCount: 5,
-      //   fact: 'Varroa mites are about 1.5 mm wide — roughly the size of a sesame seed!' },
+      { src: 'assets/mite-images/001_093.png', expertCount: 1,
+        fact: 'Varroa mites are reddish-brown and about 1–1.8 mm wide — roughly the size of a sesame seed!' },
+      { src: 'assets/mite-images/002_024.png', expertCount: 1,
+        fact: 'Varroa mites attach to a bee\'s abdomen and feed on its fat body, weakening the whole colony.' },
+      { src: 'assets/mite-images/003_169.png', expertCount: 1,
+        fact: 'A single infested hive can collapse within 1–2 years if mites go untreated.' },
+      { src: 'assets/mite-images/004_129.png', expertCount: 1,
+        fact: 'Varroa mites reproduce inside capped brood cells — one female can lay up to five eggs per cell.' },
+      { src: 'assets/mite-images/005_448.png', expertCount: 1,
+        fact: 'Beekeepers monitor mite levels by counting mites on 100–300 bees — just like you\'re doing now!' },
+      { src: 'assets/mite-images/006_004.png', expertCount: 1,
+        fact: 'Varroa mites were first detected in Europe in the 1970s and spread worldwide within decades.' },
+      { src: 'assets/mite-images/007_161.png', expertCount: 1,
+        fact: 'A mite load of more than 2% of bees is considered a treatment threshold for many beekeepers.' },
+      { src: 'assets/mite-images/008_127.png', expertCount: 1,
+        fact: 'AI systems like BeeCure can scan hive images and detect mites automatically — helping beekeepers act faster.' },
+      { src: 'assets/mite-images/009_081.png', expertCount: 1,
+        fact: 'Bees infected by Varroa mites often have deformed wings and shorter lifespans.' },
+      { src: 'assets/mite-images/010_294.png', expertCount: 1,
+        fact: 'Organic treatments like oxalic acid are used to control Varroa without harming bees or honey.' },
     ];
 
     // ── Fallback placeholder shown when no images are registered ──
