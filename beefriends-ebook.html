@@ -13,7 +13,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="assets/styles.css" rel="stylesheet">
     <style>
-      .ebook-section { min-height: calc(100vh - 118px); }
+      .ebook-section {
+        min-height: calc(100vh - 118px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      #book-viewer { width: 100%; }
       /* page-flip injects its own canvas; wrap it */
       #book-mount { display: flex; justify-content: center; }
     </style>
