@@ -73,7 +73,7 @@
         <!-- Loading state -->
         <div id="loader" class="ebook-loader">
           <p style="font-size:1.1rem;font-weight:600;margin-bottom:.5rem" data-kor="ebook.loading">Loading e-book…</p>
-          <p id="loader-detail" style="font-size:.9rem;opacity:.65;margin-bottom:1.2rem">Rendering pages, please wait.</p>
+          <p id="loader-detail" style="display:none"></p>
           <div class="ebook-progress-wrap">
             <div id="progress-bar" class="ebook-progress-bar"></div>
           </div>
@@ -130,7 +130,6 @@
     // ── Init ─────────────────────────────────────────────────────────────
     async function initEbook() {
       const loader      = document.getElementById('loader');
-      const loaderDetail= document.getElementById('loader-detail');
       const progressBar = document.getElementById('progress-bar');
       const errorMsg    = document.getElementById('error-msg');
       const viewer      = document.getElementById('book-viewer');
@@ -141,7 +140,6 @@
       const bgProgress  = document.getElementById('bg-progress');
 
       try {
-        loaderDetail.textContent = 'Fetching document…';
         const pdf   = await pdfjsLib.getDocument(PDF_FILE).promise;
         const total = pdf.numPages;
 
@@ -189,7 +187,6 @@
         // ── Render first N pages before showing the book ─────────────────
         const preload = Math.min(PRELOAD_PAGES, total);
         for (let i = 0; i < preload; i++) {
-          loaderDetail.textContent = `Rendering page ${i + 1} of ${total}…`;
           progressBar.style.width = `${Math.round(((i + 1) / preload) * 100)}%`;
           pageDivs[i].innerHTML = '';
           pageDivs[i].appendChild(await renderToImg(i + 1));
@@ -250,7 +247,6 @@
 
       } catch (err) {
         console.error(err);
-        loaderDetail.style.display = 'none';
         progressBar.parentElement.style.display = 'none';
         errorMsg.innerHTML =
           'Could not load the e-book. ' +
