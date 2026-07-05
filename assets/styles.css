@@ -1432,6 +1432,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .ebook-section {
   background: #1a1a2e;
   padding: 2rem 0 3rem;
+  overflow-x: hidden;
 }
 .ebook-loader {
   text-align: center;

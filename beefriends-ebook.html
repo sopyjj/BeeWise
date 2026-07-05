@@ -115,9 +115,9 @@
 
     <script>
     // ── Config ───────────────────────────────────────────────────────────
-    const PDF_FILE    = 'beefriends-ebook.pdf';
-    const RENDER_SCALE = 1.4;
-    const JPEG_QUALITY = 0.80;
+    const PDF_FILE     = 'beefriends-ebook.pdf';
+    const RENDER_SCALE = 1.6;
+    const JPEG_QUALITY = 0.82;
     const PRELOAD_PAGES = 4;   // pages rendered before showing the book
 
     // ── Init ─────────────────────────────────────────────────────────────
@@ -144,7 +144,7 @@
         const ratio  = baseVp.height / baseVp.width;
 
         const isMobile = window.innerWidth < 768;
-        const maxW     = Math.min(window.innerWidth - 32, 1100);
+        const maxW     = window.innerWidth - 48;   // use full viewport; no artificial cap
         const pageW    = Math.round(isMobile ? maxW : maxW / 2);
         const pageH    = Math.round(pageW * ratio);
         const scale    = (pageW / baseVp.width) * RENDER_SCALE;
@@ -198,22 +198,35 @@
         });
         pf.loadFromHTML(bookEl.querySelectorAll('.page'));
 
-        // Controls
-        const updateInfo = () => {
+        // Controls + cover-centering
+        // StPageFlip draws the front cover on the right half of a 2×pageW canvas
+        // and the back cover on the left half. Translate the mount so the visible
+        // page is centred in the viewport instead of sitting off to one side.
+        mount.style.transition = 'transform 0.35s ease';
+        function syncView() {
           const cur = pf.getCurrentPageIndex();
           pageInfo.textContent = `${cur + 1} / ${total}`;
           prevBtn.disabled = cur === 0;
           nextBtn.disabled = cur >= total - 1;
-        };
+          if (!isMobile) {
+            if (cur === 0) {
+              mount.style.transform = `translateX(-${Math.round(pageW / 2)}px)`;
+            } else if (cur >= total - 1) {
+              mount.style.transform = `translateX(${Math.round(pageW / 2)}px)`;
+            } else {
+              mount.style.transform = '';
+            }
+          }
+        }
         prevBtn.addEventListener('click', () => pf.flipPrev('top'));
         nextBtn.addEventListener('click', () => pf.flipNext('top'));
-        pf.on('flip', updateInfo);
-        pf.on('changeState', updateInfo);
+        pf.on('flip', syncView);
+        pf.on('changeState', syncView);
 
         // Show the book immediately
         loader.style.display = 'none';
         viewer.style.display = 'block';
-        updateInfo();
+        syncView();
 
         // ── Render remaining pages in the background ─────────────────────
         (async () => {
