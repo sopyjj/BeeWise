@@ -3,6 +3,7 @@
 
 # Large / binary assets — store outside git or use LFS
 *.pdf
+!beefriends-ebook.pdf
 
 # Node / Next.js (BeeCure-main and bee-friends)
 node_modules/
