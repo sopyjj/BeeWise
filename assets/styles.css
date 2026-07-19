@@ -1533,7 +1533,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .mc-section {
   background: linear-gradient(180deg, #fffdf7 0%, #fff9e6 100%);
   min-height: calc(100vh - 118px);
-  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  padding: 1rem 0 1.5rem;
 }
 .mc-screen { display: none; }
 .mc-screen.mc-active { display: block; }
@@ -1603,7 +1603,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 
 /* Annotation */
 .mc-annotate-wrap {
-  max-width: 860px;
+  max-width: 520px;
   margin: 0 auto;
 }
 .mc-progress-label {
@@ -1625,6 +1625,8 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   display: block;
   width: 100%;
   height: auto;
+  max-height: 55vh;
+  object-fit: contain;
   pointer-events: none;
   filter: contrast(1.45) saturate(1.8) brightness(1.06);
 }
