@@ -470,13 +470,14 @@
 
       const revCanvas = document.getElementById('tut-reveal-canvas');
       const revCtx    = revCanvas.getContext('2d');
-      // Reveal images are already large (752–760 px) — soften filter, keep full width
-      revCanvas.style.filter = 'contrast(1.1) saturate(1.1) brightness(0.88)';
+      revCanvas.style.filter    = 'contrast(1.1) saturate(1.1) brightness(0.88)';
+      revCanvas.style.maxHeight = '40vh';
+      revCanvas.parentElement.style.maxWidth = '360px';
 
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
-          const UPSCALE_W = 800;
+          const UPSCALE_W = 360;
           const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
@@ -552,11 +553,14 @@
 
     // ═══════════════════════════════════════════════════════════════
     // Load an image into the annotation screen
-    // Upscales to 800 px wide with bicubic smoothing + sharpening.
     // ═══════════════════════════════════════════════════════════════
     async function loadImage(idx) {
       annotations = [];
       redrawDots();
+
+      // Enforce size via inline style so it beats any cached CSS
+      wrapEl.style.maxWidth = '360px';
+      hiveCanvas.style.maxHeight = '40vh';
 
       const progressLabel = document.getElementById('progress-label');
       const dict = I18N_MC[localStorage.getItem('lang') || 'en'] || I18N_MC.en;
@@ -569,7 +573,7 @@
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
-          const UPSCALE_W = 800;
+          const UPSCALE_W = 360;
           const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
