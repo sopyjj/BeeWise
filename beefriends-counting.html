@@ -249,7 +249,71 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Firebase (compat SDK — no build step required) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
     <script>
+    // ═══════════════════════════════════════════════════════════════
+    // FIREBASE CONFIG
+    // ── How to fill this in ──────────────────────────────────────
+    // 1. Go to https://console.firebase.google.com and create a project.
+    // 2. Add a Web app (</> icon) to get the config snippet below.
+    // 3. In Firestore Database → Rules, paste:
+    //      rules_version = '2';
+    //      service cloud.firestore {
+    //        match /databases/{database}/documents {
+    //          match /{document=**} { allow read, write: if true; }
+    //        }
+    //      }
+    //    (tighten these rules before going public if needed)
+    // ═══════════════════════════════════════════════════════════════
+    const FIREBASE_CONFIG = {
+      apiKey:            "REPLACE_ME",
+      authDomain:        "REPLACE_ME.firebaseapp.com",
+      projectId:         "REPLACE_ME",
+      storageBucket:     "REPLACE_ME.appspot.com",
+      messagingSenderId: "REPLACE_ME",
+      appId:             "REPLACE_ME"
+    };
+
+    let _db = null;
+    try {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      _db = firebase.firestore();
+    } catch (e) {
+      console.warn('Firestore unavailable — responses will not be saved.', e);
+    }
+
+    // Anonymous session ID — stable within one page load
+    const SESSION_ID = Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    // Save one submission to Firestore.
+    // Schema:
+    //   mite_counts/{imageFilename}/submissions/{autoId}
+    //     sessionId:   string    — anonymous per-session identifier
+    //     coordinates: [{cx, cy}] — click positions as % of image (0–100)
+    //     count:       number    — number of markers placed
+    //     timestamp:   Timestamp — server-side write time
+    async function saveResponse(imgSrc, coordinates, count) {
+      if (!_db) return;
+      const imgId = imgSrc.split('/').pop(); // "mc_01.jpeg"
+      try {
+        await _db
+          .collection('mite_counts')
+          .doc(imgId)
+          .collection('submissions')
+          .add({
+            sessionId:   SESSION_ID,
+            coordinates: coordinates,
+            count:       count,
+            timestamp:   firebase.firestore.FieldValue.serverTimestamp(),
+          });
+      } catch (e) {
+        console.warn('Could not save response:', e);
+      }
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // IMAGE POOL — 50 varroa-positive images; 10 are picked at
     // random each round so the set changes every attempt.
@@ -661,8 +725,11 @@
     });
 
     document.getElementById('btn-submit').addEventListener('click', () => {
-      document.getElementById('fb-student').textContent = annotations.length;
+      const count = annotations.length;
+      document.getElementById('fb-student').textContent = count;
       document.getElementById('bee-fact').textContent   = activeImages[currentIdx].fact;
+      // Fire-and-forget: save coordinates + count to Firestore
+      saveResponse(activeImages[currentIdx].src, [...annotations], count);
       showScreen('screen-feedback');
     });
 
