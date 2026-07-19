@@ -206,19 +206,10 @@
           <!-- ── FEEDBACK ───────────────────────────────────────── -->
           <div id="screen-feedback" class="mc-screen">
             <div class="mc-feedback-card">
-              <div id="score-chip" class="score-chip green">10 / 10</div>
-              <h3 style="font-weight:800;color:var(--bee-dark);margin-bottom:.3rem" id="score-msg" data-kor="mc.feedback.great">
-                Excellent! 🎉
-              </h3>
-
               <div class="mc-counts">
                 <div class="mc-count-block">
                   <div class="mc-count-num" id="fb-student">0</div>
                   <div class="mc-count-label" data-kor="mc.feedback.yourCount">Your count</div>
-                </div>
-                <div class="mc-count-block">
-                  <div class="mc-count-num" id="fb-expert">0</div>
-                  <div class="mc-count-label" data-kor="mc.feedback.expertCount">Expert count</div>
                 </div>
               </div>
 
@@ -236,11 +227,6 @@
             <div class="mc-summary-card">
               <div class="mc-intro-icon"><i class="bi bi-trophy-fill" style="color:var(--bee-orange)"></i></div>
               <h2 class="mc-intro-title" data-kor="mc.summary.title">Activity Complete!</h2>
-              <div class="mc-total-score" id="total-score">0</div>
-              <p class="mc-total-label">
-                <span data-kor="mc.summary.outOf">points out of</span>
-                <span id="total-possible">0</span>
-              </p>
               <p style="color:var(--bee-ink);font-size:1rem;margin-bottom:1.8rem" id="summary-msg" data-kor="mc.summary.msg">
                 Great job helping scientists count Varroa mites!
               </p>
@@ -265,33 +251,36 @@
 
     <script>
     // ═══════════════════════════════════════════════════════════════
-    // IMAGE REGISTRY — add entries here when you upload hive images
-    // Each entry: { src, expertCount, fact }
+    // IMAGE POOL — 50 varroa-positive images; 10 are picked at
+    // random each round so the set changes every attempt.
     // ═══════════════════════════════════════════════════════════════
-    // expertCount = number of mites visible in each image.
-    // TODO: visually inspect each image and update expertCount to the correct value.
-    const IMAGES = [
-      { src: 'assets/mite-images/mc_01.jpeg', expertCount: 1,
-        fact: 'Varroa mites are reddish-brown and about 1–1.8 mm wide — roughly the size of a sesame seed!' },
-      { src: 'assets/mite-images/mc_02.jpeg', expertCount: 1,
-        fact: 'Varroa mites attach to a bee\'s abdomen and feed on its fat body, weakening the whole colony.' },
-      { src: 'assets/mite-images/mc_03.jpeg', expertCount: 1,
-        fact: 'A single infested hive can collapse within 1–2 years if mites go untreated.' },
-      { src: 'assets/mite-images/mc_04.jpeg', expertCount: 1,
-        fact: 'Varroa mites reproduce inside capped brood cells — one female can lay up to five eggs per cell.' },
-      { src: 'assets/mite-images/mc_05.jpeg', expertCount: 1,
-        fact: 'Beekeepers monitor mite levels by counting mites on 100–300 bees — just like you\'re doing now!' },
-      { src: 'assets/mite-images/mc_06.jpeg', expertCount: 1,
-        fact: 'Varroa mites were first detected in Europe in the 1970s and spread worldwide within decades.' },
-      { src: 'assets/mite-images/mc_07.jpeg', expertCount: 1,
-        fact: 'A mite load of more than 2% of bees is considered a treatment threshold for many beekeepers.' },
-      { src: 'assets/mite-images/mc_08.jpeg', expertCount: 1,
-        fact: 'AI systems like BeeCure can scan hive images and detect mites automatically — helping beekeepers act faster.' },
-      { src: 'assets/mite-images/mc_09.jpeg', expertCount: 1,
-        fact: 'Bees infected by Varroa mites often have deformed wings and shorter lifespans.' },
-      { src: 'assets/mite-images/mc_10.jpeg', expertCount: 1,
-        fact: 'Organic treatments like oxalic acid are used to control Varroa without harming bees or honey.' },
+    const BEE_FACTS = [
+      'Varroa mites are reddish-brown and about 1–1.8 mm wide — roughly the size of a sesame seed!',
+      'Varroa mites attach to a bee\'s abdomen and feed on its fat body, weakening the whole colony.',
+      'A single infested hive can collapse within 1–2 years if mites go untreated.',
+      'Varroa mites reproduce inside capped brood cells — one female can lay up to five eggs per cell.',
+      'Beekeepers monitor mite levels by counting mites on 100–300 bees — just like you\'re doing now!',
+      'Varroa mites were first detected in Europe in the 1970s and spread worldwide within decades.',
+      'A mite load of more than 2 % of bees is considered a treatment threshold for many beekeepers.',
+      'AI systems like BeeCure can scan hive images and detect mites automatically — helping beekeepers act faster.',
+      'Bees infected by Varroa mites often have deformed wings and shorter lifespans.',
+      'Organic treatments like oxalic acid are used to control Varroa without harming bees or honey.',
+      'Varroa destructor originated in Asia and parasitised the Asian honey bee before spreading to European species.',
+      'A single Varroa mite can produce 1–2 offspring per brood cycle, rapidly building up infestation levels.',
+      'Honeybees can practise hygienic behaviour — detecting and removing mite-infested brood before mites reproduce.',
+      'Varroa mites are the number one cause of honeybee colony losses worldwide.',
+      'Some beekeepers use screened bottom boards so mites fall through and cannot re-infest the colony.',
+      'Formic acid vapour treatment is one of the most effective organic options against Varroa.',
+      'Varroa mites can transmit Deformed Wing Virus (DWV) directly into bees as they feed.',
+      'Worker bees can live up to 6 weeks in summer; a heavy Varroa load can cut that lifespan in half.',
+      'Drone brood is preferred by Varroa mites — beekeepers sometimes use it as a trap to reduce mite populations.',
+      'Citizen science data like yours helps researchers understand mite distribution across different regions.',
     ];
+
+    const IMAGE_POOL = Array.from({ length: 50 }, (_, i) => ({
+      src:  `assets/mite-images/mc_${String(i + 1).padStart(2, '0')}.jpeg`,
+      fact: BEE_FACTS[i % BEE_FACTS.length],
+    }));
 
     // ═══════════════════════════════════════════════════════════════
     // TUTORIAL DATA — pairs of plain bee image + annotated answer
@@ -311,19 +300,27 @@
 
     // ── Fallback placeholder shown when no images are registered ──
     const PLACEHOLDER = {
-      src: 'assets/steps/step1-1.png',
-      expertCount: 0,
-      fact: 'Add real hive images to assets/mite-images/ and register them in the IMAGES array in beefriends-counting.html!'
+      src:  'assets/steps/step1-1.png',
+      fact: 'Add real hive images to assets/mite-images/ and register them in IMAGE_POOL in beefriends-counting.html!'
     };
-    const activeImages = IMAGES.length > 0 ? IMAGES : [PLACEHOLDER];
+    let activeImages = [PLACEHOLDER];
+
+    // Pick `n` unique items at random from `arr`
+    function pickRandom(arr, n) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a.slice(0, n);
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // State
     // ═══════════════════════════════════════════════════════════════
-    let currentIdx    = 0;
-    let annotations   = [];   // [{cx, cy}] percentages
-    let sessionScores = [];   // scores per image
-    const DOT_R = 12;         // dot radius in SVG user-units (% * 100 space)
+    let currentIdx  = 0;
+    let annotations = [];   // [{cx, cy}] percentages
+    const DOT_R = 12;       // dot radius in SVG user-units (% * 100 space)
 
     // Tutorial state
     let tutIdx         = 0;
@@ -577,9 +574,15 @@
       annotations = [];
       redrawDots();
 
-      // Enforce size via inline style so it beats any cached CSS
-      wrapEl.style.maxWidth = '360px';
+      // Enforce size + centering via inline style so it beats any cached CSS
+      const outerWrap = wrapEl.closest('.mc-annotate-wrap');
+      if (outerWrap) { outerWrap.style.maxWidth = '480px'; outerWrap.style.margin = '0 auto'; }
+      wrapEl.style.maxWidth = '380px';
+      wrapEl.style.margin   = '0 auto';
       hiveCanvas.style.maxHeight = '40vh';
+      hiveCanvas.style.width     = '100%';
+      hiveCanvas.style.height    = 'auto';
+      hiveCanvas.style.filter    = 'contrast(1.05) saturate(1.1) brightness(1.0)';
 
       const progressLabel = document.getElementById('progress-label');
       const dict = I18N_MC[localStorage.getItem('lang') || 'en'] || I18N_MC.en;
@@ -611,26 +614,6 @@
       });
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // Scoring
-    // ═══════════════════════════════════════════════════════════════
-    function calcScore(studentCount, expertCount) {
-      return Math.max(0, 10 - Math.abs(studentCount - expertCount) * 2);
-    }
-
-    function scoreClass(score) {
-      if (score >= 8) return 'green';
-      if (score >= 4) return 'yellow';
-      return 'red';
-    }
-
-    function scoreMsg(score) {
-      const lang = localStorage.getItem('lang') || 'en';
-      const dict = I18N_MC[lang] || I18N_MC.en;
-      if (score >= 8) return dict['mc.feedback.great']  || 'Excellent! 🎉';
-      if (score >= 4) return dict['mc.feedback.close']  || 'Close! 🐝';
-      return dict['mc.feedback.keep'] || 'Keep practising! 🔍';
-    }
 
     // ═══════════════════════════════════════════════════════════════
     // Tutorial button wiring
@@ -666,8 +649,8 @@
     // Main activity button wiring
     // ═══════════════════════════════════════════════════════════════
     document.getElementById('btn-start').addEventListener('click', async () => {
-      currentIdx    = 0;
-      sessionScores = [];
+      activeImages = IMAGE_POOL.length > 0 ? pickRandom(IMAGE_POOL, 10) : [PLACEHOLDER];
+      currentIdx   = 0;
       showScreen('screen-annotate');
       await loadImage(currentIdx);
     });
@@ -678,20 +661,8 @@
     });
 
     document.getElementById('btn-submit').addEventListener('click', () => {
-      const expertCount  = activeImages[currentIdx].expertCount;
-      const studentCount = annotations.length;
-      const score        = calcScore(studentCount, expertCount);
-      sessionScores.push(score);
-
-      const chip = document.getElementById('score-chip');
-      chip.textContent  = score + ' / 10';
-      chip.className    = 'score-chip ' + scoreClass(score);
-
-      document.getElementById('score-msg').textContent = scoreMsg(score);
-      document.getElementById('fb-student').textContent = studentCount;
-      document.getElementById('fb-expert').textContent  = expertCount;
+      document.getElementById('fb-student').textContent = annotations.length;
       document.getElementById('bee-fact').textContent   = activeImages[currentIdx].fact;
-
       showScreen('screen-feedback');
     });
 
@@ -701,10 +672,6 @@
         showScreen('screen-annotate');
         await loadImage(currentIdx);
       } else {
-        const total    = sessionScores.reduce((a, b) => a + b, 0);
-        const possible = activeImages.length * 10;
-        document.getElementById('total-score').textContent    = total;
-        document.getElementById('total-possible').textContent = possible;
         showScreen('screen-summary');
       }
     });
