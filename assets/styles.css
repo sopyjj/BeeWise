@@ -1603,7 +1603,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 
 /* Annotation */
 .mc-annotate-wrap {
-  max-width: 520px;
+  max-width: 360px;
   margin: 0 auto;
 }
 .mc-progress-label {
@@ -1625,7 +1625,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   display: block;
   width: 100%;
   height: auto;
-  max-height: 55vh;
+  max-height: 40vh;
   object-fit: contain;
   pointer-events: none;
   filter: contrast(1.45) saturate(1.8) brightness(1.06);
