@@ -421,6 +421,23 @@
       redrawTutDots();
     }, { passive: false });
 
+    // Shared sizing for both tutorial plain and reveal images — same constants = same display size
+    const TUT_UPSCALE_W  = 400;
+    const TUT_WRAP_MAX_W = '420px';   // outer .mc-annotate-wrap
+    const TUT_IMG_MAX_W  = '400px';   // inner img-annotate-wrap
+    const TUT_MAX_H      = '58vh';
+    const TUT_FILTER     = 'contrast(1.1) saturate(1.1) brightness(0.88)';
+
+    function applyTutWrapStyles(imgWrap) {
+      const outer = imgWrap.closest('.mc-annotate-wrap');
+      if (outer) {
+        outer.style.maxWidth  = TUT_WRAP_MAX_W;
+        outer.style.margin    = '0 auto';
+      }
+      imgWrap.style.maxWidth = TUT_IMG_MAX_W;
+      imgWrap.style.margin   = '0 auto';
+    }
+
     async function loadTutImage(idx) {
       tutAnnotations = [];
       redrawTutDots();
@@ -429,17 +446,16 @@
       document.getElementById('tut-progress-label').textContent =
         (dict['tut.label'] || 'Tutorial') + ' ' + (idx + 1) + ' / ' + TUTORIAL.length;
 
-      // Constrain the annotation wrap so tiny images don't fill the full container.
-      // Inline style beats any CSS rule — this is the reliable fix.
-      tutWrap.style.maxWidth = '360px';
-      tutCanvas.style.filter = 'contrast(1.1) saturate(1.1) brightness(0.88)';
+      applyTutWrapStyles(tutWrap);
+      tutCanvas.style.maxHeight = TUT_MAX_H;
+      tutCanvas.style.width     = '100%';
+      tutCanvas.style.height    = 'auto';
+      tutCanvas.style.filter    = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
-          // Upscale to 300 px — enough for clarity without blowing up tiny bees
-          const UPSCALE_W = 300;
-          const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
+          const scale = Math.max(1, TUT_UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
           tutCanvas.width  = w;
@@ -448,6 +464,8 @@
           tutCtx.imageSmoothingQuality = 'high';
           tutCtx.drawImage(img, 0, 0, w, h);
           applySharpen(tutCtx, w, h);
+          // Preload answer image while user annotates so reveal is instant
+          new Image().src = TUTORIAL[idx].answer;
           resolve();
         };
         img.onerror = reject;
@@ -470,15 +488,16 @@
 
       const revCanvas = document.getElementById('tut-reveal-canvas');
       const revCtx    = revCanvas.getContext('2d');
-      revCanvas.style.filter    = 'contrast(1.1) saturate(1.1) brightness(0.88)';
-      revCanvas.style.maxHeight = '40vh';
-      revCanvas.parentElement.style.maxWidth = '360px';
+      applyTutWrapStyles(revCanvas.parentElement);
+      revCanvas.style.filter    = TUT_FILTER;
+      revCanvas.style.maxHeight = TUT_MAX_H;
+      revCanvas.style.width     = '100%';
+      revCanvas.style.height    = 'auto';
 
       await new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
-          const UPSCALE_W = 360;
-          const scale = Math.max(1, UPSCALE_W / img.naturalWidth);
+          const scale = Math.max(1, TUT_UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
           revCanvas.width  = w;
@@ -628,8 +647,8 @@
     });
 
     document.getElementById('btn-see-answer').addEventListener('click', async () => {
-      showScreen('screen-tutorial-reveal');
       await loadRevealImage(tutIdx);
+      showScreen('screen-tutorial-reveal');
     });
 
     document.getElementById('btn-tut-next').addEventListener('click', async () => {
