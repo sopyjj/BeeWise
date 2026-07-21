@@ -1620,13 +1620,20 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   box-shadow: 0 12px 36px rgba(2,6,23,.14);
   user-select: none;
 }
-.img-annotate-wrap img,
-.img-annotate-wrap canvas {
+.img-annotate-wrap img {
   display: block;
   width: 100%;
   height: auto;
   max-height: 40vh;
   object-fit: contain;
+  pointer-events: none;
+  filter: contrast(1.45) saturate(1.8) brightness(1.06);
+}
+.img-annotate-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 40vh;
   pointer-events: none;
   filter: contrast(1.45) saturate(1.8) brightness(1.06);
 }
