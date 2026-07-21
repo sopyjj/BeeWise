@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=10" rel="stylesheet">
+    <link href="assets/styles.css?v=19" rel="stylesheet">
   </head>
 
   <body>
@@ -130,6 +130,7 @@
 
     canvas.width  = CW;
     canvas.height = CH;
+    ctx.imageSmoothingEnabled = false;
 
     // ── Threat facts ───────────────────────────────────────────────
     const THREAT_FACTS = {
@@ -145,7 +146,7 @@
     let phase, benny, objects, score, lives, timeLeft, elapsed;
     let lastTs, rafId, invincible, invTimer, popTimer;
     let clouds, flowerT, obstT, bonusT, wallT, frameN;
-    let threatHits, fenceX, hedgeX;
+    let threatHits, fenceX, hedgeX, birds;
 
     function initState() {
       phase       = 'idle';
@@ -163,11 +164,16 @@
       threatHits  = {};
       fenceX      = 0;
       hedgeX      = 0;
+      birds       = [
+        { x: 100, y: 62, spd: 0.38 },
+        { x: 310, y: 80, spd: 0.28 },
+        { x: 510, y: 55, spd: 0.45 },
+      ];
       clouds      = Array.from({length: 5}, (_, i) => ({
         x: i * 130 + 20,
-        y: 14 + (i % 3) * 18,
-        w: 40 + (i % 3) * 20,
-        spd: 0.35 + (i % 3) * 0.18
+        y: 16 + (i % 3) * 22,
+        w: 64 + (i % 3) * 24,   // 64 / 88 / 112 — large reference-style clouds
+        spd: 0.28 + (i % 3) * 0.12
       }));
       // Spawn timers (in frames at ~60fps)
       flowerT = 50;
@@ -311,7 +317,8 @@
       // Clouds + parallax layers
       const sp = scrollSpd();
       clouds.forEach(c => { c.x -= c.spd; if (c.x < -80) c.x = CW + 40; });
-      hedgeX = (hedgeX + sp * 0.18) % 100;
+      birds.forEach(b => { b.x -= b.spd; if (b.x < -20) b.x = CW + 20; });
+      hedgeX += sp * 0.18;
       fenceX = (fenceX + sp * 0.55) % 76;
 
       // Move objects
@@ -378,172 +385,440 @@
       syncHUD();
     }
 
-    // ── Pastel palette ─────────────────────────────────────────────
+    // ── Warm cozy dark palette ─────────────────────────────────────
     const C = {
-      skyTop:   '#ffc8e8',  // pink
-      skyMid:   '#e8c8f8',  // lavender
-      skyBot:   '#c8f0f8',  // sky blue
-      hillA:    '#d4a8f0',  // lavender hill
-      hillB:    '#e0c0f8',  // light lavender
-      hillC:    '#c898e4',  // deep lavender
-      cloud:    '#fff5fb',  // blush white
-      cloudSh:  '#f0d8f0',  // cloud shadow
-      fence:    '#f8f0ff',  // cream white
-      fenceSh:  '#ddc8f0',  // fence shadow
-      grass:    '#5cd44e',  // bright green
-      grassLt:  '#80ea6a',  // lighter green
-      grassTft: '#a0f080',  // tuft green
-      soil:     '#c8a870',  // warm tan
-      soilSp:   '#e0c898',  // soil speck
-      flPink:   '#ff8ec8',  // flower pink
-      flPurp:   '#c888f8',  // flower purple
-      flYel:    '#ffe44e',  // flower yellow
-      flWhite:  '#fff0f8',  // flower white
-      vine:     '#52a830',  // vine green
-      vineDk:   '#2d6318',  // dark vine
+      skyTop:    '#46c4cc',
+      skyMid:    '#5cd0d8',
+      skyBot:    '#7cdcdc',
+      sun:       '#f8e040',
+      sunHi:     '#fffff0',
+      bird:      '#1a4858',
+      cloud:     '#d0eef4',
+      cloudSh:   '#58b4c0',
+      hillFar:   '#287868',
+      hillFTop:  '#38a870',
+      hillMid:   '#208040',
+      hillMTop:  '#30a058',
+      hillNr:    '#188038',
+      hillNTop:  '#28b048',
+      fence:     '#9a6818',
+      fenceLt:   '#c08028',
+      fenceDk:   '#684010',
+      grass:     '#48cc18',
+      grassLt:   '#58dc28',
+      grassHi:   '#6cf038',
+      soil:      '#7a4010',
+      soilMd:    '#984c20',
+      soilLt:    '#c87828',
+      soilPurp:  '#6838a0',
+      soilPDk:   '#401878',
+      soilPLt:   '#9058c0',
+      stone:     '#6a8878',
+      stoneLt:   '#96b0a0',
+      stoneDk:   '#384840',
+      stoneMd:   '#507060',
+      sfYel:     '#f8c000',
+      sfOrg:     '#d87000',
+      sfCtr:     '#5c2800',
+      daiWht:    '#f0f8f0',
+      daiYel:    '#f0c000',
+      poppy:     '#d82010',
+      flBlue:    '#4070c8',
+      foliage:   '#1a5828',
+      foliageLt: '#30a048',
+      vine:      '#1a5828',
+      moss:      '#1a5828',
     };
 
-    // ── Draw helpers ───────────────────────────────────────────────
+    // ── Pixel-art draw helpers ─────────────────────────────────────
 
-    function drawFluffyCloud(x, y, w) {
-      const r = w / 5;
+    // 3-puff pixel cloud with interior shading and dark teal-grey shadow
+    function drawPixelCloud(x, y, s) {
+      // Dark shadow underneath
       ctx.fillStyle = C.cloudSh;
-      ctx.beginPath();
-      ctx.ellipse(x + w * .18, y + r * 1.6, r * .9, r * .7, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .42, y + r * 1.2, r * 1.1, r * .85, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .68, y + r * 1.4, r * .95, r * .75, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .88, y + r * 1.6, r * .8,  r * .65, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(x + s*2, y + s*5, s*7, s);
+      ctx.fillRect(x + s*3, y + s*4, s*5, s);
+      // Darker inner lower body
+      ctx.fillStyle = '#70c0ca';
+      ctx.fillRect(x + s,   y + s*3, s*9, s);
+      // Mid-tone body
+      ctx.fillStyle = '#a8dce8';
+      ctx.fillRect(x,       y + s*2, s*11, s);   // widest row
+      ctx.fillRect(x + s,   y + s,   s*9,  s);
+      // Bright upper body
       ctx.fillStyle = C.cloud;
+      ctx.fillRect(x + s*2, y,       s*7,  s);
+      // 3 distinct puffs on top
+      ctx.fillRect(x + s*2, y - s,   s*2,  s);   // left puff
+      ctx.fillRect(x + s*4, y - s*2, s*3,  s*2); // centre puff (tallest)
+      ctx.fillRect(x + s*8, y - s,   s*2,  s);   // right puff
+      // Specular highlights
+      ctx.fillStyle = '#f0fcff';
+      ctx.fillRect(x + s*5, y - s*2, s,    s);   // centre top sparkle
+      ctx.fillRect(x + s*3, y,       s,    s);   // left body sparkle
+    }
+
+    // Staircase hill — each horizontal step is STEP px wide = visible pixel edge
+    function drawPixelHill(colorMain, colorTop, baseY, amp, freq, phase) {
+      const STEP = 6;
+      ctx.fillStyle = colorMain;
       ctx.beginPath();
-      ctx.ellipse(x + w * .18, y + r * 1.4, r * .9, r * .7, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .42, y + r,       r * 1.1, r * .9, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .68, y + r * 1.2, r * .95, r * .8, 0, 0, Math.PI * 2);
-      ctx.ellipse(x + w * .88, y + r * 1.4, r * .8,  r * .65, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Small pixel flower (decorative)
-    function drawFlower(x, y, col) {
-      ctx.fillStyle = col;
-      ctx.fillRect(x,     y + 2, 4, 4);
-      ctx.fillRect(x + 2, y,     4, 4);
-      ctx.fillRect(x + 4, y + 2, 4, 4);
-      ctx.fillRect(x + 2, y + 4, 4, 4);
-      ctx.fillStyle = '#fff8e0';
-      ctx.fillRect(x + 2, y + 2, 4, 4);   // center
-    }
-
-    // Vine wall pillar covered in flowers
-    function drawVineWall(x, y, w, h) {
-      if (h <= 0) return;
-      // Vine base
-      ctx.fillStyle = C.vine;
-      ctx.fillRect(x, y, w, h);
-      // Vine tendrils
-      ctx.fillStyle = C.vineDk;
-      for (let vy = y + 4; vy < y + h; vy += 10) {
-        ctx.fillRect(x + 4, vy, 3, 7);
-        ctx.fillRect(x + w - 7, vy + 4, 3, 7);
+      ctx.moveTo(0, GROUND_Y);
+      for (let x = 0; x <= CW; x += STEP) {
+        const hy = Math.round((baseY - amp * (0.5 + 0.5 * Math.sin(x * freq + phase))) / STEP) * STEP;
+        ctx.lineTo(x,        hy);
+        ctx.lineTo(x + STEP, hy);
       }
-      // Light edge
-      ctx.fillStyle = '#7ad850';
-      ctx.fillRect(x, y, 3, h);
-      // Flowers scattered on vines
-      const cols = [C.flPink, C.flPurp, C.flYel, C.flWhite, C.flPink];
-      let fi = 0;
-      for (let fy = y + 6; fy < y + h - 8; fy += 16) {
-        for (let fx2 = x + 2; fx2 < x + w - 8; fx2 += 16) {
-          drawFlower(fx2, fy, cols[(fi++) % cols.length]);
+      ctx.lineTo(CW, GROUND_Y);
+      ctx.closePath();
+      ctx.fill();
+      // Pixel highlight row along the staircase top
+      ctx.fillStyle = colorTop;
+      for (let x = 0; x <= CW; x += STEP) {
+        const hy = Math.round((baseY - amp * (0.5 + 0.5 * Math.sin(x * freq + phase))) / STEP) * STEP;
+        ctx.fillRect(x, hy, STEP, STEP);
+      }
+    }
+
+    // Pixel sun with rays — drawn with S×S blocks
+    function drawPixelSun(cx, cy, r) {
+      const S = 4, rl = 13, rg = 3;
+      // Rays (drawn first, behind body)
+      ctx.fillStyle = C.sun;
+      ctx.fillRect(cx - 2,       cy - r - rl - rg, 4,  rl); // N
+      ctx.fillRect(cx - 2,       cy + r + rg,       4,  rl); // S
+      ctx.fillRect(cx + r + rg,  cy - 2,            rl, 4);  // E
+      ctx.fillRect(cx - r-rl-rg, cy - 2,            rl, 4);  // W
+      const d = Math.round((r + rg + 2) * 0.72);
+      ctx.fillRect(cx + d,     cy - d - 9, 3, 9);  // NE-vert
+      ctx.fillRect(cx + d + 3, cy - d - 9, 5, 3);  // NE-horiz
+      ctx.fillRect(cx - d - 8, cy - d - 9, 5, 3);  // NW-horiz
+      ctx.fillRect(cx - d - 3, cy - d - 6, 3, 6);  // NW-vert
+      ctx.fillRect(cx + d,     cy + d + 2, 3, 9);  // SE-vert
+      ctx.fillRect(cx + d + 3, cy + d + 8, 5, 3);  // SE-horiz
+      ctx.fillRect(cx - d - 8, cy + d + 8, 5, 3);  // SW-horiz
+      ctx.fillRect(cx - d - 3, cy + d + 2, 3, 6);  // SW-vert
+      // Inner ray highlights
+      ctx.fillStyle = C.sunHi;
+      ctx.fillRect(cx - 1, cy - r - rl - rg, 2, rl);
+      ctx.fillRect(cx + r + rg, cy - 1, rl, 2);
+      // Sun body (pixel circle)
+      for (let dy = -r; dy <= r; dy += S) {
+        for (let dx = -r; dx <= r; dx += S) {
+          if (Math.sqrt(dx*dx + dy*dy) <= r) {
+            ctx.fillStyle = Math.sqrt(dx*dx + dy*dy) <= r * 0.5 ? C.sunHi : C.sun;
+            ctx.fillRect(Math.round(cx+dx), Math.round(cy+dy), S, S);
+          }
         }
       }
     }
 
+    // Pixel bird — larger W-wing silhouette with head and accent
+    function drawPixelBird(x, y) {
+      ctx.fillStyle = C.bird;
+      ctx.fillRect(x - 12, y - 3, 5,  2); // left outer wing
+      ctx.fillRect(x - 7,  y,     6,  3); // left inner wing
+      ctx.fillRect(x - 1,  y - 2, 3,  3); // body
+      ctx.fillRect(x + 2,  y - 4, 3,  2); // head
+      ctx.fillRect(x + 2,  y,     6,  3); // right inner wing
+      ctx.fillRect(x + 8,  y - 3, 5,  2); // right outer wing
+      // Dark accent on wingtips
+      ctx.fillStyle = '#0e3848';
+      ctx.fillRect(x - 12, y - 3, 2, 2);
+      ctx.fillRect(x + 11, y - 3, 2, 2);
+    }
+
+    // Pixel flower — taller stem with leaves, more detailed petals
+    function drawPixelFlower(x, y, type) {
+      const S = 2;
+      // Stem + two leaves
+      ctx.fillStyle = C.foliage;
+      ctx.fillRect(x + 3*S, y - 9*S, S, 9*S);   // tall stem
+      ctx.fillRect(x + 4*S, y - 6*S, 2*S, S);   // right leaf
+      ctx.fillRect(x + S,   y - 5*S, 2*S, S);   // left leaf
+      ctx.fillStyle = C.foliageLt;
+      ctx.fillRect(x + 4*S, y - 6*S, S,   S);   // right leaf highlight
+      ctx.fillRect(x + S,   y - 5*S, S,   S);   // left leaf highlight
+      if (type === 0) {
+        // Sunflower: 8 petals + dark seed centre
+        ctx.fillStyle = C.sfYel;
+        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S); // top
+        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S); // bottom
+        ctx.fillRect(x,       y - 12*S, 2*S, 2*S); // left
+        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S); // right
+        ctx.fillStyle = C.sfOrg;
+        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S); // TL
+        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S); // TR
+        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S); // BL
+        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S); // BR
+        ctx.fillStyle = C.sfCtr;
+        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S); // seed centre
+        ctx.fillStyle = '#b84000';
+        ctx.fillRect(x + 2*S, y - 12*S, S,   S);   // dark accent
+        ctx.fillStyle = '#f0d000';
+        ctx.fillRect(x + 3*S, y - 11*S, S,   S);   // light accent
+      } else if (type === 1) {
+        // Daisy: 8 petals + golden centre
+        ctx.fillStyle = C.daiWht;
+        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S);
+        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S);
+        ctx.fillRect(x,       y - 12*S, 2*S, 2*S);
+        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S);
+        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S);
+        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S);
+        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S);
+        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S);
+        ctx.fillStyle = C.daiYel;
+        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S);
+        ctx.fillStyle = '#c08000';
+        ctx.fillRect(x + 2*S, y - 12*S, S,   S);
+      } else if (type === 2) {
+        // Poppy: bold red with stamens
+        ctx.fillStyle = C.poppy;
+        ctx.fillRect(x + S,   y - 13*S, 4*S, 3*S); // top petal
+        ctx.fillRect(x,       y - 11*S, 6*S, 3*S); // main body
+        ctx.fillRect(x + S,   y - 8*S,  4*S, S);   // bottom
+        ctx.fillStyle = '#c00000';
+        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S); // shadow
+        ctx.fillStyle = C.sfCtr;
+        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 2*S); // dark centre
+        ctx.fillStyle = '#f8f860';
+        ctx.fillRect(x + 2*S, y - 11*S, 2*S, S);   // stamens
+      } else {
+        // Blue cornflower with purple inner
+        ctx.fillStyle = C.flBlue;
+        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S);
+        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S);
+        ctx.fillRect(x,       y - 12*S, 2*S, 2*S);
+        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S);
+        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S);
+        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S);
+        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S);
+        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S);
+        ctx.fillStyle = '#f0f040';
+        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S);
+        ctx.fillStyle = '#2040c8';
+        ctx.fillRect(x + 2*S, y - 12*S, S,   S);
+      }
+    }
+
+    // Rounded pixel tree canopy + trunk
+    function drawPixelTree(cx, baseY, totalH, spread) {
+      const S = 4;
+      const r = spread;
+      const canopyCY = baseY - totalH * 0.62;
+      // Canopy (pixel circle — dark foreground, lighter top-left)
+      for (let row = -r; row <= r * 0.55; row += S) {
+        const hw = Math.round(Math.sqrt(Math.max(0, r*r - row*row)) / S) * S;
+        if (hw <= 0) continue;
+        const py = Math.round((canopyCY + row) / S) * S;
+        ctx.fillStyle = row < -r * 0.25 ? C.foliageLt : C.foliage;
+        ctx.fillRect(cx - hw, py, hw * 2, S);
+      }
+      // Shadow/dark bottom of canopy
+      ctx.fillStyle = '#123020';
+      for (let row = r * 0.3; row <= r * 0.55; row += S) {
+        const hw = Math.round(Math.sqrt(Math.max(0, r*r - row*row)) / S) * S * 0.7;
+        if (hw <= 0) continue;
+        const py = Math.round((canopyCY + row) / S) * S;
+        ctx.fillRect(cx - hw, py, hw * 2, S);
+      }
+      // Trunk
+      const trunkTop = canopyCY + r * 0.5;
+      ctx.fillStyle = '#3a2408';
+      ctx.fillRect(cx - S, trunkTop, S*2, baseY - trunkTop);
+      ctx.fillStyle = '#5c3a10';
+      ctx.fillRect(cx - S, trunkTop, S, baseY - trunkTop);
+    }
+
+    // Small rounded hedge bush
+    function drawPixelBush(x, baseY, w, h) {
+      const S = 4;
+      const third = Math.floor(w / 3);
+      ctx.fillStyle = C.foliage;
+      ctx.fillRect(x, baseY - h, w, h);
+      // 3 rounded bumps along top
+      [0, 1, 2].forEach(b => {
+        const bx = x + b * third;
+        ctx.fillRect(bx + S,       baseY - h - S,   third - S*2, S);
+        if (b === 1) ctx.fillRect(bx + S*2, baseY - h - S*2, third - S*4, S);
+      });
+      // Top highlight stripe
+      ctx.fillStyle = C.foliageLt;
+      ctx.fillRect(x + S, baseY - h, w - S*2, S);
+      [0, 1, 2].forEach(b => {
+        const bx = x + b * third;
+        ctx.fillRect(bx + S, baseY - h - S, third - S*2, S);
+      });
+      // Base shadow
+      ctx.fillStyle = '#123020';
+      ctx.fillRect(x, baseY - S, w, S);
+    }
+
+    function drawStoneWall(x, y, w, h) {
+      if (h <= 0) return;
+      ctx.fillStyle = C.stoneMd;
+      ctx.fillRect(x, y, w, h);
+      const SH = 11, GAP = 2;
+      for (let row = 0; row * (SH + GAP) < h; row++) {
+        const ry = y + row * (SH + GAP);
+        const rh = Math.min(SH, y + h - ry);
+        if (rh <= 0) break;
+        const off = (row % 2) * 12;
+        for (let sx = x - off; sx < x + w; sx += 24 + GAP) {
+          const rx = Math.max(x, sx), rw2 = Math.min(x + w, sx + 24) - rx;
+          if (rw2 <= 0) continue;
+          ctx.fillStyle = row % 3 === 0 ? C.stone : row % 3 === 1 ? '#7e7c6e' : C.stoneMd;
+          ctx.fillRect(rx, ry, rw2, rh);
+          ctx.fillStyle = C.stoneLt;
+          ctx.fillRect(rx, ry, rw2, Math.min(2, rh));
+          ctx.fillStyle = C.stoneDk;
+          ctx.fillRect(rx + rw2 - 2, ry, 2, rh);
+        }
+        if (ry + SH < y + h) {
+          ctx.fillStyle = C.stoneDk;
+          ctx.fillRect(x, ry + SH, w, GAP);
+        }
+      }
+      ctx.fillStyle = 'rgba(0,0,0,.18)';
+      ctx.fillRect(x + w - 4, y, 4, h);
+    }
+
     // ── Draw ───────────────────────────────────────────────────────
     function drawBg() {
-      // Dreamy pastel sky
+      // Sky gradient
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-      grad.addColorStop(0,   C.skyTop);
-      grad.addColorStop(0.5, C.skyMid);
-      grad.addColorStop(1,   C.skyBot);
+      grad.addColorStop(0,    C.skyTop);
+      grad.addColorStop(0.55, C.skyMid);
+      grad.addColorStop(1,    C.skyBot);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, CW, GROUND_Y);
 
-      // Background lavender hills — parallax
-      const HCYCLE = 110;
-      const hillPal = [C.hillA, C.hillB, C.hillC];
-      for (let hx = -(hedgeX % HCYCLE); hx < CW + HCYCLE; hx += HCYCLE) {
-        const idx = Math.abs(Math.round(hx / HCYCLE)) % 3;
-        const hh  = 40 + idx * 8;
-        ctx.fillStyle = hillPal[idx];
-        ctx.fillRect(hx, GROUND_Y - hh, 100, hh);
-        // lighter top highlight
-        ctx.fillStyle = C.hillB;
-        ctx.fillRect(hx, GROUND_Y - hh, 100, 5);
-        // little flowers on hilltop
-        [C.flPink, C.flYel, C.flPurp].forEach((col, fi) => {
-          drawFlower(hx + 8 + fi * 28, GROUND_Y - hh - 6, col);
-          // stem
-          ctx.fillStyle = C.vine;
-          ctx.fillRect(hx + 11 + fi * 28, GROUND_Y - hh, 2, 6);
+      // Pixel sun with rays (top-right)
+      drawPixelSun(CW - 54, 38, 20);
+
+      // Far hill + background tree silhouettes (slowest parallax)
+      drawPixelHill(C.hillFar, C.hillFTop, GROUND_Y - 68, 28, 0.016, hedgeX * 0.06);
+      const TREE_TILE = 380;
+      const treeOff = (hedgeX * 1.5) % TREE_TILE;
+      const treeDefs = [
+        { rel: 28,  h: 55, r: 16 }, { rel: 102, h: 44, r: 13 },
+        { rel: 192, h: 64, r: 19 }, { rel: 276, h: 48, r: 14 },
+        { rel: 342, h: 58, r: 17 },
+      ];
+      for (let tile = 0; tile <= 2; tile++) {
+        treeDefs.forEach(t => {
+          const tx = t.rel + tile * TREE_TILE - treeOff;
+          if (tx > -60 && tx < CW + 60) drawPixelTree(tx, GROUND_Y - 80, t.h, t.r);
         });
       }
 
-      // Fluffy clouds
-      ctx.globalAlpha = 0.9;
-      clouds.forEach(c => drawFluffyCloud(c.x, c.y, c.w));
-      ctx.globalAlpha = 1;
+      // Mid + near hills
+      drawPixelHill(C.hillMid, C.hillMTop, GROUND_Y - 50, 34, 0.021, hedgeX * 0.15);
+      drawPixelHill(C.hillNr,  C.hillNTop, GROUND_Y - 36, 28, 0.028, hedgeX * 0.32);
 
-      // White picket fence — parallax layer 2
+      // Midground hedge bushes (between near hill and fence)
+      const BUSH_TILE = 108;
+      const bushOff = (hedgeX * 3.8) % BUSH_TILE;
+      for (let tile = -1; tile <= 6; tile++) {
+        const bx = tile * BUSH_TILE - bushOff;
+        const variant = ((tile % 3) + 3) % 3;
+        const bw = 68 + variant * 14, bh = 22 + variant * 7;
+        if (bx > -120 && bx < CW + 60) drawPixelBush(bx, GROUND_Y - 26, bw, bh);
+      }
+
+      // Birds
+      birds.forEach(b => drawPixelBird(b.x, b.y));
+
+      // Clouds
+      clouds.forEach(c => drawPixelCloud(c.x, c.y, Math.max(4, Math.round(c.w / 8))));
+
+      // Warm wood picket fence (3 rails + pointed posts)
       const PGAP = 64, PW = 7, PH = 28;
-      // Rails
       ctx.fillStyle = C.fence;
-      ctx.fillRect(0, GROUND_Y - 18, CW, 4);
-      ctx.fillRect(0, GROUND_Y - 8,  CW, 4);
-      ctx.fillStyle = C.fenceSh;
-      ctx.fillRect(0, GROUND_Y - 14, CW, 2);
+      ctx.fillRect(0, GROUND_Y - 22, CW, 5);
+      ctx.fillRect(0, GROUND_Y - 13, CW, 5);
+      ctx.fillRect(0, GROUND_Y - 4,  CW, 5);
+      ctx.fillStyle = C.fenceLt;
+      ctx.fillRect(0, GROUND_Y - 22, CW, 2);
+      ctx.fillRect(0, GROUND_Y - 13, CW, 2);
       ctx.fillRect(0, GROUND_Y - 4,  CW, 2);
-      // Picket posts
+      ctx.fillStyle = C.fenceDk;
+      ctx.fillRect(0, GROUND_Y - 17, CW, 1);
+      ctx.fillRect(0, GROUND_Y - 8,  CW, 1);
       for (let fx = -(fenceX % PGAP); fx < CW + PGAP; fx += PGAP) {
         ctx.fillStyle = C.fence;
-        ctx.fillRect(fx, GROUND_Y - PH, PW, PH);
-        // pointed top (pixel diamond)
-        ctx.fillRect(fx + 1, GROUND_Y - PH - 3, PW - 2, 3);
-        ctx.fillRect(fx + 2, GROUND_Y - PH - 5, PW - 4, 2);
-        // right shadow
-        ctx.fillStyle = C.fenceSh;
-        ctx.fillRect(fx + PW - 2, GROUND_Y - PH, 2, PH);
+        ctx.fillRect(fx, GROUND_Y - PH - 3, PW, PH + 3);
+        ctx.fillRect(fx + 1, GROUND_Y - PH - 6, PW - 2, 3);
+        ctx.fillRect(fx + 2, GROUND_Y - PH - 8, PW - 4, 2);
+        ctx.fillStyle = C.fenceLt;
+        ctx.fillRect(fx, GROUND_Y - PH - 8, 2, PH + 8);
+        ctx.fillStyle = C.fenceDk;
+        ctx.fillRect(fx + PW - 2, GROUND_Y - PH - 3, 2, PH + 3);
+        ctx.fillStyle = '#6a4810';
+        ctx.fillRect(fx + 1, GROUND_Y - PH + 3,  5, 1);
+        ctx.fillRect(fx + 1, GROUND_Y - PH + 11, 5, 1);
+        ctx.fillRect(fx + 1, GROUND_Y - PH + 19, 5, 1);
       }
 
-      // Ground — bright green lawn
+      // Ground — vivid lime grass band with varied tufts
       ctx.fillStyle = C.grass;
-      ctx.fillRect(0, GROUND_Y, CW, CH - GROUND_Y);
+      ctx.fillRect(0, GROUND_Y, CW, 12);
       ctx.fillStyle = C.grassLt;
       ctx.fillRect(0, GROUND_Y, CW, 6);
-      ctx.fillStyle = C.grassTft;
-      ctx.fillRect(0, GROUND_Y, CW, 3);
-      // Pixel grass tufts
-      ctx.fillStyle = C.grassLt;
-      for (let gx = 0; gx < CW; gx += 8) {
-        ctx.fillRect(gx,     GROUND_Y - 7, 4, 7);
-        ctx.fillRect(gx + 4, GROUND_Y - 4, 4, 4);
+      ctx.fillStyle = C.grassHi;
+      ctx.fillRect(0, GROUND_Y, CW, 2);
+      // Varied pixel tufts — different heights every 4px
+      const tuftH = [11, 7, 14, 5, 9, 13, 6, 10, 8, 12, 4, 15, 7, 11, 9, 6];
+      for (let gx = 0; gx < CW; gx += 4) {
+        const h = tuftH[Math.floor(gx / 4) % tuftH.length];
+        const col = gx % 20 === 0 ? C.grassHi : gx % 10 === 0 ? C.grassLt : C.grass;
+        ctx.fillStyle = col;
+        ctx.fillRect(gx, GROUND_Y - h, 3, h);
       }
-      // Warm soil strip at bottom
+      // Bright tip highlights on tallest tufts
+      ctx.fillStyle = C.grassHi;
+      for (let gx = 2; gx < CW; gx += 20) {
+        ctx.fillRect(gx, GROUND_Y - 15, 2, 3);
+      }
+
+      // Warm brown soil with pebbles and root lines
       ctx.fillStyle = C.soil;
-      ctx.fillRect(0, GROUND_Y + 18, CW, CH - GROUND_Y - 18);
-      // Soil speckles
-      ctx.fillStyle = C.soilSp;
-      for (let sx = 14; sx < CW; sx += 38) {
-        ctx.fillRect(sx,      GROUND_Y + 22, 5, 3);
-        ctx.fillRect(sx + 18, GROUND_Y + 28, 4, 3);
+      ctx.fillRect(0, GROUND_Y + 12, CW, 18);
+      ctx.fillStyle = C.soilMd;
+      ctx.fillRect(0, GROUND_Y + 12, CW, 4);
+      // Pebbles (amber + dark)
+      ctx.fillStyle = C.soilLt;
+      for (let sx = 6; sx < CW; sx += 36) {
+        ctx.fillRect(sx,      GROUND_Y + 18, 7, 5);
+        ctx.fillRect(sx + 17, GROUND_Y + 22, 5, 4);
+        ctx.fillRect(sx + 30, GROUND_Y + 16, 4, 4);
       }
-      // Ground flower patches
-      const gfCols = [C.flPink, C.flPurp, C.flYel, C.flWhite, C.flPink, C.flPurp];
-      for (let gx = 10; gx < CW; gx += 28) {
-        const col = gfCols[Math.floor(gx / 28) % gfCols.length];
-        drawFlower(gx, GROUND_Y + 6, col);
-        ctx.fillStyle = C.vine;
-        ctx.fillRect(gx + 3, GROUND_Y + 14, 2, 5);
+      ctx.fillStyle = C.soilMd;
+      for (let sx = 18; sx < CW; sx += 36) {
+        ctx.fillRect(sx, GROUND_Y + 24, 4, 3);
+      }
+
+      // Purple bottom strip with richer texture
+      ctx.fillStyle = C.soilPurp;
+      ctx.fillRect(0, GROUND_Y + 30, CW, CH - GROUND_Y - 30);
+      ctx.fillStyle = C.soilPLt;
+      ctx.fillRect(0, GROUND_Y + 30, CW, 4);
+      ctx.fillStyle = C.soilPDk;
+      for (let sx = 6; sx < CW; sx += 30) {
+        ctx.fillRect(sx,      GROUND_Y + 37, 6, 4);
+        ctx.fillRect(sx + 15, GROUND_Y + 42, 5, 3);
+        ctx.fillRect(sx + 24, GROUND_Y + 36, 3, 3);
+      }
+      ctx.fillStyle = C.soilPLt;
+      for (let sx = 12; sx < CW; sx += 48) {
+        ctx.fillRect(sx, GROUND_Y + 32, 3, 2);
+      }
+
+      // Ground flowers — denser and varied
+      const ftypes4 = [0, 1, 2, 1, 0, 3, 2, 1, 0, 1, 3, 2];
+      for (let gx = 10; gx < CW; gx += 26) {
+        drawPixelFlower(gx, GROUND_Y + 6, ftypes4[Math.floor(gx / 26) % ftypes4.length]);
       }
     }
 
@@ -553,15 +828,15 @@
         if (o._done) return;
 
         if (o.type === 'wall') {
-          drawVineWall(o.x, 0,      o.w, o.gapTop);
-          drawVineWall(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
-          // pastel flower caps at gap edges
-          ctx.fillStyle = C.flPink;
-          ctx.fillRect(o.x, o.gapTop - 4, o.w, 4);
-          ctx.fillRect(o.x, o.gapBot,     o.w, 4);
+          drawStoneWall(o.x, 0,        o.w, o.gapTop);
+          drawStoneWall(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
+          // Moss caps at gap edges
+          ctx.fillStyle = C.moss;
+          ctx.fillRect(o.x, o.gapTop - 5, o.w, 5);
+          ctx.fillRect(o.x, o.gapBot,     o.w, 5);
           ctx.font = '18px serif';
-          ctx.fillText('🏗️', o.x + 8, Math.max(4, o.gapTop - 24));
-          ctx.fillText('🏗️', o.x + 8, o.gapBot + 7);
+          ctx.fillText('🏗️', o.x + 8, Math.max(4, o.gapTop - 26));
+          ctx.fillText('🏗️', o.x + 8, o.gapBot + 8);
           return;
         }
 
@@ -607,31 +882,82 @@
     function drawIdle() {
       ctx.clearRect(0, 0, CW, CH);
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-      grad.addColorStop(0, C.skyTop); grad.addColorStop(0.5, C.skyMid); grad.addColorStop(1, C.skyBot);
+      grad.addColorStop(0, C.skyTop); grad.addColorStop(0.55, C.skyMid); grad.addColorStop(1, C.skyBot);
       ctx.fillStyle = grad; ctx.fillRect(0, 0, CW, GROUND_Y);
-      // hills
-      [[0,44,100],[140,52,110],[300,40,100],[460,48,100]].forEach(([hx,hh,hw]) => {
-        ctx.fillStyle = C.hillA; ctx.fillRect(hx, GROUND_Y-hh, hw, hh);
-        ctx.fillStyle = C.hillB; ctx.fillRect(hx, GROUND_Y-hh, hw, 5);
-        [C.flPink, C.flYel].forEach((col, fi) => { drawFlower(hx+8+fi*30, GROUND_Y-hh-6, col); ctx.fillStyle=C.vine; ctx.fillRect(hx+11+fi*30,GROUND_Y-hh,2,6); });
-      });
-      // clouds
-      drawFluffyCloud(30,  14, 80); drawFluffyCloud(220, 20, 65); drawFluffyCloud(430, 8, 75);
-      // fence
+      drawPixelSun(CW - 54, 38, 20);
+      // Hills + background trees (static phases)
+      drawPixelHill(C.hillFar, C.hillFTop, GROUND_Y - 68, 28, 0.016, 0);
+      [{ rel: 28, h: 55, r: 16 }, { rel: 112, h: 44, r: 13 }, { rel: 210, h: 64, r: 19 },
+       { rel: 310, h: 50, r: 15 }, { rel: 420, h: 58, r: 17 }, { rel: 520, h: 46, r: 13 }]
+        .forEach(t => drawPixelTree(t.rel, GROUND_Y - 80, t.h, t.r));
+      drawPixelHill(C.hillMid, C.hillMTop, GROUND_Y - 50, 34, 0.021, 1.2);
+      drawPixelHill(C.hillNr,  C.hillNTop, GROUND_Y - 36, 28, 0.028, 2.4);
+      // Midground bushes (static)
+      [{ x: 0, w: 82, h: 29 }, { x: 110, w: 68, h: 22 }, { x: 202, w: 96, h: 36 },
+       { x: 318, w: 72, h: 26 }, { x: 416, w: 88, h: 32 }, { x: 522, w: 70, h: 22 }]
+        .forEach(b => drawPixelBush(b.x, GROUND_Y - 26, b.w, b.h));
+      // Birds + clouds
+      [[110,62],[290,80],[480,55]].forEach(([bx,by]) => drawPixelBird(bx, by));
+      drawPixelCloud(20,  18, 9);
+      drawPixelCloud(200, 22, 8);
+      drawPixelCloud(390, 14, 11);
+      drawPixelCloud(510, 20, 7);
+      // Fence (3 rails)
+      const PGAP = 64, PW = 7, PH = 28;
       ctx.fillStyle = C.fence;
-      ctx.fillRect(0, GROUND_Y-18, CW, 4); ctx.fillRect(0, GROUND_Y-8, CW, 4);
-      for (let fx = 8; fx < CW; fx += 64) { ctx.fillRect(fx, GROUND_Y-28, 7, 28); ctx.fillRect(fx+1,GROUND_Y-31,5,3); }
-      // ground
-      ctx.fillStyle = C.grass; ctx.fillRect(0, GROUND_Y, CW, CH-GROUND_Y);
-      ctx.fillStyle = C.grassLt; ctx.fillRect(0, GROUND_Y, CW, 3);
-      ctx.fillStyle = C.grassLt;
-      for (let gx = 0; gx < CW; gx += 8) ctx.fillRect(gx, GROUND_Y-7, 4, 7);
-      ctx.fillStyle = C.soil; ctx.fillRect(0, GROUND_Y+18, CW, CH-GROUND_Y-18);
-      for (let gx = 10; gx < CW; gx += 28) { drawFlower(gx, GROUND_Y+6, [C.flPink,C.flPurp,C.flYel][Math.floor(gx/28)%3]); }
-      // sprites
+      ctx.fillRect(0, GROUND_Y-22, CW, 5); ctx.fillRect(0, GROUND_Y-13, CW, 5); ctx.fillRect(0, GROUND_Y-4, CW, 5);
+      ctx.fillStyle = C.fenceLt;
+      ctx.fillRect(0, GROUND_Y-22, CW, 2); ctx.fillRect(0, GROUND_Y-13, CW, 2); ctx.fillRect(0, GROUND_Y-4, CW, 2);
+      ctx.fillStyle = C.fenceDk;
+      ctx.fillRect(0, GROUND_Y-17, CW, 1); ctx.fillRect(0, GROUND_Y-8, CW, 1);
+      for (let fx = 8; fx < CW; fx += PGAP) {
+        ctx.fillStyle = C.fence;
+        ctx.fillRect(fx, GROUND_Y-PH-3, PW, PH+3);
+        ctx.fillRect(fx+1, GROUND_Y-PH-6, PW-2, 3); ctx.fillRect(fx+2, GROUND_Y-PH-8, PW-4, 2);
+        ctx.fillStyle = C.fenceLt; ctx.fillRect(fx, GROUND_Y-PH-8, 2, PH+8);
+        ctx.fillStyle = C.fenceDk; ctx.fillRect(fx+PW-2, GROUND_Y-PH-3, 2, PH+3);
+        ctx.fillStyle = '#6a4810';
+        ctx.fillRect(fx+1, GROUND_Y-PH+3, 5, 1); ctx.fillRect(fx+1, GROUND_Y-PH+11, 5, 1);
+        ctx.fillRect(fx+1, GROUND_Y-PH+19, 5, 1);
+      }
+      // Ground with varied tufts
+      ctx.fillStyle = C.grass; ctx.fillRect(0, GROUND_Y, CW, 12);
+      ctx.fillStyle = C.grassLt; ctx.fillRect(0, GROUND_Y, CW, 6);
+      ctx.fillStyle = C.grassHi; ctx.fillRect(0, GROUND_Y, CW, 2);
+      const tuftH = [11, 7, 14, 5, 9, 13, 6, 10, 8, 12, 4, 15, 7, 11, 9, 6];
+      for (let gx = 0; gx < CW; gx += 4) {
+        const h = tuftH[Math.floor(gx / 4) % tuftH.length];
+        ctx.fillStyle = gx % 20 === 0 ? C.grassHi : gx % 10 === 0 ? C.grassLt : C.grass;
+        ctx.fillRect(gx, GROUND_Y - h, 3, h);
+      }
+      ctx.fillStyle = C.grassHi;
+      for (let gx = 2; gx < CW; gx += 20) { ctx.fillRect(gx, GROUND_Y-15, 2, 3); }
+      // Brown soil
+      ctx.fillStyle = C.soil; ctx.fillRect(0, GROUND_Y+12, CW, 18);
+      ctx.fillStyle = C.soilMd; ctx.fillRect(0, GROUND_Y+12, CW, 4);
+      ctx.fillStyle = C.soilLt;
+      for (let sx = 6; sx < CW; sx += 36) {
+        ctx.fillRect(sx, GROUND_Y+18, 7, 5); ctx.fillRect(sx+17, GROUND_Y+22, 5, 4);
+      }
+      // Purple strip
+      ctx.fillStyle = C.soilPurp; ctx.fillRect(0, GROUND_Y+30, CW, CH-GROUND_Y-30);
+      ctx.fillStyle = C.soilPLt;  ctx.fillRect(0, GROUND_Y+30, CW, 4);
+      ctx.fillStyle = C.soilPDk;
+      for (let sx = 6; sx < CW; sx += 30) {
+        ctx.fillRect(sx, GROUND_Y+37, 6, 4); ctx.fillRect(sx+15, GROUND_Y+42, 5, 3);
+      }
+      // Flowers (denser)
+      const ftypes4 = [0, 1, 2, 1, 0, 3, 2, 1, 0, 1, 3, 2];
+      for (let gx = 10; gx < CW; gx += 26) {
+        drawPixelFlower(gx, GROUND_Y + 6, ftypes4[Math.floor(gx / 26) % ftypes4.length]);
+      }
+      // Sprites
       ctx.textBaseline = 'top';
-      ctx.font = '34px serif'; ctx.fillText('🐝', BENNY_X, CH/2-18);
-      [{e:'🌸',x:215,y:108},{e:'🌷',x:345,y:150},{e:'🌸',x:472,y:82},{e:'💧',x:398,y:208},{e:'☠️',x:272,y:62},{e:'🦠',x:522,y:142}].forEach(p => { ctx.font='28px serif'; ctx.fillText(p.e,p.x,p.y); });
+      ctx.font = '34px serif'; ctx.fillText('🐝', BENNY_X, CH/2 - 18);
+      [{e:'🌸',x:215,y:108},{e:'🌿',x:345,y:152},{e:'💧',x:398,y:208},
+       {e:'☠️',x:272,y:62},{e:'🦠',x:522,y:140},{e:'🌳',x:472,y:82}].forEach(p => {
+        ctx.font='28px serif'; ctx.fillText(p.e, p.x, p.y);
+      });
     }
 
     // ── Start / restart ────────────────────────────────────────────

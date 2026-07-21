@@ -1732,9 +1732,9 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 /* ═══════════════════════════════════════════════════════════
    Bee Guardian — elementary ecosystem decision game
    ═══════════════════════════════════════════════════════════ */
-/* ── Bee Dash — pastel garden aesthetic ── */
+/* ── Bee Dash — pixel garden (reference.png style) ── */
 .bd-section {
-  background: linear-gradient(145deg, #ffe8f4 0%, #f4e4ff 45%, #e4f4ff 100%);
+  background: linear-gradient(145deg, #1a7888 0%, #145e70 50%, #0e4858 100%);
   min-height: calc(100vh - 118px);
   padding: 2rem 0 3.5rem;
 }
@@ -1744,8 +1744,8 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   margin: 0 auto;
   border-radius: 20px;
   overflow: hidden;
-  border: 3px solid #f0a8d8;
-  box-shadow: 0 6px 0 #d880b8, 0 18px 40px rgba(200,80,160,.18);
+  border: 3px solid #9a6818;
+  box-shadow: 0 6px 0 #684010, 0 18px 40px rgba(16,40,56,.4);
 }
 #bd-canvas-wrap { position: relative; }
 #bd-canvas {
@@ -1763,11 +1763,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   justify-content: space-between;
   align-items: center;
   padding: .5rem 1rem;
-  background: linear-gradient(90deg, #ffd6ee, #eec8ff, #c8e8ff);
-  border-bottom: 2px solid #f0a8d8;
+  background: linear-gradient(90deg, #0e3020, #1a5030, #0e3020);
+  border-bottom: 2px solid #0a2018;
   font-family: 'Press Start 2P', monospace;
   font-size: .62rem;
-  color: #8830a0;
+  color: #e8d848;
   user-select: none;
   letter-spacing: .02em;
 }
@@ -1777,23 +1777,23 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   bottom: 52px;
   left: 50%;
   transform: translateX(-50%);
-  background: #fff5fb;
-  border: 2px solid #f0a8d8;
+  background: #f8f4e8;
+  border: 2px solid #2a7830;
   border-radius: 14px;
-  box-shadow: 0 4px 0 #d880b8, 0 8px 24px rgba(200,80,160,.15);
+  box-shadow: 0 4px 0 #1a5020, 0 8px 24px rgba(20,60,20,.22);
   padding: .7rem 1.1rem;
   max-width: 300px;
   width: max-content;
   font-size: .85rem;
   line-height: 1.5;
-  color: #60206a;
+  color: #1a3010;
   z-index: 20;
   pointer-events: none;
 }
 .bd-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #fff8fd 0%, #fef4ff 100%);
+  background: linear-gradient(160deg, #f8f4ec 0%, #f0ecd8 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1814,18 +1814,18 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   line-height: 1;
   margin-bottom: .6rem;
   animation: benny-float 2s ease-in-out infinite;
-  filter: drop-shadow(0 4px 8px rgba(200,80,160,.25));
+  filter: drop-shadow(0 4px 10px rgba(20,80,20,.28));
 }
 .bd-title {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(.9rem, 2vw + .4rem, 1.25rem);
-  color: #c0308a;
-  text-shadow: 2px 2px 0 #f4a8d4, 4px 4px 0 rgba(200,80,160,.2);
+  color: #1a6030;
+  text-shadow: 2px 2px 0 #78d858, 4px 4px 0 rgba(20,80,20,.15);
   line-height: 1.65;
   margin-bottom: .6rem;
 }
 .bd-sub {
-  color: #6a3878;
+  color: #1e3818;
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
   font-size: .95rem;
@@ -1848,11 +1848,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: .78rem;
-  color: #7030a0;
-  background: #fef0ff;
-  border: 2px solid #e8a8f8;
+  color: #1e3818;
+  background: #e8f5d0;
+  border: 2px solid #4aaa28;
   border-radius: 12px;
-  box-shadow: 0 4px 0 #d880b8;
+  box-shadow: 0 4px 0 #2a7018;
   padding: .65rem .8rem;
 }
 .bd-howto-icon { font-size: 1.65rem; }
@@ -1868,20 +1868,20 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .bd-score-big > span:nth-child(2) {
   font-family: 'Press Start 2P', monospace;
   font-size: 2.5rem;
-  color: #c0308a;
-  text-shadow: 3px 3px 0 #f4a8d4;
+  color: #1a6030;
+  text-shadow: 3px 3px 0 #78d858;
 }
 .bd-score-label {
   font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #7030a0;
+  color: #1e3818;
 }
 .bd-facts-recap { text-align: left; margin-top: .75rem; max-width: 440px; width: 100%; }
 .bd-facts-title {
   font-family: 'Press Start 2P', monospace;
   font-size: .58rem;
-  color: #c0308a;
+  color: #1a6030;
   margin-bottom: .5rem;
   line-height: 1.9;
 }
@@ -1889,34 +1889,34 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
   font-size: .88rem;
-  color: #50186a;
+  color: #1e3010;
   line-height: 1.55;
   padding: .55rem .85rem;
-  background: #fef0ff;
-  border: 2px solid #e8a8f8;
+  background: #e8f5d0;
+  border: 2px solid #4aaa28;
   border-radius: 12px;
-  box-shadow: 0 3px 0 #d880b8;
+  box-shadow: 0 3px 0 #2a7018;
   margin-bottom: .5rem;
 }
 
-/* Pastel btn override scoped to bd-section */
+/* Pixel garden btn override scoped to bd-section */
 .bd-section .btn-bee {
   font-family: 'Press Start 2P', monospace;
   font-size: .62rem;
-  background: linear-gradient(135deg, #ff8ec8, #c878f8);
-  border: 2px solid #a840c8;
+  background: linear-gradient(135deg, #3aaa18, #1e7010);
+  border: 2px solid #0e4808;
   border-radius: 12px;
-  color: #fff;
-  box-shadow: 0 5px 0 #a040a0, 0 8px 20px rgba(180,60,180,.25);
-  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+  color: #e8f8c0;
+  box-shadow: 0 5px 0 #0e4808, 0 8px 20px rgba(20,80,10,.28);
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
   letter-spacing: .04em;
   transition: box-shadow .08s, transform .08s;
 }
 .bd-section .btn-bee:hover {
-  background: linear-gradient(135deg, #ff70b8, #b860f0);
+  background: linear-gradient(135deg, #4ac020, #268018);
 }
 .bd-section .btn-bee:active {
-  box-shadow: 0 2px 0 #a040a0;
+  box-shadow: 0 2px 0 #0e4808;
   transform: translateY(3px);
 }
 
