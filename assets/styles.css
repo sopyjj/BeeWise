@@ -1597,10 +1597,12 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .mc-annotate-wrap {
   max-width: 480px;
   margin: 0 auto;
+  text-align: center;
 }
 .mc-progress-label {
   font-weight: 700; color: var(--bee-dark);
   font-size: .92rem; margin-bottom: .6rem;
+  text-align: center;
 }
 .img-annotate-wrap {
   position: relative;
@@ -1636,10 +1638,9 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 
 .mc-counter-bar {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .75rem;
+  gap: .6rem;
   margin-top: 1rem;
 }
 .dot-counter {
