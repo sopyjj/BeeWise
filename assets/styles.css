@@ -1572,14 +1572,6 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   margin-top: .1rem;
 }
 
-/* Tutorial — constrain image display and soften filter vs main activity */
-#tut-annotate-wrap {
-  max-width: 440px;   /* stops tiny bee images stretching to full container */
-}
-#tut-canvas,
-#tut-reveal-canvas {
-  filter: contrast(1.15) saturate(1.2) brightness(0.92);
-}
 
 .tut-badge {
   display: inline-block;
@@ -1616,25 +1608,17 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   position: relative;
   display: inline-block;
   max-width: 100%;
-  text-align: left;
   cursor: crosshair;
   user-select: none;
+  box-shadow: none;
+  border-radius: 0;
 }
-.img-annotate-wrap img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  max-height: 40vh;
-  pointer-events: none;
-  filter: contrast(1.45) saturate(1.8) brightness(1.06);
-}
+.img-annotate-wrap img,
 .img-annotate-wrap canvas {
   display: block;
   max-width: 100%;
   height: auto;
-  max-height: 40vh;
   pointer-events: none;
-  filter: contrast(1.45) saturate(1.8) brightness(1.06);
 }
 .img-annotate-wrap svg {
   position: absolute;

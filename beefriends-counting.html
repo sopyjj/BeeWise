@@ -509,8 +509,7 @@
         (dict['tut.label'] || 'Tutorial') + ' ' + (idx + 1) + ' / ' + TUTORIAL.length;
 
       applyTutWrapStyles(tutWrap);
-      tutCanvas.style.maxHeight = TUT_MAX_H;
-      tutCanvas.style.filter    = TUT_FILTER;
+      tutCanvas.style.filter = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
         const img = new Image();
@@ -550,8 +549,7 @@
       const revCanvas = document.getElementById('tut-reveal-canvas');
       const revCtx    = revCanvas.getContext('2d');
       applyTutWrapStyles(revCanvas.parentElement);
-      revCanvas.style.filter    = TUT_FILTER;
-      revCanvas.style.maxHeight = TUT_MAX_H;
+      revCanvas.style.filter = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
         const img = new Image();
@@ -642,8 +640,7 @@
       if (outerWrap) { outerWrap.style.maxWidth = '480px'; outerWrap.style.margin = '0 auto'; }
       wrapEl.style.maxWidth = '380px';
       wrapEl.style.margin   = '0 auto';
-      hiveCanvas.style.maxHeight = '40vh';
-      hiveCanvas.style.filter    = 'contrast(1.05) saturate(1.1) brightness(1.0)';
+      hiveCanvas.style.filter = 'contrast(1.05) saturate(1.1) brightness(1.0)';
 
       const progressLabel = document.getElementById('progress-label');
       const dict = I18N_MC[localStorage.getItem('lang') || 'en'] || I18N_MC.en;
