@@ -10,8 +10,8 @@
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=8" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="assets/styles.css?v=9" rel="stylesheet">
   </head>
 
   <body>
@@ -144,7 +144,7 @@
     let phase, benny, objects, score, lives, timeLeft, elapsed;
     let lastTs, rafId, invincible, invTimer, popTimer;
     let clouds, flowerT, obstT, bonusT, wallT, frameN;
-    let threatHits;
+    let threatHits, fenceX, hedgeX;
 
     function initState() {
       phase       = 'idle';
@@ -160,10 +160,13 @@
       popTimer    = 0;
       frameN      = 0;
       threatHits  = {};
-      clouds      = Array.from({length: 6}, (_, i) => ({
-        x: i * 110 + 30,
-        y: 15 + (i % 3) * 28,
-        spd: 0.45 + (i % 3) * 0.22
+      fenceX      = 0;
+      hedgeX      = 0;
+      clouds      = Array.from({length: 5}, (_, i) => ({
+        x: i * 130 + 20,
+        y: 14 + (i % 3) * 18,
+        w: 40 + (i % 3) * 20,
+        spd: 0.35 + (i % 3) * 0.18
       }));
       // Spawn timers (in frames at ~60fps)
       flowerT = 50;
@@ -304,9 +307,11 @@
         document.getElementById('bd-popup').style.display = 'none';
       }
 
-      // Clouds
+      // Clouds + parallax layers
       const sp = scrollSpd();
-      clouds.forEach(c => { c.x -= c.spd; if (c.x < -60) c.x = CW + 30; });
+      clouds.forEach(c => { c.x -= c.spd; if (c.x < -80) c.x = CW + 40; });
+      hedgeX = (hedgeX + sp * 0.18) % 100;
+      fenceX = (fenceX + sp * 0.55) % 76;
 
       // Move objects
       objects.forEach(o => {
@@ -372,35 +377,113 @@
       syncHUD();
     }
 
+    // ── Draw helpers ───────────────────────────────────────────────
+
+    // Pixel-art cloud: two stacked rectangles
+    function drawPixelCloud(x, y, w) {
+      ctx.fillStyle = '#e8f4f8';
+      ctx.fillRect(x + 8,  y,      w - 16, 10);
+      ctx.fillRect(x,      y + 10, w,      10);
+      ctx.fillRect(x + 4,  y - 6,  w - 8,  8);
+      // dark outline pixels (top-left, bottom-right)
+      ctx.fillStyle = '#b0d8e8';
+      ctx.fillRect(x,      y + 10, 4,  4);
+      ctx.fillRect(x + w - 4, y + 16, 4, 4);
+    }
+
+    // Pixel brick wall pillar
+    function drawBrickPillar(x, y, w, h) {
+      if (h <= 0) return;
+      const B = 10, MORTAR = 2;
+      for (let by = y; by < y + h; by += B + MORTAR) {
+        const row = Math.floor((by - y) / (B + MORTAR));
+        const off = (row % 2) * 14;
+        ctx.fillStyle = row % 2 === 0 ? '#7a3a1e' : '#8f4522';
+        for (let bx = x - off - 28; bx < x + w + 28; bx += 28 + MORTAR) {
+          const rx = Math.max(x, bx), rw = Math.min(x + w, bx + 28) - rx;
+          if (rw > 0) ctx.fillRect(rx, by, rw, B);
+        }
+      }
+      // dark edge shading
+      ctx.fillStyle = '#4a1e0a';
+      ctx.fillRect(x,         y, 3, h);
+      ctx.fillRect(x + w - 3, y, 3, h);
+    }
+
     // ── Draw ───────────────────────────────────────────────────────
     function drawBg() {
+      // Sky — warm garden morning
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-      grad.addColorStop(0, '#b3e5fc');
-      grad.addColorStop(1, '#dff2fd');
+      grad.addColorStop(0,   '#6ab8d4');
+      grad.addColorStop(0.6, '#a8d8a8');
+      grad.addColorStop(1,   '#c8e8a0');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, CW, CH);
+      ctx.fillRect(0, 0, CW, GROUND_Y);
 
-      // Clouds
-      ctx.globalAlpha = 0.65;
-      ctx.font = '38px serif';
-      ctx.textBaseline = 'top';
-      clouds.forEach(c => ctx.fillText('☁️', c.x, c.y));
+      // Distant hedges — parallax layer 1
+      const HEDGE_W = 100, HEDGE_GAP = 100;
+      const HEDGE_CYCLE = HEDGE_W + HEDGE_GAP;
+      const hedgePalette = ['#1e5c10', '#276814', '#1a4e0c'];
+      for (let hx = -(hedgeX % HEDGE_CYCLE); hx < CW + HEDGE_CYCLE; hx += HEDGE_CYCLE) {
+        const idx = Math.abs(Math.round(hx / HEDGE_CYCLE)) % 3;
+        ctx.fillStyle = hedgePalette[idx];
+        ctx.fillRect(hx,      GROUND_Y - 38, HEDGE_W,      38);
+        ctx.fillRect(hx + 10, GROUND_Y - 50, HEDGE_W - 20, 14);
+        // highlight strip
+        ctx.fillStyle = '#2e7a1a';
+        ctx.fillRect(hx,      GROUND_Y - 38, HEDGE_W, 6);
+        ctx.fillRect(hx + 10, GROUND_Y - 50, HEDGE_W - 20, 4);
+        // flower dots on hedge top
+        ctx.fillStyle = '#f9c74f';
+        for (let fd = 0; fd < 3; fd++) {
+          ctx.fillRect(hx + 12 + fd * 28, GROUND_Y - 52, 6, 6);
+        }
+      }
+
+      // Pixel clouds
+      ctx.globalAlpha = 0.88;
+      clouds.forEach(c => drawPixelCloud(c.x, c.y, c.w));
       ctx.globalAlpha = 1;
 
-      // Ground
-      ctx.fillStyle = '#2e7d32';
+      // Fence — parallax layer 2 (wood)
+      const POST_GAP = 76, POST_W = 8, POST_H = 30;
+      // horizontal rails first (so posts draw over them)
+      ctx.fillStyle = '#a07820';
+      ctx.fillRect(0, GROUND_Y - 20, CW, 4);
+      ctx.fillRect(0, GROUND_Y - 10, CW, 4);
+      // shadow rails
+      ctx.fillStyle = '#7a5c10';
+      ctx.fillRect(0, GROUND_Y - 16, CW, 2);
+      ctx.fillRect(0, GROUND_Y - 6,  CW, 2);
+      // posts
+      for (let fx = -(fenceX % POST_GAP); fx < CW + POST_GAP; fx += POST_GAP) {
+        ctx.fillStyle = '#8B6914';
+        ctx.fillRect(fx, GROUND_Y - POST_H, POST_W, POST_H);
+        ctx.fillStyle = '#c49a28';
+        ctx.fillRect(fx, GROUND_Y - POST_H, POST_W, 4);   // post cap light
+        ctx.fillStyle = '#5c4010';
+        ctx.fillRect(fx + POST_W - 2, GROUND_Y - POST_H, 2, POST_H); // shadow edge
+      }
+
+      // Ground — soil
+      ctx.fillStyle = '#5c3d1a';
       ctx.fillRect(0, GROUND_Y, CW, CH - GROUND_Y);
-      ctx.fillStyle = '#43a047';
-      ctx.fillRect(0, GROUND_Y, CW, 7);
-      // Grass spikes
-      ctx.fillStyle = '#4caf50';
-      for (let gx = 4; gx < CW; gx += 16) {
-        ctx.beginPath();
-        ctx.moveTo(gx,     GROUND_Y);
-        ctx.lineTo(gx + 5, GROUND_Y);
-        ctx.lineTo(gx + 2, GROUND_Y - 8);
-        ctx.closePath();
-        ctx.fill();
+      // Grass strip
+      ctx.fillStyle = '#2e7d1a';
+      ctx.fillRect(0, GROUND_Y, CW, 8);
+      ctx.fillStyle = '#3a9c22';
+      ctx.fillRect(0, GROUND_Y, CW, 4);
+      // Pixel grass tufts
+      ctx.fillStyle = '#4dbf28';
+      for (let gx = 0; gx < CW; gx += 8) {
+        ctx.fillRect(gx,     GROUND_Y - 6, 4, 6);
+        ctx.fillRect(gx + 4, GROUND_Y - 3, 4, 3);
+      }
+      // Soil specks
+      ctx.fillStyle = '#7a5530';
+      for (let sx = 10; sx < CW; sx += 40) {
+        ctx.fillRect(sx,      GROUND_Y + 12, 6, 4);
+        ctx.fillRect(sx + 20, GROUND_Y + 20, 4, 4);
       }
     }
 
@@ -410,21 +493,18 @@
         if (o._done) return;
 
         if (o.type === 'wall') {
-          ctx.fillStyle = 'rgba(78,96,115,0.82)';
-          // top pillar
-          ctx.beginPath();
-          ctx.roundRect ? ctx.roundRect(o.x, 0, o.w, o.gapTop, [0,0,8,8])
-                        : ctx.rect(o.x, 0, o.w, o.gapTop);
-          ctx.fill();
-          // bottom pillar
-          ctx.beginPath();
-          ctx.roundRect ? ctx.roundRect(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot, [8,8,0,0])
-                        : ctx.rect(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
-          ctx.fill();
-          // emoji labels
-          ctx.font = '22px serif';
-          ctx.fillText('🏗️', o.x + 8, Math.max(4, o.gapTop - 28));
-          ctx.fillText('🏗️', o.x + 8, o.gapBot + 5);
+          // Brick pillar — top
+          drawBrickPillar(o.x, 0, o.w, o.gapTop);
+          // Brick pillar — bottom
+          drawBrickPillar(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
+          // Moss cap on gap edges
+          ctx.fillStyle = '#2d7a14';
+          ctx.fillRect(o.x, o.gapTop - 5, o.w, 5);
+          ctx.fillRect(o.x, o.gapBot,     o.w, 5);
+          // Emoji marker
+          ctx.font = '20px serif';
+          ctx.fillText('🏗️', o.x + 6, Math.max(6, o.gapTop - 26));
+          ctx.fillText('🏗️', o.x + 6, o.gapBot + 8);
           return;
         }
 
@@ -434,7 +514,7 @@
     }
 
     function drawBenny() {
-      if (invincible && frameN % 8 < 4) return; // flicker
+      if (invincible && frameN % 8 < 4) return;
       ctx.save();
       const cx = BENNY_X + BENNY_SZ / 2;
       const cy = benny.y + BENNY_SZ / 2;
@@ -445,7 +525,6 @@
       ctx.textAlign    = 'center';
       ctx.fillText('🐝', 0, 0);
       ctx.restore();
-      // Reset
       ctx.textAlign    = 'left';
       ctx.textBaseline = 'top';
     }
@@ -470,25 +549,50 @@
     // ── Idle preview frame ─────────────────────────────────────────
     function drawIdle() {
       ctx.clearRect(0, 0, CW, CH);
-      const grad = ctx.createLinearGradient(0, 0, 0, CH);
-      grad.addColorStop(0, '#b3e5fc');
-      grad.addColorStop(1, '#dff2fd');
+      // sky
+      const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+      grad.addColorStop(0,   '#6ab8d4');
+      grad.addColorStop(0.6, '#a8d8a8');
+      grad.addColorStop(1,   '#c8e8a0');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, CW, CH);
-      ctx.fillStyle = '#2e7d32';
+      ctx.fillRect(0, 0, CW, GROUND_Y);
+      // hedges
+      ctx.fillStyle = '#1e5c10';
+      ctx.fillRect(0,   GROUND_Y - 38, 110, 38);
+      ctx.fillRect(180, GROUND_Y - 44, 90,  44);
+      ctx.fillRect(360, GROUND_Y - 32, 100, 32);
+      ctx.fillRect(520, GROUND_Y - 42, 80,  42);
+      ctx.fillStyle = '#2e7a1a';
+      ctx.fillRect(0,   GROUND_Y - 38, 110, 6);
+      ctx.fillRect(180, GROUND_Y - 44, 90,  6);
+      ctx.fillRect(360, GROUND_Y - 32, 100, 6);
+      ctx.fillRect(520, GROUND_Y - 42, 80,  6);
+      // clouds
+      drawPixelCloud(40,  16, 60);
+      drawPixelCloud(200, 24, 50);
+      drawPixelCloud(420, 10, 70);
+      // fence rail
+      ctx.fillStyle = '#a07820';
+      ctx.fillRect(0, GROUND_Y - 20, CW, 4);
+      ctx.fillRect(0, GROUND_Y - 10, CW, 4);
+      // fence posts
+      ctx.fillStyle = '#8B6914';
+      for (let fx = 10; fx < CW; fx += 76) ctx.fillRect(fx, GROUND_Y - 30, 8, 30);
+      // ground
+      ctx.fillStyle = '#5c3d1a';
       ctx.fillRect(0, GROUND_Y, CW, CH - GROUND_Y);
-      ctx.fillStyle = '#43a047';
-      ctx.fillRect(0, GROUND_Y, CW, 7);
-
+      ctx.fillStyle = '#3a9c22';
+      ctx.fillRect(0, GROUND_Y, CW, 4);
+      ctx.fillStyle = '#4dbf28';
+      for (let gx = 0; gx < CW; gx += 8) { ctx.fillRect(gx, GROUND_Y - 6, 4, 6); }
+      // sprites
       ctx.textBaseline = 'top';
       ctx.font = '34px serif';
       ctx.fillText('🐝', BENNY_X, CH / 2 - 18);
-
-      // Scattered flowers and threats
       const preview = [
-        { e:'🌸', x:210, y:100 }, { e:'🌸', x:330, y:160 },
-        { e:'🌸', x:470, y:80  }, { e:'💧', x:390, y:220 },
-        { e:'☠️', x:280, y:60  }, { e:'🦠', x:520, y:150 },
+        { e:'🌸', x:210, y:110 }, { e:'🌸', x:340, y:155 },
+        { e:'🌸', x:470, y:85  }, { e:'💧', x:400, y:210 },
+        { e:'☠️', x:270, y:65  }, { e:'🦠', x:520, y:145 },
       ];
       ctx.font = '28px serif';
       preview.forEach(p => ctx.fillText(p.e, p.x, p.y));

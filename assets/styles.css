@@ -1732,9 +1732,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 /* ═══════════════════════════════════════════════════════════
    Bee Guardian — elementary ecosystem decision game
    ═══════════════════════════════════════════════════════════ */
-/* ── Bee Dash ── */
+/* ── Bee Dash — pixel garden theme ── */
 .bd-section {
-  background: linear-gradient(180deg, #fffdf7 0%, #fff9e6 100%);
+  background: #1e3c10;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0, rgba(0,0,0,.08) 1px, transparent 1px, transparent 4px);
   min-height: calc(100vh - 118px);
   padding: 2rem 0 3.5rem;
 }
@@ -1742,9 +1744,10 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   position: relative;
   max-width: 600px;
   margin: 0 auto;
-  border-radius: 16px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 16px 48px rgba(2,6,23,.13);
+  border: 4px solid #0e200a;
+  box-shadow: 6px 6px 0 #0e200a;
 }
 #bd-canvas-wrap { position: relative; }
 #bd-canvas {
@@ -1752,8 +1755,8 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   height: auto;
   display: block;
   cursor: pointer;
-  border-radius: 0;
   touch-action: none;
+  image-rendering: pixelated;
 }
 #bd-hud {
   position: absolute;
@@ -1762,36 +1765,38 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .45rem 1rem;
-  background: rgba(255,255,255,.88);
-  font-weight: 700;
-  font-size: .95rem;
-  color: var(--bee-dark);
+  padding: .5rem .9rem;
+  background: #1e3c10;
+  border-bottom: 3px solid #0e200a;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .65rem;
+  color: #a8d860;
   user-select: none;
+  letter-spacing: .03em;
 }
 #bd-popup {
   display: none;
   position: absolute;
-  bottom: 56px;
+  bottom: 52px;
   left: 50%;
   transform: translateX(-50%);
-  background: #fff;
-  border-left: 4px solid var(--bee-orange);
-  border-radius: 0 12px 12px 0;
-  padding: .65rem 1rem;
+  background: #f5efd8;
+  border: 3px solid #1e3c10;
+  box-shadow: 4px 4px 0 #0e200a;
+  border-radius: 0;
+  padding: .7rem 1rem;
   max-width: 300px;
   width: max-content;
-  font-size: .88rem;
-  line-height: 1.45;
-  color: var(--bee-dark);
+  font-size: .82rem;
+  line-height: 1.5;
+  color: #2c1a08;
   z-index: 20;
-  box-shadow: 0 4px 18px rgba(2,6,23,.12);
   pointer-events: none;
 }
 .bd-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255,253,247,.96);
+  background: #f5efd8;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1803,70 +1808,100 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .bd-hidden { display: none !important; }
 .bd-hero-bee {
-  font-size: 5rem;
+  font-size: 4.5rem;
   line-height: 1;
   margin-bottom: .75rem;
-  animation: benny-float 2s ease-in-out infinite;
+  animation: benny-float 2s steps(4, end) infinite;
 }
 .bd-title {
-  font-weight: 800;
-  font-size: clamp(1.6rem, 3vw + .8rem, 2.1rem);
-  color: var(--bee-dark);
-  margin-bottom: .45rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(.85rem, 2vw + .4rem, 1.3rem);
+  color: #1e3c10;
+  text-shadow: 3px 3px 0 #4a8c20;
+  line-height: 1.6;
+  margin-bottom: .65rem;
 }
 .bd-sub {
-  color: var(--bee-ink);
-  font-size: .95rem;
-  line-height: 1.6;
+  color: #3b2a10;
+  font-size: .9rem;
+  line-height: 1.65;
   max-width: 380px;
   margin-bottom: 1.25rem;
 }
 .bd-howto-row {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
   flex-wrap: wrap;
 }
 .bd-howto-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .2rem;
-  font-size: .85rem;
-  color: var(--bee-ink);
-  font-weight: 600;
+  gap: .3rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .55rem;
+  color: #3b2a10;
+  background: #e8d9b0;
+  border: 2px solid #1e3c10;
+  box-shadow: 3px 3px 0 #1e3c10;
+  padding: .6rem .7rem;
+  line-height: 1.6;
 }
-.bd-howto-icon { font-size: 1.75rem; }
-.bd-stars { font-size: 2.4rem; margin-bottom: .4rem; }
+.bd-howto-icon { font-size: 1.6rem; }
+.bd-stars { font-size: 2.2rem; margin-bottom: .5rem; }
 .bd-score-big {
   display: flex;
   align-items: baseline;
   gap: .35rem;
   justify-content: center;
-  margin: .65rem 0;
+  margin: .75rem 0;
 }
-.bd-score-big > span:nth-child(1) { font-size: 2rem; }
-.bd-score-big > span:nth-child(2) { font-size: 3rem; font-weight: 800; color: var(--bee-orange); }
-.bd-score-label { font-size: 1.1rem; font-weight: 600; color: var(--bee-ink); }
+.bd-score-big > span:nth-child(1) { font-size: 1.8rem; }
+.bd-score-big > span:nth-child(2) {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2.4rem;
+  color: #2d7a12;
+  text-shadow: 3px 3px 0 #1a4a0a;
+}
+.bd-score-label { font-size: .9rem; font-weight: 600; color: #3b2a10; }
 .bd-facts-recap { text-align: left; margin-top: .75rem; max-width: 440px; width: 100%; }
 .bd-facts-title {
-  font-weight: 700;
-  font-size: .88rem;
-  color: var(--bee-dark);
-  margin-bottom: .4rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .6rem;
+  color: #1e3c10;
+  margin-bottom: .5rem;
+  line-height: 1.8;
 }
 .bd-fact-item {
-  font-size: .85rem;
-  color: var(--bee-ink);
-  line-height: 1.5;
-  padding: .45rem .75rem;
-  background: rgba(248,180,0,.1);
-  border-radius: 10px;
-  margin-bottom: .4rem;
+  font-size: .82rem;
+  color: #2c1a08;
+  line-height: 1.55;
+  padding: .5rem .75rem;
+  background: #e8d9b0;
+  border: 2px solid #1e3c10;
+  box-shadow: 3px 3px 0 #1e3c10;
+  border-radius: 0;
+  margin-bottom: .55rem;
+}
+
+/* pixel-style btn override scoped to bd-section */
+.bd-section .btn-bee {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .65rem;
+  border-radius: 0;
+  border: 3px solid #1e3c10;
+  box-shadow: 4px 4px 0 #1e3c10;
+  letter-spacing: .05em;
+  transition: box-shadow .06s, transform .06s;
+}
+.bd-section .btn-bee:active {
+  box-shadow: 1px 1px 0 #1e3c10;
+  transform: translate(3px, 3px);
 }
 
 @keyframes benny-float {
   0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-9px); }
+  50%     { transform: translateY(-10px); }
 }
