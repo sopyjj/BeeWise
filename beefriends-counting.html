@@ -518,8 +518,9 @@
           const scale = Math.max(1, TUT_UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
-          tutCanvas.width  = w;
-          tutCanvas.height = h;
+          tutCanvas.width       = w;
+          tutCanvas.height      = h;
+          tutCanvas.style.width = w + 'px'; // explicit px = wrap matches canvas exactly
           tutCtx.imageSmoothingEnabled = true;
           tutCtx.imageSmoothingQuality = 'high';
           tutCtx.drawImage(img, 0, 0, w, h);
@@ -558,8 +559,9 @@
           const scale = Math.max(1, TUT_UPSCALE_W / img.naturalWidth);
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
-          revCanvas.width  = w;
-          revCanvas.height = h;
+          revCanvas.width       = w;
+          revCanvas.height      = h;
+          revCanvas.style.width = w + 'px';
           revCtx.imageSmoothingEnabled = true;
           revCtx.imageSmoothingQuality = 'high';
           revCtx.drawImage(img, 0, 0, w, h);
@@ -659,8 +661,9 @@
           const w = Math.round(img.naturalWidth  * scale);
           const h = Math.round(img.naturalHeight * scale);
 
-          hiveCanvas.width  = w;
-          hiveCanvas.height = h;
+          hiveCanvas.width       = w;
+          hiveCanvas.height      = h;
+          hiveCanvas.style.width = w + 'px';
           hiveCtx.imageSmoothingEnabled = true;
           hiveCtx.imageSmoothingQuality = 'high';
           hiveCtx.drawImage(img, 0, 0, w, h);

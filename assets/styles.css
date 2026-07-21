@@ -1603,19 +1603,20 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 
 /* Annotation */
 .mc-annotate-wrap {
-  max-width: 360px;
+  max-width: 480px;
   margin: 0 auto;
+  text-align: center;   /* centres the inline-block image wrap */
 }
 .mc-progress-label {
   font-weight: 700; color: var(--bee-dark);
   font-size: .92rem; margin-bottom: .6rem;
+  text-align: left;
 }
 .img-annotate-wrap {
   position: relative;
-  display: block;
-  width: fit-content;   /* shrink to the canvas — no empty frame background */
+  display: inline-block; /* shrinks to canvas width — no empty frame */
   max-width: 100%;
-  margin: 0 auto;
+  text-align: left;      /* reset text-align for inner content */
   cursor: crosshair;
   border-radius: 16px;
   overflow: hidden;
