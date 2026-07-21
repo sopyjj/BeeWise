@@ -483,22 +483,8 @@
       redrawTutDots();
     }, { passive: false });
 
-    // Shared sizing for both tutorial plain and reveal images — same constants = same display size
-    const TUT_UPSCALE_W  = 400;
-    const TUT_WRAP_MAX_W = '420px';   // outer .mc-annotate-wrap
-    const TUT_IMG_MAX_W  = '400px';   // inner img-annotate-wrap
-    const TUT_MAX_H      = '58vh';
-    const TUT_FILTER     = 'contrast(1.1) saturate(1.1) brightness(0.88)';
-
-    function applyTutWrapStyles(imgWrap) {
-      const outer = imgWrap.closest('.mc-annotate-wrap');
-      if (outer) {
-        outer.style.maxWidth  = TUT_WRAP_MAX_W;
-        outer.style.margin    = '0 auto';
-      }
-      imgWrap.style.maxWidth = TUT_IMG_MAX_W;
-      imgWrap.style.margin   = '0 auto';
-    }
+    const TUT_UPSCALE_W = 400;
+    const TUT_FILTER    = 'contrast(1.1) saturate(1.1) brightness(0.88)';
 
     async function loadTutImage(idx) {
       tutAnnotations = [];
@@ -508,7 +494,6 @@
       document.getElementById('tut-progress-label').textContent =
         (dict['tut.label'] || 'Tutorial') + ' ' + (idx + 1) + ' / ' + TUTORIAL.length;
 
-      applyTutWrapStyles(tutWrap);
       tutCanvas.style.filter = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
@@ -548,7 +533,6 @@
 
       const revCanvas = document.getElementById('tut-reveal-canvas');
       const revCtx    = revCanvas.getContext('2d');
-      applyTutWrapStyles(revCanvas.parentElement);
       revCanvas.style.filter = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
@@ -635,11 +619,6 @@
       annotations = [];
       redrawDots();
 
-      // Enforce size + centering via inline style so it beats any cached CSS
-      const outerWrap = wrapEl.closest('.mc-annotate-wrap');
-      if (outerWrap) { outerWrap.style.maxWidth = '480px'; outerWrap.style.margin = '0 auto'; }
-      wrapEl.style.maxWidth = '380px';
-      wrapEl.style.margin   = '0 auto';
       hiveCanvas.style.filter = 'contrast(1.05) saturate(1.1) brightness(1.0)';
 
       const progressLabel = document.getElementById('progress-label');

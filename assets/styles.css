@@ -1597,21 +1597,19 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .mc-annotate-wrap {
   max-width: 480px;
   margin: 0 auto;
-  text-align: center;   /* centres the inline-block image wrap */
 }
 .mc-progress-label {
   font-weight: 700; color: var(--bee-dark);
   font-size: .92rem; margin-bottom: .6rem;
-  text-align: left;
 }
 .img-annotate-wrap {
   position: relative;
-  display: inline-block;
+  display: block;
+  width: fit-content;
   max-width: 100%;
+  margin: 0 auto;
   cursor: crosshair;
   user-select: none;
-  box-shadow: none;
-  border-radius: 0;
 }
 .img-annotate-wrap img,
 .img-annotate-wrap canvas {
