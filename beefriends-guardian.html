@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=7" rel="stylesheet">
+    <link href="assets/styles.css?v=8" rel="stylesheet">
   </head>
 
   <body>
@@ -56,98 +56,58 @@
         </div>
       </nav>
 
-      <!-- ══════════════════ GAME SECTION ══════════════════ -->
-      <section class="bg-section">
+      <!-- ═══════════════════ BEE DASH SECTION ═══════════════════ -->
+      <section class="bd-section">
         <div class="container">
+          <div class="bd-wrap">
 
-          <!-- ── START SCREEN ─────────────────────────────────── -->
-          <div id="bg-start" class="bg-screen bg-active">
-            <div class="bg-card text-center">
-              <div class="bg-mascot-wrap benny-neutral" id="benny-start">
-                <div class="bg-mascot">🐝</div>
-              </div>
-              <h1 class="bg-title" data-kor="bg.start.title">Can you save the hive?</h1>
-              <p class="bg-subtitle" data-kor="bg.start.subtitle">
-                Benny the Bee's colony is in danger! You are the <strong>Bee Guardian</strong>. Make smart choices to protect the hive from 8 real threats bees face today. The whole colony is counting on you!
-              </p>
-              <div class="bg-hud-row mb-4">
-                <span class="bg-health-label">🐝 Colony Health</span>
-                <div class="bg-health-bar" id="start-health-bar"></div>
-                <span class="bg-health-pct" id="start-health-pct">60%</span>
-              </div>
-              <button class="btn btn-bee btn-lg px-5" id="btn-bg-start" data-kor="bg.start.btn">Start →</button>
-            </div>
-          </div>
-
-          <!-- ── GAME SCREEN ──────────────────────────────────── -->
-          <div id="bg-game" class="bg-screen">
-            <div class="bg-hud">
-              <div class="bg-progress-dots" id="bg-progress-dots"></div>
-              <div class="bg-hud-row">
-                <span class="bg-health-label">🐝 Colony Health</span>
-                <div class="bg-health-bar" id="game-health-bar"></div>
-                <span class="bg-health-pct" id="game-health-pct">60%</span>
-              </div>
-            </div>
-            <div class="bg-mascot-wrap benny-neutral" id="benny-game">
-              <div class="bg-mascot">🐝</div>
-            </div>
-            <div class="bg-card" id="bg-scenario-card">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-
-          <!-- ── WIN SCREEN ───────────────────────────────────── -->
-          <div id="bg-win" class="bg-screen">
-            <div class="bg-card text-center">
-              <div class="bg-win-stars">⭐⭐⭐</div>
-              <div class="bg-mascot-wrap benny-great">
-                <div class="bg-mascot">🐝</div>
-              </div>
-              <h2 class="bg-title" data-kor="bg.win.title">You saved the hive!</h2>
-              <p class="bg-subtitle" data-kor="bg.win.subtitle">
-                Amazing work, Bee Guardian! Thanks to your decisions, Benny's colony survived. Real bees need real people like you!
-              </p>
-              <div class="bg-end-stat-row">
-                <div class="bg-end-stat">
-                  <div class="bg-end-stat-num" id="win-health">0%</div>
-                  <div class="bg-end-stat-label" data-kor="bg.win.healthLeft">Health left</div>
+            <!-- START overlay -->
+            <div id="bd-start" class="bd-overlay">
+              <div class="bd-hero-bee">🐝</div>
+              <h1 class="bd-title">Bee Dash!</h1>
+              <p class="bd-sub">Help Benny fly through a world full of threats — and collect flowers to keep the colony alive!</p>
+              <div class="bd-howto-row">
+                <div class="bd-howto-item">
+                  <span class="bd-howto-icon">👆</span>
+                  <span>Tap to fly up</span>
                 </div>
-                <div class="bg-end-stat">
-                  <div class="bg-end-stat-num" id="win-great">0</div>
-                  <div class="bg-end-stat-label" data-kor="bg.win.bestChoices">Best choices</div>
+                <div class="bd-howto-item">
+                  <span class="bd-howto-icon">🌸</span>
+                  <span>Collect flowers</span>
+                </div>
+                <div class="bd-howto-item">
+                  <span class="bd-howto-icon">☠️</span>
+                  <span>Dodge threats</span>
                 </div>
               </div>
-              <div id="win-fact-recap" class="bg-recap"></div>
-              <button class="btn btn-bee mt-4 px-5" id="btn-bg-win-restart" data-kor="bg.end.restart">Play Again</button>
+              <button class="btn btn-bee btn-lg px-5 mt-2" id="bd-btn-start">Start Flying! →</button>
             </div>
-          </div>
 
-          <!-- ── LOSE SCREEN ──────────────────────────────────── -->
-          <div id="bg-lose" class="bg-screen">
-            <div class="bg-card bg-lose-card text-center">
-              <div class="bg-mascot-wrap benny-distressed">
-                <div class="bg-mascot">🐝</div>
+            <!-- Canvas + HUD -->
+            <div id="bd-canvas-wrap">
+              <div id="bd-hud">
+                <span id="bd-score-display">🌸 0</span>
+                <span id="bd-lives-display">❤️❤️❤️</span>
+                <span id="bd-timer-display">⏱ 1:00</span>
               </div>
-              <h2 class="bg-title" data-kor="bg.lose.title">The hive needs help…</h2>
-              <p class="bg-subtitle" data-kor="bg.lose.subtitle">
-                Don't give up! Now you know what bees are up against. Try again and use what you learned!
-              </p>
-              <div class="bg-end-stat-row">
-                <div class="bg-end-stat">
-                  <div class="bg-end-stat-num" id="lose-scenarios">0</div>
-                  <div class="bg-end-stat-label" data-kor="bg.lose.handled">Scenarios handled</div>
-                </div>
-                <div class="bg-end-stat">
-                  <div class="bg-end-stat-num" id="lose-good">0</div>
-                  <div class="bg-end-stat-label" data-kor="bg.lose.goodChoices">Good choices</div>
-                </div>
-              </div>
-              <div id="lose-fact-recap" class="bg-recap"></div>
-              <button class="btn btn-bee mt-4 px-5" id="btn-bg-lose-restart" data-kor="bg.end.restart">Try Again</button>
+              <div id="bd-popup"></div>
+              <canvas id="bd-canvas"></canvas>
             </div>
-          </div>
 
+            <!-- GAME OVER overlay -->
+            <div id="bd-gameover" class="bd-overlay bd-hidden">
+              <div id="bd-stars" class="bd-stars">⭐⭐⭐</div>
+              <h2 class="bd-title" id="bd-go-title">Time's up!</h2>
+              <div class="bd-score-big">
+                <span>🌸</span>
+                <span id="bd-final-score">0</span>
+                <span class="bd-score-label">flowers</span>
+              </div>
+              <div id="bd-facts-recap" class="bd-facts-recap"></div>
+              <button class="btn btn-bee btn-lg px-5 mt-3" id="bd-btn-restart">Play Again →</button>
+            </div>
+
+          </div><!-- /bd-wrap -->
         </div>
       </section>
     </div><!-- /bf-page-wrap -->
@@ -155,365 +115,449 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     // ══════════════════════════════════════════════════════════════
-    // Bee Guardian — all 8 scenarios
+    // Bee Dash — canvas side-scroller
     // ══════════════════════════════════════════════════════════════
-    const SCENARIOS = [
-      {
-        id: 'varroa',
-        emoji: '🦠',
-        threat: 'Varroa Mite Attack!',
-        story: 'Tiny parasites called Varroa mites are attacking your bees. These mini vampires suck bee blood and spread dangerous viruses through the whole colony!',
-        choices: [
-          { emoji: '🩺', text: 'Treat the hive with safe beekeeper medicine', outcome: 'great', delta: 15,
-            fact: 'Beekeepers use special treatments to fight Varroa mites safely. Acting fast saves the whole colony!' },
-          { emoji: '🔍', text: 'Inspect the hive carefully to see how bad it is', outcome: 'good', delta: 8,
-            fact: 'Smart thinking! Regular inspections catch problems early — good beekeepers check for mites every few weeks.' },
-          { emoji: '⏰', text: 'Wait and hope it goes away on its own', outcome: 'terrible', delta: -28,
-            fact: 'Varroa mites spread incredibly fast. Without treatment, they can collapse a whole colony in months!' }
-        ]
-      },
-      {
-        id: 'pesticide',
-        emoji: '☠️',
-        threat: 'Pesticide Danger!',
-        story: 'A farmer nearby is spraying chemicals on their crops in the middle of the day. Your bees are out foraging and flying right through the spray!',
-        choices: [
-          { emoji: '🌙', text: 'Ask the farmer to spray at dusk when bees are asleep', outcome: 'great', delta: 15,
-            fact: 'Bees return to the hive at night! Spraying at dusk means far fewer bees are exposed to harmful chemicals.' },
-          { emoji: '🚪', text: 'Close the hive entrance until spraying is done', outcome: 'good', delta: 8,
-            fact: 'Closing the entrance protects the bees inside, though foragers already out may still be harmed.' },
-          { emoji: '🤷', text: 'Do nothing — bees are tough, they\'ll be fine', outcome: 'terrible', delta: -28,
-            fact: 'Pesticides can kill thousands of bees in minutes! Bees who bring sprayed nectar home can poison the whole hive.' }
-        ]
-      },
-      {
-        id: 'wildflowers',
-        emoji: '🌸',
-        threat: 'The Flowers Are Disappearing!',
-        story: 'A nearby wildflower field has been paved over for a car park. Your bees are flying further and further to find food, coming back exhausted and hungry.',
-        choices: [
-          { emoji: '🌱', text: 'Plant a wildflower patch in the garden', outcome: 'great', delta: 15,
-            fact: 'Just 1 square metre of wildflowers can feed hundreds of bees! Native flowers are best because bees evolved alongside them.' },
-          { emoji: '🏙️', text: 'Move the hive closer to a local park', outcome: 'good', delta: 8,
-            fact: 'Parks with flowers help! But planting your own wildflowers creates a reliable nearby food source the bees can always count on.' },
-          { emoji: '😐', text: 'Hope the bees find food somewhere else', outcome: 'bad', delta: -18,
-            fact: 'Bees need flowers within 3 km of the hive. Without enough nearby food, the colony slowly starves and gets weaker.' }
-        ]
-      },
-      {
-        id: 'monoculture',
-        emoji: '🌾',
-        threat: 'Only One Kind of Crop!',
-        story: 'All the farms nearby grow just one crop — wheat. It only flowers for two weeks a year and barely makes nectar. Your bees have nothing to eat for most of the year!',
-        choices: [
-          { emoji: '📢', text: 'Talk to farmers about planting wildflower strips', outcome: 'great', delta: 15,
-            fact: 'Wildflower strips along field edges feed bees all season AND help farmers by attracting pollinators to their crops — everyone wins!' },
-          { emoji: '🌻', text: 'Plant sunflowers and lavender near the hive', outcome: 'good', delta: 8,
-            fact: 'Sunflowers and lavender are bee magnets! Every extra flower helps bridge the gap when crops aren\'t blooming.' },
-          { emoji: '🙏', text: 'Hope next year the farmers grow something different', outcome: 'bad', delta: -18,
-            fact: 'Monoculture farming is one of the biggest threats to bees worldwide. Without diverse flowers, colonies get weak and hungry.' }
-        ]
-      },
-      {
-        id: 'water',
-        emoji: '💧',
-        threat: 'The Bees Are Thirsty!',
-        story: 'It\'s been hot and dry for weeks. Bees need water to cool the hive and make honey, but the nearest water source is far across a very busy road!',
-        choices: [
-          { emoji: '🥣', text: 'Place a shallow dish of water with pebbles near the hive', outcome: 'great', delta: 15,
-            fact: 'Bees need water every single day! A shallow dish with pebbles (so they can land safely without drowning) is a perfect bee watering station.' },
-          { emoji: '🌊', text: 'Try to guide the bees to a stream far away', outcome: 'ok', delta: 0,
-            fact: 'Natural water is great, but it\'s far away. Bees waste precious energy flying long distances when a closer source is available.' },
-          { emoji: '🚿', text: 'Spray the outside of the hive with a garden hose', outcome: 'bad', delta: -18,
-            fact: 'Wetting the hive causes mold and distresses the bees. They need their own proper drinking spot — not a shower!' }
-        ]
-      },
-      {
-        id: 'heat',
-        emoji: '☀️',
-        threat: 'Too Hot to Handle!',
-        story: 'A heatwave has arrived! It\'s dangerously hot inside the hive. Thousands of bees are fanning their wings to cool it down and getting totally exhausted.',
-        choices: [
-          { emoji: '🌳', text: 'Move the hive to a shaded spot', outcome: 'great', delta: 15,
-            fact: 'Shade keeps the hive cool so bees spend energy foraging instead of fanning. Morning sun and afternoon shade is the ideal setup!' },
-          { emoji: '💨', text: 'Add extra ventilation holes to the hive', outcome: 'good', delta: 8,
-            fact: 'More airflow helps the bees fan more effectively. Combined with shade, it\'s a great heat-busting combo!' },
-          { emoji: '🥵', text: 'Leave it — bees have survived hot weather before', outcome: 'terrible', delta: -28,
-            fact: 'Extreme heat can melt the wax comb and kill bee larvae! Managed hives need our help during serious heatwaves.' }
-        ]
-      },
-      {
-        id: 'inspection',
-        emoji: '🔍',
-        threat: 'Nobody\'s Checking the Hive!',
-        story: 'The hive hasn\'t been inspected in two months. You have no idea if the queen is healthy, if there\'s disease spreading, or if the bees have enough food for winter!',
-        choices: [
-          { emoji: '📋', text: 'Start inspecting the hive carefully every 2 weeks', outcome: 'great', delta: 15,
-            fact: 'Regular inspections catch problems before they become disasters! Good beekeepers always check for a healthy queen, food stores, and signs of disease.' },
-          { emoji: '👀', text: 'Watch from outside to see if bees look healthy', outcome: 'ok', delta: 0,
-            fact: 'Watching from outside can reveal some issues, but you really need to open the hive to spot a failing queen or hidden disease.' },
-          { emoji: '🚫', text: 'Leave them — bees are wild animals that look after themselves', outcome: 'bad', delta: -18,
-            fact: 'Managed honeybee colonies depend on beekeepers! Without regular checks, small problems like disease or a failing queen can destroy a colony.' }
-        ]
-      },
-      {
-        id: 'habitat',
-        emoji: '🏗️',
-        threat: 'The Forest Is Being Cut Down!',
-        story: 'A forest nearby — where bees find flowers, shelter, and biodiversity — is being cleared to build houses. Bees across your whole region are losing vital habitat.',
-        choices: [
-          { emoji: '📢', text: 'Join a local nature conservation group', outcome: 'great', delta: 15,
-            fact: 'Community action really works! Conservation groups have protected thousands of hectares of bee habitat by speaking up to planners and governments.' },
-          { emoji: '🌳', text: 'Plant native trees and shrubs in your garden', outcome: 'good', delta: 8,
-            fact: 'A single flowering tree feeds more bees than an entire lawn of grass! Gardens are vital stepping stones for wildlife across the whole landscape.' },
-          { emoji: '😔', text: 'Nothing you can do — it\'s too big a problem', outcome: 'terrible', delta: -28,
-            fact: 'Every garden, every petition, and every vote for bee-friendly policies helps. Small actions add up to massive change — don\'t give up!' }
-        ]
+
+    const canvas = document.getElementById('bd-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    // Native canvas resolution (CSS scales it via width:100%)
+    const CW = 600, CH = 360;
+    const GROUND_Y  = CH - 44;   // y where ground begins
+    const BENNY_X   = 85;
+    const BENNY_SZ  = 36;        // logical hit-box side
+
+    canvas.width  = CW;
+    canvas.height = CH;
+
+    // ── Threat facts ───────────────────────────────────────────────
+    const THREAT_FACTS = {
+      pesticide: { emoji:'☠️', name:'Pesticide!',
+        fact:'Farmers can protect bees by spraying at dusk when bees are safely back in the hive.' },
+      varroa:    { emoji:'🦠', name:'Varroa mite!',
+        fact:'Beekeepers use safe treatments to stop Varroa mites spreading through the colony.' },
+      wall:      { emoji:'🏗️', name:'Habitat loss!',
+        fact:'Planting native wildflowers and trees gives bees the food and shelter they need.' },
+    };
+
+    // ── Game state ─────────────────────────────────────────────────
+    let phase, benny, objects, score, lives, timeLeft, elapsed;
+    let lastTs, rafId, invincible, invTimer, popTimer;
+    let clouds, flowerT, obstT, bonusT, wallT, frameN;
+    let threatHits;
+
+    function initState() {
+      phase       = 'idle';
+      benny       = { y: CH / 2, vy: 0 };
+      objects     = [];
+      score       = 0;
+      lives       = 3;
+      timeLeft    = 60;
+      elapsed     = 0;
+      lastTs      = null;
+      invincible  = false;
+      invTimer    = 0;
+      popTimer    = 0;
+      frameN      = 0;
+      threatHits  = {};
+      clouds      = Array.from({length: 6}, (_, i) => ({
+        x: i * 110 + 30,
+        y: 15 + (i % 3) * 28,
+        spd: 0.45 + (i % 3) * 0.22
+      }));
+      // Spawn timers (in frames at ~60fps)
+      flowerT = 50;
+      obstT   = 110;
+      bonusT  = 260;
+      wallT   = 320;
+    }
+
+    // ── Physics constants ──────────────────────────────────────────
+    const GRAVITY  = 0.4;
+    const FLAP     = -9.8;
+    const MAX_FALL = 13;
+
+    function scrollSpd() {
+      if (elapsed < 20) return 2.8;
+      if (elapsed < 40) return 3.8;
+      return 5.0;
+    }
+
+    function spawnIntervals() {
+      if (elapsed < 20) return { flower:70,  obst:130, bonus:300, wall:Infinity };
+      if (elapsed < 40) return { flower:58,  obst:100, bonus:240, wall:270 };
+      return               { flower:46,  obst:78,  bonus:190, wall:195 };
+    }
+
+    function randY(lo, hi) {
+      return lo + Math.random() * (hi - lo);
+    }
+
+    // ── Spawners ───────────────────────────────────────────────────
+    function spawnFlower() {
+      objects.push({ type:'collectible', emoji:'🌸', pts:1,
+        x: CW+10, y: randY(40, GROUND_Y-40), sz:28 });
+    }
+
+    function spawnBonus() {
+      const b = Math.random() < 0.55
+        ? { emoji:'💧', pts:3 }
+        : { emoji:'🌳', pts:2 };
+      objects.push({ type:'collectible', ...b, x: CW+10, y: randY(40, GROUND_Y-40), sz:30 });
+    }
+
+    function spawnPesticide() {
+      const baseY = randY(60, GROUND_Y - 60);
+      objects.push({ type:'threat', key:'pesticide', emoji:'☠️',
+        x: CW+10, baseY, y: baseY, sz:34,
+        t:0, amp:28, freq:0.042 });
+    }
+
+    function spawnVarroa() {
+      const baseY = randY(50, GROUND_Y - 50);
+      objects.push({ type:'threat', key:'varroa', emoji:'🦠',
+        x: CW+10, baseY, y: baseY, sz:28,
+        t:0, amp:58, freq:0.09 });
+    }
+
+    function spawnWall() {
+      const gapH  = elapsed < 40 ? 145 : 115;
+      const gapTop= randY(55, GROUND_Y - gapH - 55);
+      objects.push({ type:'wall', key:'wall',
+        x: CW+10, w:54, gapTop, gapBot: gapTop + gapH });
+    }
+
+    // ── Flap ───────────────────────────────────────────────────────
+    function flap() {
+      if (phase !== 'playing') return;
+      benny.vy = FLAP;
+    }
+
+    // ── Pop-up ─────────────────────────────────────────────────────
+    function showPopup(key) {
+      if (!key || !THREAT_FACTS[key]) return;
+      threatHits[key] = THREAT_FACTS[key];
+      const el = document.getElementById('bd-popup');
+      const tf = THREAT_FACTS[key];
+      el.innerHTML = `<strong>${tf.emoji} ${tf.name}</strong><br>${tf.fact}`;
+      el.style.display = 'block';
+      popTimer = 125;
+    }
+
+    // ── HUD ────────────────────────────────────────────────────────
+    function syncHUD() {
+      document.getElementById('bd-score-display').textContent = '🌸 ' + score;
+      document.getElementById('bd-lives-display').textContent =
+        '❤️'.repeat(lives) + '🖤'.repeat(Math.max(0, 3 - lives));
+      const s = Math.ceil(timeLeft);
+      const m = Math.floor(s / 60);
+      const ss = (s % 60).toString().padStart(2, '0');
+      document.getElementById('bd-timer-display').textContent = `⏱ ${m}:${ss}`;
+    }
+
+    // ── Lose a life ────────────────────────────────────────────────
+    function hitThreat(key) {
+      if (invincible) return;
+      lives = Math.max(0, lives - 1);
+      syncHUD();
+      showPopup(key);
+      invincible = true;
+      invTimer   = 80;
+      if (lives <= 0) {
+        phase = 'dead';
+        setTimeout(endGame, 700);
       }
-    ];
-
-    // ── State ──────────────────────────────────────────────────────
-    let health      = 60;
-    let scenarioIdx = 0;
-    let choicesMade = [];
-    const TOTAL     = SCENARIOS.length;
-
-    // ── Screen management ──────────────────────────────────────────
-    function showScreen(id) {
-      document.querySelectorAll('.bg-screen').forEach(s => s.classList.remove('bg-active'));
-      document.getElementById(id).classList.add('bg-active');
     }
 
-    // ── Health bar ─────────────────────────────────────────────────
-    function renderBar(barEl) {
-      barEl.innerHTML = '';
-      const filled = Math.ceil(Math.max(0, Math.min(100, health)) / 10);
-      for (let i = 0; i < 10; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'bg-hcell' + (i < filled ? ' filled' : '');
-        barEl.appendChild(cell);
+    // ── Update loop ────────────────────────────────────────────────
+    function update(dt) {
+      elapsed   += dt;
+      timeLeft  -= dt;
+      frameN++;
+
+      if (timeLeft <= 0) {
+        timeLeft = 0;
+        phase    = 'timeup';
+        endGame();
+        return;
+      }
+
+      // Benny physics
+      benny.vy = Math.min(benny.vy + GRAVITY, MAX_FALL);
+      benny.y += benny.vy;
+
+      if (benny.y < 0) {
+        benny.y  = 0;
+        benny.vy = 1;
+      }
+      if (benny.y + BENNY_SZ >= GROUND_Y) {
+        benny.y  = GROUND_Y - BENNY_SZ;
+        benny.vy = -3;
+        hitThreat(null);
+      }
+
+      // Invincibility countdown
+      if (invincible && --invTimer <= 0) invincible = false;
+
+      // Popup countdown
+      if (popTimer > 0 && --popTimer <= 0) {
+        document.getElementById('bd-popup').style.display = 'none';
+      }
+
+      // Clouds
+      const sp = scrollSpd();
+      clouds.forEach(c => { c.x -= c.spd; if (c.x < -60) c.x = CW + 30; });
+
+      // Move objects
+      objects.forEach(o => {
+        o.x -= sp;
+        if (o.freq !== undefined) {          // drifting threats
+          o.t += o.freq;
+          o.y = o.baseY + Math.sin(o.t) * o.amp;
+        }
+      });
+
+      // Spawn
+      const iv = spawnIntervals();
+      if (--flowerT <= 0) { spawnFlower(); flowerT = iv.flower + Math.floor(Math.random()*25); }
+      if (--bonusT  <= 0) { spawnBonus();  bonusT  = iv.bonus  + Math.floor(Math.random()*55); }
+      if (--obstT   <= 0) {
+        (Math.random() < 0.52 ? spawnPesticide : spawnVarroa)();
+        obstT = iv.obst + Math.floor(Math.random()*35);
+      }
+      if (iv.wall !== Infinity && --wallT <= 0) {
+        spawnWall();
+        wallT = iv.wall + Math.floor(Math.random()*55);
+      }
+
+      // Collision (Benny hit-box with 8px inset)
+      const bx1 = BENNY_X + 8, by1 = benny.y + 8;
+      const bx2 = BENNY_X + BENNY_SZ - 8, by2 = benny.y + BENNY_SZ - 8;
+
+      objects.forEach(o => {
+        if (o._done) return;
+
+        if (o.type === 'collectible') {
+          const ox2 = o.x + o.sz, oy2 = o.y + o.sz;
+          if (bx1 < ox2 && bx2 > o.x && by1 < oy2 && by2 > o.y) {
+            score += o.pts;
+            syncHUD();
+            o._done = true;
+          }
+          return;
+        }
+
+        if (o.type === 'threat') {
+          const ox2 = o.x + o.sz, oy2 = o.y + o.sz;
+          if (!invincible && bx1 < ox2 && bx2 > o.x && by1 < oy2 && by2 > o.y) {
+            hitThreat(o.key);
+          }
+          return;
+        }
+
+        if (o.type === 'wall') {
+          const bennyMidX = (bx1 + bx2) / 2;
+          const bennyMidY = (by1 + by2) / 2;
+          if (bennyMidX > o.x && bennyMidX < o.x + o.w) {
+            if (!invincible && (bennyMidY < o.gapTop || bennyMidY > o.gapBot)) {
+              hitThreat(o.key);
+            }
+          }
+        }
+      });
+
+      // Remove off-screen and collected objects
+      objects = objects.filter(o => !o._done && o.x > -70);
+
+      syncHUD();
+    }
+
+    // ── Draw ───────────────────────────────────────────────────────
+    function drawBg() {
+      const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+      grad.addColorStop(0, '#b3e5fc');
+      grad.addColorStop(1, '#dff2fd');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, CW, CH);
+
+      // Clouds
+      ctx.globalAlpha = 0.65;
+      ctx.font = '38px serif';
+      ctx.textBaseline = 'top';
+      clouds.forEach(c => ctx.fillText('☁️', c.x, c.y));
+      ctx.globalAlpha = 1;
+
+      // Ground
+      ctx.fillStyle = '#2e7d32';
+      ctx.fillRect(0, GROUND_Y, CW, CH - GROUND_Y);
+      ctx.fillStyle = '#43a047';
+      ctx.fillRect(0, GROUND_Y, CW, 7);
+      // Grass spikes
+      ctx.fillStyle = '#4caf50';
+      for (let gx = 4; gx < CW; gx += 16) {
+        ctx.beginPath();
+        ctx.moveTo(gx,     GROUND_Y);
+        ctx.lineTo(gx + 5, GROUND_Y);
+        ctx.lineTo(gx + 2, GROUND_Y - 8);
+        ctx.closePath();
+        ctx.fill();
       }
     }
 
-    function syncHealth() {
-      const pct = Math.max(0, Math.min(100, Math.round(health)));
-      document.querySelectorAll('.bg-health-bar').forEach(renderBar);
-      document.querySelectorAll('.bg-health-pct').forEach(el => el.textContent = pct + '%');
-    }
+    function drawObjects() {
+      ctx.textBaseline = 'top';
+      objects.forEach(o => {
+        if (o._done) return;
 
-    // ── Mascot ─────────────────────────────────────────────────────
-    function mascotClass() {
-      if (health > 80)  return 'benny-great';
-      if (health > 60)  return 'benny-happy';
-      if (health > 40)  return 'benny-neutral';
-      if (health > 20)  return 'benny-worried';
-      return 'benny-distressed';
-    }
+        if (o.type === 'wall') {
+          ctx.fillStyle = 'rgba(78,96,115,0.82)';
+          // top pillar
+          ctx.beginPath();
+          ctx.roundRect ? ctx.roundRect(o.x, 0, o.w, o.gapTop, [0,0,8,8])
+                        : ctx.rect(o.x, 0, o.w, o.gapTop);
+          ctx.fill();
+          // bottom pillar
+          ctx.beginPath();
+          ctx.roundRect ? ctx.roundRect(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot, [8,8,0,0])
+                        : ctx.rect(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
+          ctx.fill();
+          // emoji labels
+          ctx.font = '22px serif';
+          ctx.fillText('🏗️', o.x + 8, Math.max(4, o.gapTop - 28));
+          ctx.fillText('🏗️', o.x + 8, o.gapBot + 5);
+          return;
+        }
 
-    function syncMascot(override) {
-      const cls = override || mascotClass();
-      ['benny-start', 'benny-game'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.className = 'bg-mascot-wrap ' + cls;
+        ctx.font = o.sz + 'px serif';
+        ctx.fillText(o.emoji, o.x, o.y);
       });
     }
 
-    // ── Progress dots ──────────────────────────────────────────────
-    function renderDots() {
-      const el = document.getElementById('bg-progress-dots');
-      el.innerHTML = '';
-      for (let i = 0; i < TOTAL; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'bg-dot' + (i < scenarioIdx ? ' done' : i === scenarioIdx ? ' current' : '');
-        dot.textContent = i < scenarioIdx ? '🐝' : '○';
-        el.appendChild(dot);
-      }
+    function drawBenny() {
+      if (invincible && frameN % 8 < 4) return; // flicker
+      ctx.save();
+      const cx = BENNY_X + BENNY_SZ / 2;
+      const cy = benny.y + BENNY_SZ / 2;
+      ctx.translate(cx, cy);
+      ctx.rotate(Math.max(-0.45, Math.min(0.5, benny.vy * 0.048)));
+      ctx.font = '34px serif';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign    = 'center';
+      ctx.fillText('🐝', 0, 0);
+      ctx.restore();
+      // Reset
+      ctx.textAlign    = 'left';
+      ctx.textBaseline = 'top';
     }
 
-    // ── Apply delta + re-sync UI ───────────────────────────────────
-    function applyDelta(delta) {
-      health = Math.max(0, Math.min(100, health + delta));
-      syncHealth();
-      syncMascot();
+    function drawFrame() {
+      ctx.clearRect(0, 0, CW, CH);
+      drawBg();
+      drawObjects();
+      drawBenny();
     }
 
-    // ── Load a scenario ────────────────────────────────────────────
-    function loadScenario(idx) {
-      renderDots();
-      syncHealth();
-      syncMascot();
-
-      const sc    = SCENARIOS[idx];
-      const card  = document.getElementById('bg-scenario-card');
-      card.innerHTML = `
-        <div class="bg-scenario-header">
-          <span class="bg-scenario-emoji">${sc.emoji}</span>
-          <h2 class="bg-scenario-title">${sc.threat}</h2>
-        </div>
-        <p class="bg-scenario-story">${sc.story}</p>
-        <div class="bg-choices" id="bg-choices">
-          ${sc.choices.map((c, ci) => `
-            <button class="bg-choice-btn" data-ci="${ci}">
-              <span class="bg-choice-emoji">${c.emoji}</span>
-              <span class="bg-choice-text">${c.text}</span>
-            </button>
-          `).join('')}
-        </div>
-      `;
-
-      card.querySelectorAll('.bg-choice-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          handleChoice(sc, sc.choices[+btn.dataset.ci]);
-        });
-      });
+    // ── Game loop ──────────────────────────────────────────────────
+    function gameLoop(ts) {
+      if (phase !== 'playing') return;
+      const dt = lastTs !== null ? Math.min((ts - lastTs) / 1000, 0.05) : 0.016;
+      lastTs = ts;
+      update(dt);
+      drawFrame();
+      rafId = requestAnimationFrame(gameLoop);
     }
 
-    // ── Handle a player's choice ───────────────────────────────────
-    function handleChoice(sc, choice) {
-      applyDelta(choice.delta);
-      choicesMade.push({ outcome: choice.outcome, fact: choice.fact, threat: sc.threat });
+    // ── Idle preview frame ─────────────────────────────────────────
+    function drawIdle() {
+      ctx.clearRect(0, 0, CW, CH);
+      const grad = ctx.createLinearGradient(0, 0, 0, CH);
+      grad.addColorStop(0, '#b3e5fc');
+      grad.addColorStop(1, '#dff2fd');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, CW, CH);
+      ctx.fillStyle = '#2e7d32';
+      ctx.fillRect(0, GROUND_Y, CW, CH - GROUND_Y);
+      ctx.fillStyle = '#43a047';
+      ctx.fillRect(0, GROUND_Y, CW, 7);
 
-      const labels = {
-        great:    '⭐ Great choice!',
-        good:     '👍 Good thinking!',
-        ok:       '😐 That helps a little.',
-        bad:      '⚠️ That hurt the colony!',
-        terrible: '❌ Oh no — the colony suffered!'
-      };
-      const colors = {
-        great: '#d1fae5', good: '#fef3c7', ok: '#f3f4f6',
-        bad: '#fee2e2', terrible: '#fecaca'
-      };
+      ctx.textBaseline = 'top';
+      ctx.font = '34px serif';
+      ctx.fillText('🐝', BENNY_X, CH / 2 - 18);
 
-      const isLast     = scenarioIdx + 1 >= TOTAL;
-      const nextLabel  = isLast ? 'See Results →' : 'Next →';
-
-      const choicesEl = document.getElementById('bg-choices');
-      choicesEl.innerHTML = `
-        <div class="bg-feedback-block" style="background:${colors[choice.outcome]}">
-          <div class="bg-feedback-label">${labels[choice.outcome]}</div>
-          <div class="bg-fact-box">${choice.fact}</div>
-        </div>
-        <div class="text-center mt-3">
-          <button class="btn btn-bee px-4" id="btn-bg-next">${nextLabel}</button>
-        </div>
-      `;
-      document.getElementById('btn-bg-next').addEventListener('click', advanceScenario);
-
-      if (health <= 0) setTimeout(showLose, 800);
+      // Scattered flowers and threats
+      const preview = [
+        { e:'🌸', x:210, y:100 }, { e:'🌸', x:330, y:160 },
+        { e:'🌸', x:470, y:80  }, { e:'💧', x:390, y:220 },
+        { e:'☠️', x:280, y:60  }, { e:'🦠', x:520, y:150 },
+      ];
+      ctx.font = '28px serif';
+      preview.forEach(p => ctx.fillText(p.e, p.x, p.y));
     }
 
-    // ── Advance to next scenario or end ───────────────────────────
-    function advanceScenario() {
-      scenarioIdx++;
-      if (health <= 0)         { showLose(); return; }
-      if (scenarioIdx >= TOTAL){ showWin();  return; }
-      loadScenario(scenarioIdx);
+    // ── Start / restart ────────────────────────────────────────────
+    function startGame() {
+      cancelAnimationFrame(rafId);
+      initState();
+      document.getElementById('bd-start').classList.add('bd-hidden');
+      document.getElementById('bd-gameover').classList.add('bd-hidden');
+      document.getElementById('bd-popup').style.display = 'none';
+      syncHUD();
+      phase  = 'playing';
+      lastTs = null;
+      rafId  = requestAnimationFrame(gameLoop);
     }
 
-    // ── Win ────────────────────────────────────────────────────────
-    function showWin() {
-      const greatCount = choicesMade.filter(c => c.outcome === 'great').length;
-      document.getElementById('win-health').textContent = Math.round(health) + '%';
-      document.getElementById('win-great').textContent  = greatCount;
+    // ── End game ───────────────────────────────────────────────────
+    function endGame() {
+      cancelAnimationFrame(rafId);
 
-      const items = choicesMade
-        .filter(c => c.outcome === 'great' || c.outcome === 'good')
-        .slice(0, 3)
-        .map(c => `<div class="bg-recap-item">🐝 <em>${c.threat}</em> — ${c.fact}</div>`)
-        .join('');
-      document.getElementById('win-fact-recap').innerHTML = items
-        ? '<p class="bg-recap-title">Things you learned:</p>' + items
-        : '';
-      showScreen('bg-win');
+      const stars = score >= 30 ? '⭐⭐⭐' : score >= 15 ? '⭐⭐' : '⭐';
+      const title = lives <= 0 ? 'The colony needs help…' : "Time's up!";
+
+      document.getElementById('bd-stars').textContent      = stars;
+      document.getElementById('bd-go-title').textContent   = title;
+      document.getElementById('bd-final-score').textContent = score;
+
+      const hits = Object.values(threatHits);
+      const factsHtml = hits.length
+        ? '<p class="bd-facts-title">What you encountered:</p>' +
+          hits.map(tf =>
+            `<div class="bd-fact-item">${tf.emoji} <strong>${tf.name}</strong> ${tf.fact}</div>`
+          ).join('')
+        : '<p class="bd-facts-title">Great flying — no threats hit! 🎉</p>';
+
+      document.getElementById('bd-facts-recap').innerHTML = factsHtml;
+      document.getElementById('bd-gameover').classList.remove('bd-hidden');
     }
 
-    // ── Lose ───────────────────────────────────────────────────────
-    function showLose() {
-      const goodCount = choicesMade.filter(c => c.outcome === 'great' || c.outcome === 'good').length;
-      document.getElementById('lose-scenarios').textContent = scenarioIdx;
-      document.getElementById('lose-good').textContent      = goodCount;
-
-      const items = choicesMade
-        .filter(c => c.outcome === 'bad' || c.outcome === 'terrible')
-        .slice(0, 3)
-        .map(c => `<div class="bg-recap-item">💡 <em>${c.threat}</em> — ${c.fact}</div>`)
-        .join('');
-      document.getElementById('lose-fact-recap').innerHTML = items
-        ? '<p class="bg-recap-title">What to remember next time:</p>' + items
-        : '';
-      showScreen('bg-lose');
-    }
-
-    // ── Restart ────────────────────────────────────────────────────
-    function restartGame() {
-      health      = 60;
-      scenarioIdx = 0;
-      choicesMade = [];
-      syncHealth();
-      syncMascot();
-      showScreen('bg-start');
-    }
-
-    // ── Boot ───────────────────────────────────────────────────────
-    syncHealth();
-    syncMascot();
-    renderDots();
-
-    document.getElementById('btn-bg-start').addEventListener('click', () => {
-      showScreen('bg-game');
-      loadScenario(0);
+    // ── Controls ───────────────────────────────────────────────────
+    canvas.addEventListener('click', flap);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); flap(); }, { passive: false });
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') { e.preventDefault(); flap(); }
     });
-    document.getElementById('btn-bg-win-restart').addEventListener('click', restartGame);
-    document.getElementById('btn-bg-lose-restart').addEventListener('click', restartGame);
+
+    document.getElementById('bd-btn-start').addEventListener('click', startGame);
+    document.getElementById('bd-btn-restart').addEventListener('click', startGame);
+
+    // Initial idle frame
+    initState();
+    drawIdle();
 
     // ── i18n ───────────────────────────────────────────────────────
-    const I18N_BG = {
-      en: {
-        'subnav.ebook':    'E-Book',
-        'subnav.game':     'Game',
-        'subnav.counter':  'Mite Counter',
-        'subnav.guardian': 'Bee Guardian',
-        'bg.start.title':    'Can you save the hive?',
-        'bg.start.subtitle': 'Benny the Bee\'s colony is in danger! You are the <strong>Bee Guardian</strong>. Make smart choices to protect the hive from 8 real threats bees face today. The whole colony is counting on you!',
-        'bg.start.btn':      'Start →',
-        'bg.win.title':      'You saved the hive!',
-        'bg.win.subtitle':   'Amazing work, Bee Guardian! Thanks to your decisions, Benny\'s colony survived. Real bees need real people like you!',
-        'bg.win.healthLeft': 'Health left',
-        'bg.win.bestChoices':'Best choices',
-        'bg.lose.title':     'The hive needs help…',
-        'bg.lose.subtitle':  'Don\'t give up! Now you know what bees are up against. Try again and use what you learned!',
-        'bg.lose.handled':   'Scenarios handled',
-        'bg.lose.goodChoices':'Good choices',
-        'bg.end.restart':    'Play Again'
-      },
-      ko: {
-        'subnav.ebook':    '전자책',
-        'subnav.game':     '게임',
-        'subnav.counter':  '응애 카운터',
-        'subnav.guardian': '비가디언',
-        'bg.start.title':    '벌집을 지킬 수 있을까요?',
-        'bg.start.subtitle': '베니 꿀벌의 군집이 위험에 처했어요! 당신은 <strong>비가디언</strong>입니다. 꿀벌이 오늘 직면한 8가지 실제 위협으로부터 벌집을 보호하는 현명한 선택을 해보세요!',
-        'bg.start.btn':      '시작 →',
-        'bg.win.title':      '벌집을 구했어요!',
-        'bg.win.subtitle':   '훌륭해요, 비가디언! 당신의 결정 덕분에 베니의 군집이 살아남았어요. 실제 꿀벌에게는 당신 같은 사람이 필요합니다!',
-        'bg.win.healthLeft': '남은 건강',
-        'bg.win.bestChoices':'최선의 선택',
-        'bg.lose.title':     '벌집이 도움이 필요해요…',
-        'bg.lose.subtitle':  '포기하지 마세요! 이제 꿀벌이 어떤 위협에 처해 있는지 알았으니 배운 것을 활용해 다시 도전해 보세요!',
-        'bg.lose.handled':   '처리한 상황',
-        'bg.lose.goodChoices':'좋은 선택',
-        'bg.end.restart':    '다시 하기'
-      }
+    const I18N_BD = {
+      en: { 'subnav.ebook':'E-Book', 'subnav.game':'Game',
+            'subnav.counter':'Mite Counter', 'subnav.guardian':'Bee Guardian' },
+      ko: { 'subnav.ebook':'전자책',  'subnav.game':'게임',
+            'subnav.counter':'응애 카운터', 'subnav.guardian':'비가디언' }
     };
 
     function applyLang(lang) {
-      const dict = I18N_BG[lang] || I18N_BG.en;
+      const dict = I18N_BD[lang] || I18N_BD.en;
       document.querySelectorAll('[data-kor]').forEach(el => {
         const key = el.getAttribute('data-kor');
-        if (dict[key] !== undefined) el.innerHTML = dict[key];
+        if (dict[key]) el.innerHTML = dict[key];
       });
-      document.documentElement.lang = lang;
       localStorage.setItem('lang', lang);
       const btn = document.getElementById('langToggle');
       if (btn) btn.textContent = lang === 'en' ? '한국어' : 'English';
