@@ -1614,13 +1614,10 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .img-annotate-wrap {
   position: relative;
-  display: inline-block; /* shrinks to canvas width — no empty frame */
+  display: inline-block;
   max-width: 100%;
-  text-align: left;      /* reset text-align for inner content */
+  text-align: left;
   cursor: crosshair;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 12px 36px rgba(2,6,23,.14);
   user-select: none;
 }
 .img-annotate-wrap img {
