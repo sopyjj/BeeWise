@@ -1533,7 +1533,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .mc-section {
   background: linear-gradient(180deg, #fffdf7 0%, #fff9e6 100%);
   min-height: calc(100vh - 118px);
-  padding: 1rem 0 1.5rem;
+  padding: 2rem 0 3rem;
 }
 .mc-screen { display: none; }
 .mc-screen.mc-active { display: block; }
@@ -1582,7 +1582,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .tut-task-hint {
   text-align: center; color: var(--bee-ink);
-  font-size: .95rem; opacity: .7; margin-bottom: .75rem;
+  font-size: .95rem; opacity: .7; margin-bottom: 1.25rem;
 }
 .tut-reveal-hint {
   background: #fff9e6;
@@ -1590,7 +1590,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   border-radius: 0 10px 10px 0;
   padding: .8rem 1.1rem;
   color: var(--bee-ink); font-size: .95rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Annotation */
@@ -1598,10 +1598,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   max-width: 480px;
   margin: 0 auto;
   text-align: center;
+  padding: 0 1rem;
 }
 .mc-progress-label {
   font-weight: 700; color: var(--bee-dark);
-  font-size: .92rem; margin-bottom: .6rem;
+  font-size: .92rem; margin-bottom: 1rem;
   text-align: center;
 }
 .img-annotate-wrap {
@@ -1640,8 +1641,8 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .6rem;
-  margin-top: 1rem;
+  gap: .9rem;
+  margin-top: 1.5rem;
 }
 .dot-counter {
   background: #fff;
