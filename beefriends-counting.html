@@ -510,8 +510,6 @@
 
       applyTutWrapStyles(tutWrap);
       tutCanvas.style.maxHeight = TUT_MAX_H;
-      tutCanvas.style.width     = '100%';
-      tutCanvas.style.height    = 'auto';
       tutCanvas.style.filter    = TUT_FILTER;
 
       await new Promise((resolve, reject) => {
@@ -553,8 +551,6 @@
       applyTutWrapStyles(revCanvas.parentElement);
       revCanvas.style.filter    = TUT_FILTER;
       revCanvas.style.maxHeight = TUT_MAX_H;
-      revCanvas.style.width     = '100%';
-      revCanvas.style.height    = 'auto';
 
       await new Promise((resolve, reject) => {
         const img = new Image();
@@ -645,8 +641,6 @@
       wrapEl.style.maxWidth = '380px';
       wrapEl.style.margin   = '0 auto';
       hiveCanvas.style.maxHeight = '40vh';
-      hiveCanvas.style.width     = '100%';
-      hiveCanvas.style.height    = 'auto';
       hiveCanvas.style.filter    = 'contrast(1.05) saturate(1.1) brightness(1.0)';
 
       const progressLabel = document.getElementById('progress-label');

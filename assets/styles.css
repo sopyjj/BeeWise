@@ -1612,8 +1612,10 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .img-annotate-wrap {
   position: relative;
-  display: inline-block;
-  width: 100%;
+  display: block;
+  width: fit-content;   /* shrink to the canvas — no empty frame background */
+  max-width: 100%;
+  margin: 0 auto;
   cursor: crosshair;
   border-radius: 16px;
   overflow: hidden;
@@ -1622,16 +1624,15 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .img-annotate-wrap img {
   display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
   max-height: 40vh;
-  object-fit: contain;
   pointer-events: none;
   filter: contrast(1.45) saturate(1.8) brightness(1.06);
 }
 .img-annotate-wrap canvas {
   display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
   max-height: 40vh;
   pointer-events: none;
