@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link href="assets/styles.css" rel="stylesheet">
+    <link href="assets/styles.css?v=4" rel="stylesheet">
   </head>
 
   <body>
@@ -416,6 +416,27 @@
     const tutCtx      = tutCanvas.getContext('2d');
     const tutWrap     = document.getElementById('tut-annotate-wrap');
 
+    // Strip any box/shadow/radius from a wrap element — overrides cached CSS
+    function stripFrame(el, pxW) {
+      el.style.display      = 'block';
+      el.style.width        = pxW + 'px';
+      el.style.margin       = '0 auto';
+      el.style.boxShadow    = 'none';
+      el.style.borderRadius = '0';
+      el.style.overflow     = 'visible';
+      el.style.background   = 'transparent';
+      el.style.border       = 'none';
+      el.style.padding      = '0';
+    }
+    function stripCanvasFrame(canvas, pxW) {
+      canvas.style.display    = 'block';
+      canvas.style.width      = pxW + 'px';
+      canvas.style.maxWidth   = 'none';
+      canvas.style.maxHeight  = 'none';
+      canvas.style.boxShadow  = 'none';
+      canvas.style.borderRadius = '0';
+    }
+
     // Sharpening convolution — 8-neighbour kernel, applied after upscaling
     function applySharpen(ctx, w, h) {
       const id  = ctx.getImageData(0, 0, w, h);
@@ -504,11 +525,12 @@
           const h = Math.round(img.naturalHeight * scale);
           tutCanvas.width       = w;
           tutCanvas.height      = h;
-          tutCanvas.style.width = w + 'px'; // explicit px = wrap matches canvas exactly
           tutCtx.imageSmoothingEnabled = true;
           tutCtx.imageSmoothingQuality = 'high';
           tutCtx.drawImage(img, 0, 0, w, h);
           applySharpen(tutCtx, w, h);
+          stripCanvasFrame(tutCanvas, w);
+          stripFrame(tutWrap, w);
           // Preload answer image while user annotates so reveal is instant
           new Image().src = TUTORIAL[idx].answer;
           resolve();
@@ -543,10 +565,12 @@
           const h = Math.round(img.naturalHeight * scale);
           revCanvas.width       = w;
           revCanvas.height      = h;
-          revCanvas.style.width = w + 'px';
           revCtx.imageSmoothingEnabled = true;
           revCtx.imageSmoothingQuality = 'high';
           revCtx.drawImage(img, 0, 0, w, h);
+          const revWrap = revCanvas.parentElement;
+          stripCanvasFrame(revCanvas, w);
+          stripFrame(revWrap, w);
           resolve();
         };
         img.onerror = reject;
@@ -639,12 +663,12 @@
 
           hiveCanvas.width       = w;
           hiveCanvas.height      = h;
-          hiveCanvas.style.width = w + 'px';
           hiveCtx.imageSmoothingEnabled = true;
           hiveCtx.imageSmoothingQuality = 'high';
           hiveCtx.drawImage(img, 0, 0, w, h);
-
           applySharpen(hiveCtx, w, h);
+          stripCanvasFrame(hiveCanvas, w);
+          stripFrame(wrapEl, w);
           resolve();
         };
         img.onerror = reject;
