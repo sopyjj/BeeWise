@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mite Invaders — BeeFriends · BeeWise</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png"/>
+  <link rel="shortcut icon" href="assets/favicon.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="assets/styles.css?v=20" rel="stylesheet">
+  <style>
+    #mi-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 0 4px;
+      background: rgba(0,0,0,.18);
+      border-radius: 0 0 16px 16px;
+    }
+    .mi-btn {
+      min-width: 72px; height: 48px;
+      padding: 0 16px;
+      background: rgba(0,0,0,.45);
+      border: 2px solid rgba(255,255,255,.5);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      touch-action: none; cursor: pointer;
+      user-select: none; -webkit-user-select: none;
+      transition: background .08s;
+    }
+    .mi-btn-fire {
+      min-width: 110px;
+      background: rgba(180,40,0,.65);
+      border-color: rgba(255,140,60,.8);
+      letter-spacing: .03em;
+    }
+    .mi-btn.mi-active { background: rgba(255,255,255,.4); border-color: #fff; }
+    .mi-btn-fire.mi-active { background: rgba(255,80,0,.7); }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm fixed-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <img src="assets/logo_nobg.png" alt="BeeWise Logo" class="nav-logo2"/>
+      <span>BeeWise</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="beecure.html">BeeCure</a></li>
+        <li class="nav-item"><a class="nav-link active" href="beefriends.html">BeeFriends</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <button id="langToggle" class="btn btn-lang d-inline-flex align-items-center gap-2">
+            한국어 <span class="lang-pill">EN</span>
+          </button>
+        </li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-bee3" href="beefriends.html#contact">Get Started</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Sub-nav -->
+<div class="bf-page-wrap">
+  <nav class="bf-subnav">
+    <div class="container d-flex align-items-center gap-2 flex-wrap">
+      <a href="beefriends.html" class="bf-back"><i class="bi bi-arrow-left me-1"></i>BeeFriends</a>
+      <span class="text-muted mx-1" style="opacity:.35">|</span>
+      <a href="beefriends-ebook.html"    class="nav-link" data-kor="subnav.ebook">E-Book</a>
+      <a href="beefriends-game.html"     class="nav-link" data-kor="subnav.game">Game</a>
+      <a href="beefriends-counting.html" class="nav-link" data-kor="subnav.counter">Mite Counter</a>
+      <a href="beefriends-guardian.html" class="nav-link" data-kor="subnav.guardian">Bee Dash</a>
+      <a href="beefriends-mite.html"     class="nav-link bf-active" data-kor="subnav.mite">Mite Invaders</a>
+    </div>
+  </nav>
+
+  <!-- ══════════════ MITE INVADERS SECTION ══════════════ -->
+  <section class="bd-section">
+    <div class="container">
+      <div class="bd-wrap">
+
+        <!-- START overlay -->
+        <div id="mi-start" class="bd-overlay">
+          <div class="bd-sparkles">🦠🐝🦠</div>
+          <div class="bd-hero-bee">🦠</div>
+          <h1 class="bd-title">Mite Invaders!</h1>
+          <p class="bd-sub">You are a Varroa mite — the tiny parasite that threatens bee colonies! Launch yourself upward and attach to as many honeybees as you can before time runs out! 🐝</p>
+          <div class="bd-howto-row">
+            <div class="bd-howto-item">
+              <span class="bd-howto-icon">◀▶</span>
+              <span>Move left &amp; right</span>
+            </div>
+            <div class="bd-howto-item">
+              <span class="bd-howto-icon">↑</span>
+              <span>Launch up!</span>
+            </div>
+            <div class="bd-howto-item">
+              <span class="bd-howto-icon">🐝</span>
+              <span>Attach to bees</span>
+            </div>
+          </div>
+          <button class="btn btn-bee btn-lg px-5 mt-2" id="mi-btn-start">Start Invading! 🦠</button>
+        </div>
+
+        <!-- Canvas + HUD -->
+        <div id="bd-canvas-wrap">
+          <div id="bd-hud">
+            <span id="mi-score-display">🦠 0</span>
+            <span id="mi-timer-display">⏱ 2:00</span>
+          </div>
+          <div id="bd-popup"></div>
+          <canvas id="mi-canvas"></canvas>
+        </div>
+
+        <!-- Mobile controls (below canvas, outside canvas-wrap) -->
+        <div id="mi-controls">
+          <button class="mi-btn" id="mi-btn-left"  aria-label="Move left">◀</button>
+          <button class="mi-btn mi-btn-fire" id="mi-btn-fire" aria-label="Launch mite">↑ ATTACH</button>
+          <button class="mi-btn" id="mi-btn-right" aria-label="Move right">▶</button>
+        </div>
+
+        <!-- GAME OVER overlay -->
+        <div id="mi-gameover" class="bd-overlay bd-hidden">
+          <div id="mi-stars" class="bd-stars">⭐⭐⭐</div>
+          <h2 class="bd-title" id="mi-go-title">Time's Up!</h2>
+          <div class="bd-score-big">
+            <span>🦠</span>
+            <span id="mi-final-score">0</span>
+            <span class="bd-score-label">attachments</span>
+          </div>
+          <div id="mi-facts" class="bd-facts-recap"></div>
+          <button class="btn btn-bee btn-lg px-5 mt-3" id="mi-btn-restart">Play Again →</button>
+        </div>
+
+      </div><!-- /bd-wrap -->
+    </div>
+  </section>
+</div><!-- /bf-page-wrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════
+// Mite Invaders — Space-Invaders-style canvas game
+// Player is a Varroa mite at the bottom. Rows of bees fly
+// overhead left-right. Launch upward to attach. 2-minute round.
+// ════════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('mi-canvas');
+const ctx    = canvas.getContext('2d');
+
+const CW            = 600;
+const CH            = 360;
+const GAME_DURATION = 120;   // seconds
+
+const BEE_SZ   = 34;    // emoji render size
+const MITE_SZ  = 28;    // player size
+const PROJ_SZ  = 16;    // in-flight mite size
+const PROJ_SPD = 6;     // upward px/frame
+const MITE_SPD = 4;     // horizontal px/frame
+const MITE_Y   = CH - 52;
+const START_X  = CW / 2 - MITE_SZ / 2;
+const HIT_IMMUNE = 72; // frames a bee is immune after being hit (~1.2 s)
+
+canvas.width  = CW;
+canvas.height = CH;
+ctx.imageSmoothingEnabled = false;
+
+// ── Educational facts ──────────────────────────────────────────
+const FACTS = [
+  { emoji: '🦠', title: 'What is a Varroa mite?',
+    fact: 'Varroa destructor is a tiny external parasite that attaches to honeybees and feeds on their fat bodies, weakening them and spreading viruses through the colony.' },
+  { emoji: '🐝', title: 'How do mites spread?',
+    fact: 'Varroa mites hitch rides between bees inside the hive — just like in this game — spreading quickly through the whole colony.' },
+  { emoji: '🔬', title: 'How do beekeepers help?',
+    fact: 'Beekeepers do regular mite counts using a sugar shake or sticky board, then use safe treatments to protect the colony before mites take over.' },
+  { emoji: '💪', title: 'Bees fight back!',
+    fact: 'Some bee breeds groom each other to knock off mites. Scientists are breeding these "hygienic" bees to create mite-resistant colonies.' },
+];
+
+// ── State ──────────────────────────────────────────────────────
+let phase, mite, proj, rows, score, timeLeft, elapsed;
+let lastTs, rafId, popTimer, frameN;
+let row3Added, row4Added;
+let bgCanvas;
+const keys = { left: false, right: false, fire: false };
+let fireLatch = false;
+
+// ── Row factory ────────────────────────────────────────────────
+function makeRow(y, count, baseSpd, dir) {
+  const margin = 44;
+  const span   = CW - margin * 2 - BEE_SZ;
+  const step   = count > 1 ? span / (count - 1) : 0;
+  return {
+    y, baseSpd, dir, active: false,
+    bees: Array.from({ length: count }, (_, i) => ({
+      x: margin + i * step,
+      hitTimer: 0,
+    })),
+  };
+}
+
+function initState() {
+  phase     = 'idle';
+  score     = 0;
+  timeLeft  = GAME_DURATION;
+  elapsed   = 0;
+  lastTs    = null;
+  popTimer  = 0;
+  frameN    = 0;
+  row3Added = false;
+  row4Added = false;
+  mite      = { x: START_X };
+  proj      = null;
+  rows = [
+    makeRow(52,  6, 1.2,  1),   // row A — active from start
+    makeRow(102, 5, 1.5, -1),   // row B — active from start
+    makeRow(152, 6, 1.8,  1),   // row C — unlocks at 40 s
+    makeRow(202, 5, 2.1, -1),   // row D — unlocks at 80 s
+  ];
+  rows[0].active = true;
+  rows[1].active = true;
+}
+
+// ── Progress ───────────────────────────────────────────────────
+function progressFrac() { return Math.min(1, elapsed / GAME_DURATION); }
+function rowSpeed(row)   { return row.baseSpd + progressFrac() * 3.0; }
+
+// ── HUD ────────────────────────────────────────────────────────
+function syncHUD() {
+  document.getElementById('mi-score-display').textContent = '🦠 ' + score;
+  const s  = Math.ceil(timeLeft);
+  const mm = Math.floor(s / 60);
+  const ss = (s % 60).toString().padStart(2, '0');
+  document.getElementById('mi-timer-display').textContent = `⏱ ${mm}:${ss}`;
+}
+
+// ── Popup ──────────────────────────────────────────────────────
+function showPopup(html) {
+  const el = document.getElementById('bd-popup');
+  el.innerHTML = html;
+  el.style.display = 'block';
+  popTimer = 70;
+}
+
+// ── Fire ───────────────────────────────────────────────────────
+function fireMite() {
+  if (proj !== null) return;
+  proj = { x: mite.x + MITE_SZ / 2 - PROJ_SZ / 2, y: MITE_Y - PROJ_SZ };
+}
+
+// ── Update ─────────────────────────────────────────────────────
+function update(dt) {
+  elapsed  += dt;
+  timeLeft -= dt;
+  frameN++;
+
+  if (timeLeft <= 0) { timeLeft = 0; endGame(); return; }
+
+  // Unlock rows on schedule
+  if (!row3Added && elapsed >= 40) { rows[2].active = true; row3Added = true;
+    showPopup('🐝 More bees are joining the colony!'); }
+  if (!row4Added && elapsed >= 80) { rows[3].active = true; row4Added = true;
+    showPopup('🐝🐝 The colony is at full strength!'); }
+
+  // Player movement
+  if (keys.left)  mite.x = Math.max(0,              mite.x - MITE_SPD);
+  if (keys.right) mite.x = Math.min(CW - MITE_SZ,   mite.x + MITE_SPD);
+
+  // Fire — only on fresh keypress (latch prevents auto-fire)
+  if (keys.fire && !fireLatch) { fireMite(); fireLatch = true; }
+  if (!keys.fire) fireLatch = false;
+
+  // Move projectile
+  if (proj) {
+    proj.y -= PROJ_SPD;
+    if (proj.y + PROJ_SZ < 0) proj = null;
+  }
+
+  // Move bee rows
+  rows.forEach(row => {
+    if (!row.active) return;
+    const spd = rowSpeed(row);
+    let minX = Infinity, maxX = -Infinity;
+    row.bees.forEach(b => {
+      if (b.x < minX) minX = b.x;
+      if (b.x + BEE_SZ > maxX) maxX = b.x + BEE_SZ;
+    });
+    if (maxX >= CW - 6 && row.dir > 0) row.dir = -1;
+    if (minX <= 6      && row.dir < 0) row.dir =  1;
+    row.bees.forEach(b => {
+      b.x += row.dir * spd;
+      if (b.hitTimer > 0) b.hitTimer--;
+    });
+  });
+
+  // Popup countdown
+  if (popTimer > 0 && --popTimer <= 0)
+    document.getElementById('bd-popup').style.display = 'none';
+
+  // Collision: projectile vs bees
+  if (proj) {
+    const px1 = proj.x + 3, px2 = proj.x + PROJ_SZ - 3;
+    const py1 = proj.y + 3, py2 = proj.y + PROJ_SZ - 3;
+    outer:
+    for (const row of rows) {
+      if (!row.active) continue;
+      for (const bee of row.bees) {
+        if (bee.hitTimer > 0) continue;
+        if (px1 < bee.x + BEE_SZ - 4 && px2 > bee.x + 4 &&
+            py1 < bee.y + BEE_SZ - 4 && py2 > bee.y + 4) {
+          score++;
+          syncHUD();
+          bee.hitTimer = HIT_IMMUNE;
+          proj  = null;
+          mite.x = START_X;
+          showPopup('🦠 Attached! <strong>+1</strong>');
+          break outer;
+        }
+      }
+    }
+  }
+
+  syncHUD();
+}
+
+// ── Background (prerendered honeycomb) ─────────────────────────
+function buildBg() {
+  bgCanvas = document.createElement('canvas');
+  bgCanvas.width = CW; bgCanvas.height = CH;
+  const bc = bgCanvas.getContext('2d');
+
+  // Warm amber gradient base
+  const g = bc.createLinearGradient(0, 0, 0, CH);
+  g.addColorStop(0,    '#e8980e');
+  g.addColorStop(0.60, '#b86008');
+  g.addColorStop(1,    '#783004');
+  bc.fillStyle = g; bc.fillRect(0, 0, CW, CH);
+
+  // Honeycomb cells (pointy-top hexagons)
+  const R  = 20;
+  const HW = Math.sqrt(3) * R;
+  const rowH = R * 1.5;
+  for (let row = -1; row * rowH < CH + R * 2; row++) {
+    for (let col = -1; col * HW < CW + HW; col++) {
+      const cx = col * HW + (row % 2 !== 0 ? HW / 2 : 0);
+      const cy = row * rowH;
+      bc.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const a = Math.PI / 6 + (Math.PI / 3) * i;
+        const px = cx + R * Math.cos(a), py = cy + R * Math.sin(a);
+        i === 0 ? bc.moveTo(px, py) : bc.lineTo(px, py);
+      }
+      bc.closePath();
+      const alt = (Math.round(col + row * 0.5)) % 2 === 0;
+      bc.fillStyle = alt ? 'rgba(255,180,0,.13)' : 'rgba(0,0,0,.10)';
+      bc.fill();
+      bc.strokeStyle = 'rgba(80,30,0,.38)';
+      bc.lineWidth = 1.2;
+      bc.stroke();
+    }
+  }
+
+  // Lighter flight zone at top (where bees fly)
+  const fz = bc.createLinearGradient(0, 0, 0, 240);
+  fz.addColorStop(0, 'rgba(255,230,100,.20)');
+  fz.addColorStop(1, 'rgba(255,230,100,0)');
+  bc.fillStyle = fz; bc.fillRect(0, 0, CW, 240);
+
+  // Darker mite zone at bottom
+  const mz = bc.createLinearGradient(0, CH - 72, 0, CH);
+  mz.addColorStop(0, 'rgba(40,8,0,0)');
+  mz.addColorStop(1, 'rgba(40,8,0,.55)');
+  bc.fillStyle = mz; bc.fillRect(0, CH - 72, CW, 72);
+}
+
+// ── Draw ───────────────────────────────────────────────────────
+function drawFrame() {
+  ctx.drawImage(bgCanvas, 0, 0);
+
+  // Subtle lane shading for active bee rows
+  rows.forEach(row => {
+    if (!row.active) return;
+    ctx.fillStyle = 'rgba(255,200,0,.05)';
+    ctx.fillRect(0, row.y - 6, CW, BEE_SZ + 12);
+  });
+
+  // Bees
+  ctx.textBaseline = 'top';
+  rows.forEach(row => {
+    if (!row.active) return;
+    row.bees.forEach(bee => {
+      ctx.save();
+      if (bee.hitTimer > 0) {
+        const pulse = 1 + 0.15 * Math.sin(bee.hitTimer * 0.42);
+        ctx.translate(bee.x + BEE_SZ / 2, bee.y + BEE_SZ / 2);
+        ctx.scale(pulse, pulse);
+        ctx.translate(-(bee.x + BEE_SZ / 2), -(bee.y + BEE_SZ / 2));
+        ctx.globalAlpha = 0.6 + 0.4 * Math.sin(bee.hitTimer * 0.3);
+      }
+      ctx.font = BEE_SZ + 'px serif';
+      ctx.fillText('🐝', bee.x, bee.y);
+      if (bee.hitTimer > 0) {
+        ctx.font = '14px serif';
+        ctx.fillText('🦠', bee.x + BEE_SZ * 0.45, bee.y + BEE_SZ * 0.25);
+      }
+      ctx.restore();
+    });
+  });
+
+  // Projectile
+  if (proj) {
+    ctx.font = PROJ_SZ + 'px serif';
+    ctx.textBaseline = 'top';
+    ctx.fillText('🦠', proj.x, proj.y);
+  }
+
+  // Player mite with idle bob
+  const bob = Math.sin(frameN * 0.09) * 2;
+  ctx.font = MITE_SZ + 'px serif';
+  ctx.textBaseline = 'top';
+  ctx.fillText('🦠', mite.x, MITE_Y + bob);
+
+  // "Your position" label
+  ctx.font = '600 10px Nunito, sans-serif';
+  ctx.fillStyle = 'rgba(255,210,120,.5)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('— YOUR POSITION —', CW / 2, CH - 4);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+}
+
+function drawIdle() {
+  ctx.drawImage(bgCanvas, 0, 0);
+  ctx.textBaseline = 'top';
+  ctx.font = BEE_SZ + 'px serif';
+  [44, 140, 236, 332, 428, 516].forEach(x => {
+    ctx.fillText('🐝', x, 52);
+    ctx.fillText('🐝', x + 48, 102);
+  });
+  ctx.font = MITE_SZ + 'px serif';
+  ctx.fillText('🦠', START_X, MITE_Y);
+  ctx.font = '600 10px Nunito, sans-serif';
+  ctx.fillStyle = 'rgba(255,210,120,.5)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('— YOUR POSITION —', CW / 2, CH - 4);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+}
+
+// ── Game loop ──────────────────────────────────────────────────
+function gameLoop(ts) {
+  if (phase !== 'playing') return;
+  const dt = lastTs !== null ? Math.min((ts - lastTs) / 1000, 0.05) : 0.016;
+  lastTs = ts;
+  update(dt);
+  drawFrame();
+  rafId = requestAnimationFrame(gameLoop);
+}
+
+// ── Start / Restart ────────────────────────────────────────────
+function startGame() {
+  cancelAnimationFrame(rafId);
+  initState();
+  keys.left = keys.right = keys.fire = false;
+  fireLatch = false;
+  document.getElementById('mi-start').classList.add('bd-hidden');
+  document.getElementById('mi-gameover').classList.add('bd-hidden');
+  document.getElementById('bd-popup').style.display = 'none';
+  syncHUD();
+  phase  = 'playing';
+  lastTs = null;
+  rafId  = requestAnimationFrame(gameLoop);
+}
+
+// ── End game ───────────────────────────────────────────────────
+function endGame() {
+  cancelAnimationFrame(rafId);
+  phase = 'over';
+
+  const stars = score >= 20 ? '⭐⭐⭐' : score >= 10 ? '⭐⭐' : score >= 1 ? '⭐' : '💔';
+  document.getElementById('mi-stars').textContent      = stars;
+  document.getElementById('mi-final-score').textContent = score;
+  document.getElementById('mi-go-title').textContent   =
+    score === 0 ? 'The bees stayed safe!' : "Time's Up!";
+
+  const shuffled = [...FACTS].sort(() => Math.random() - 0.5).slice(0, 2);
+  document.getElementById('mi-facts').innerHTML =
+    '<p class="bd-facts-title">Did you know?</p>' +
+    shuffled.map(f =>
+      `<div class="bd-fact-item">${f.emoji} <strong>${f.title}</strong> ${f.fact}</div>`
+    ).join('');
+
+  document.getElementById('mi-gameover').classList.remove('bd-hidden');
+}
+
+// ── Keyboard controls ──────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (phase !== 'playing') return;
+  if (e.code === 'ArrowLeft'  || e.code === 'KeyA') { keys.left  = true; e.preventDefault(); }
+  if (e.code === 'ArrowRight' || e.code === 'KeyD') { keys.right = true; e.preventDefault(); }
+  if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') {
+    keys.fire = true; e.preventDefault();
+  }
+});
+document.addEventListener('keyup', e => {
+  if (e.code === 'ArrowLeft'  || e.code === 'KeyA') keys.left  = false;
+  if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+  if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'Space') keys.fire = false;
+});
+
+// ── Mobile controls ────────────────────────────────────────────
+function setupBtn(id, key) {
+  const btn = document.getElementById(id);
+  const press   = () => { if (phase === 'playing') keys[key] = true;  btn.classList.add('mi-active'); };
+  const release = () => { keys[key] = false; btn.classList.remove('mi-active'); };
+  btn.addEventListener('mousedown',  e => { e.preventDefault(); press(); });
+  btn.addEventListener('touchstart', e => { e.preventDefault(); press(); }, { passive: false });
+  window.addEventListener('mouseup',  release);
+  window.addEventListener('touchend', release);
+}
+setupBtn('mi-btn-left',  'left');
+setupBtn('mi-btn-right', 'right');
+setupBtn('mi-btn-fire',  'fire');
+
+document.getElementById('mi-btn-start').addEventListener('click', startGame);
+document.getElementById('mi-btn-restart').addEventListener('click', startGame);
+
+// ── Boot ───────────────────────────────────────────────────────
+initState();
+buildBg();
+drawIdle();
+
+// ── i18n ───────────────────────────────────────────────────────
+const I18N_MI = {
+  en: {
+    'subnav.ebook':'E-Book', 'subnav.game':'Game',
+    'subnav.counter':'Mite Counter', 'subnav.guardian':'Bee Dash',
+    'subnav.mite':'Mite Invaders',
+  },
+  ko: {
+    'subnav.ebook':'전자책', 'subnav.game':'게임',
+    'subnav.counter':'응애 카운터', 'subnav.guardian':'비 대시',
+    'subnav.mite':'응애 침입자',
+  },
+};
+
+function applyLang(lang) {
+  const dict = I18N_MI[lang] || I18N_MI.en;
+  document.querySelectorAll('[data-kor]').forEach(el => {
+    const key = el.getAttribute('data-kor');
+    if (dict[key]) el.innerHTML = dict[key];
+  });
+  localStorage.setItem('lang', lang);
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'en' ? '한국어' : 'English';
+}
+
+(function () {
+  const saved = localStorage.getItem('lang') || 'en';
+  applyLang(saved);
+  const btn = document.getElementById('langToggle');
+  if (btn) btn.addEventListener('click', () => {
+    const next = (localStorage.getItem('lang') || 'en') === 'en' ? 'ko' : 'en';
+    applyLang(next);
+  });
+})();
+</script>
+</body>
+</html>
