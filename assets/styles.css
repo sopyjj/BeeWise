@@ -1924,3 +1924,37 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   0%,100% { transform: translateY(0) scale(1); }
   50%     { transform: translateY(-10px) scale(1.05); }
 }
+
+/* ── Bee Dash — D-pad on-screen controller ── */
+#bd-dpad {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 4px;
+  z-index: 15;
+  pointer-events: auto;
+}
+.bd-dpad-btn {
+  background: rgba(0,0,0,.28);
+  border: 2px solid rgba(255,255,255,.45);
+  border-radius: 10px;
+  color: rgba(255,255,255,.9);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  padding: 0;
+  transition: background .07s, border-color .07s;
+  -webkit-tap-highlight-color: transparent;
+}
+.bd-dpad-btn.bd-active {
+  background: rgba(255,255,255,.5);
+  border-color: rgba(255,255,255,.9);
+}
