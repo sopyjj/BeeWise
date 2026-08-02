@@ -66,7 +66,7 @@
               <div class="bd-sparkles">✨🌸✨</div>
               <div class="bd-hero-bee">🐝</div>
               <h1 class="bd-title">Bee Dash!</h1>
-              <p class="bd-sub">Help Benny fly through the garden — collect flowers and keep the colony blooming! 🌷</p>
+              <p class="bd-sub">The hive starts at a perfect 35°C — but global warming is heating up! Collect flowers before rising temperatures bring more Varroa mites and fewer blooms. 🌡️🌸</p>
               <div class="bd-howto-row">
                 <div class="bd-howto-item">
                   <span class="bd-howto-icon">👆</span>
@@ -88,6 +88,7 @@
             <div id="bd-canvas-wrap">
               <div id="bd-hud">
                 <span id="bd-score-display">🌸 0</span>
+                <span id="bd-temp-display">🌡️ 35°C</span>
                 <span id="bd-lives-display">❤️❤️❤️</span>
                 <span id="bd-timer-display">⏱ 1:00</span>
               </div>
@@ -154,27 +155,31 @@
     };
 
     // ── Game state ─────────────────────────────────────────────────
-    let phase, benny, objects, score, lives, timeLeft, elapsed;
+    let phase, benny, objects, score, lives, timeLeft, elapsed, temperature;
     let lastTs, rafId, invincible, invTimer, popTimer;
     let clouds, flowerT, obstT, bonusT, wallT, frameN;
     let threatHits, fenceX, hedgeX, birds;
+    let tempWarned38, tempWarned40;
 
     function initState() {
-      phase       = 'idle';
-      benny       = { x: BENNY_X, y: CH / 2, vx: 0, vy: 0 };
-      objects     = [];
-      score       = 0;
-      lives       = 3;
-      timeLeft    = 60;
-      elapsed     = 0;
-      lastTs      = null;
-      invincible  = false;
-      invTimer    = 0;
-      popTimer    = 0;
-      frameN      = 0;
-      threatHits  = {};
-      fenceX      = 0;
-      hedgeX      = 0;
+      phase        = 'idle';
+      benny        = { x: BENNY_X, y: CH / 2, vx: 0, vy: 0 };
+      objects      = [];
+      score        = 0;
+      lives        = 3;
+      timeLeft     = 60;
+      elapsed      = 0;
+      temperature  = 35;
+      lastTs       = null;
+      invincible   = false;
+      invTimer     = 0;
+      popTimer     = 0;
+      frameN       = 0;
+      threatHits   = {};
+      fenceX       = 0;
+      hedgeX       = 0;
+      tempWarned38 = false;
+      tempWarned40 = false;
       birds       = [
         { x: 100, y: 62, spd: 0.38 },
         { x: 310, y: 80, spd: 0.28 },
@@ -211,6 +216,18 @@
       if (elapsed < 20) return { flower:70,  obst:130, bonus:300, wall:Infinity };
       if (elapsed < 40) return { flower:58,  obst:100, bonus:240, wall:270 };
       return               { flower:46,  obst:78,  bonus:190, wall:195 };
+    }
+
+    // 0 at start (35°C), 1 at peak (42°C)
+    function heatFactor() {
+      return Math.min(1, Math.max(0, (temperature - 35) / 7));
+    }
+
+    function showInfoPopup(emoji, msg) {
+      const el = document.getElementById('bd-popup');
+      el.innerHTML = `<strong>${emoji}</strong> ${msg}`;
+      el.style.display = 'block';
+      popTimer = 145;
     }
 
     function randY(lo, hi) {
@@ -271,6 +288,10 @@
       const m = Math.floor(s / 60);
       const ss = (s % 60).toString().padStart(2, '0');
       document.getElementById('bd-timer-display').textContent = `⏱ ${m}:${ss}`;
+      const t = Math.round(temperature);
+      const tColor = t <= 37 ? '#20a040' : t <= 39 ? '#d07010' : '#c82010';
+      document.getElementById('bd-temp-display').innerHTML =
+        `🌡️ <span style="color:${tColor};font-weight:700">${t}°C</span>`;
     }
 
     // ── Lose a life ────────────────────────────────────────────────
@@ -289,9 +310,20 @@
 
     // ── Update loop ────────────────────────────────────────────────
     function update(dt) {
-      elapsed   += dt;
-      timeLeft  -= dt;
+      elapsed     += dt;
+      timeLeft    -= dt;
+      temperature  = 35 + (elapsed / 60) * 7;   // 35→42°C over 60 s
       frameN++;
+
+      // Temperature milestone popups
+      if (!tempWarned38 && temperature >= 38) {
+        tempWarned38 = true;
+        showInfoPopup('🌡️', 'Warming up! Varroa mites are multiplying…');
+      }
+      if (!tempWarned40 && temperature >= 40) {
+        tempWarned40 = true;
+        showInfoPopup('🌡️🔥', 'It\'s too hot! Flowers wilt and mites surge!');
+      }
 
       if (timeLeft <= 0) {
         timeLeft = 0;
@@ -345,11 +377,15 @@
       });
 
       // Spawn
-      const iv = spawnIntervals();
-      if (--flowerT <= 0) { spawnFlower(); flowerT = iv.flower + Math.floor(Math.random()*25); }
+      const iv  = spawnIntervals();
+      const hf  = heatFactor();
+      // Flowers become rarer as heat rises (up to 45 extra frames at peak)
+      if (--flowerT <= 0) { spawnFlower(); flowerT = iv.flower + Math.floor(Math.random()*25) + Math.floor(hf * 45); }
       if (--bonusT  <= 0) { spawnBonus();  bonusT  = iv.bonus  + Math.floor(Math.random()*55); }
       if (--obstT   <= 0) {
-        (Math.random() < 0.52 ? spawnPesticide : spawnVarroa)();
+        // Varroa probability rises from 30% → 80% as temperature climbs
+        const varroaChance = 0.30 + 0.50 * hf;
+        (Math.random() < varroaChance ? spawnVarroa : spawnPesticide)();
         obstT = iv.obst + Math.floor(Math.random()*35);
       }
       if (iv.wall !== Infinity && --wallT <= 0) {
@@ -707,6 +743,13 @@
       grad.addColorStop(1,    C.skyBot);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, CW, GROUND_Y);
+
+      // Warm heat tint — upper sky blushes orange as temperature climbs
+      const _hf = heatFactor();
+      if (_hf > 0.05) {
+        ctx.fillStyle = `rgba(255, 90, 10, ${(_hf * 0.13).toFixed(3)})`;
+        ctx.fillRect(0, 0, CW, Math.round(GROUND_Y * 0.65));
+      }
 
       // Pixel sun with rays (top-right)
       drawPixelSun(CW - 54, 38, 20);
