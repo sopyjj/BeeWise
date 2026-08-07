@@ -70,16 +70,16 @@
               <p class="bd-sub">The hive starts at a perfect 35°C — but global warming is heating up! Collect flowers before rising temperatures bring more Varroa mites and fewer blooms. 🌡️🌸</p>
               <div class="bd-howto-row">
                 <div class="bd-howto-item">
-                  <span class="bd-howto-icon">👆</span>
-                  <span>Tap to fly</span>
-                </div>
-                <div class="bd-howto-item">
                   <span class="bd-howto-icon">🌸</span>
                   <span>Collect flowers</span>
                 </div>
                 <div class="bd-howto-item">
                   <span class="bd-howto-icon">☠️</span>
                   <span>Dodge threats</span>
+                </div>
+                <div class="bd-howto-item">
+                  <span class="bd-howto-icon">💊</span>
+                  <span>Cure sick bees!</span>
                 </div>
               </div>
               <button class="btn btn-bee btn-lg px-5 mt-2" id="bd-btn-start">Start Flying! 🌸</button>
@@ -100,7 +100,7 @@
                 <button class="bd-dpad-btn" data-dir="up"    aria-label="Fly up">▲</button>
                 <div></div>
                 <button class="bd-dpad-btn" data-dir="left"  aria-label="Fly left">◀</button>
-                <div></div>
+                <button class="bd-dpad-btn bd-med-btn" id="bd-btn-med" aria-label="Fire medicine">💊</button>
                 <button class="bd-dpad-btn" data-dir="right" aria-label="Fly right">▶</button>
                 <div></div>
                 <button class="bd-dpad-btn" data-dir="down"  aria-label="Fly down">▼</button>
@@ -158,9 +158,10 @@
     // ── Game state ─────────────────────────────────────────────────
     let phase, benny, objects, score, lives, timeLeft, elapsed, temperature, gameDuration;
     let lastTs, rafId, invincible, invTimer, popTimer;
-    let clouds, flowerT, obstT, bonusT, wallT, frameN;
+    let clouds, flowerT, obstT, bonusT, wallT, infBeeT, frameN;
     let threatHits, fenceX, hedgeX, birds;
     let tempWarned38, tempWarned40;
+    let medicines, companions, medicineLatch;
 
     function initState() {
       phase        = 'idle';
@@ -199,6 +200,10 @@
       obstT   = 110;
       bonusT  = 260;
       wallT   = 320;
+      infBeeT = 600;   // first infected bee after ~10 s
+      medicines     = [];
+      companions    = [];
+      medicineLatch = false;
     }
 
     // ── Physics constants ──────────────────────────────────────────
@@ -207,7 +212,7 @@
     const MAX_SPD = 7;      // max px/frame in any direction
 
     // Directional input state — shared by keyboard and D-pad
-    const keys = { up: false, down: false, left: false, right: false };
+    const keys = { up: false, down: false, left: false, right: false, med: false };
 
     function progressFrac() {
       return Math.min(1, elapsed / gameDuration);
@@ -275,6 +280,13 @@
       const gapTop= randY(55, GROUND_Y - gapH - 55);
       objects.push({ type:'wall', key:'wall',
         x: CW+10, w:54, gapTop, gapBot: gapTop + gapH });
+    }
+
+    function spawnInfectedBee() {
+      const baseY = randY(50, GROUND_Y - 60);
+      objects.push({ type:'infected',
+        x: CW+10, baseY, y: baseY, sz:32,
+        t:0, amp:22, freq:0.048 });
     }
 
     // ── Pop-up ─────────────────────────────────────────────────────
@@ -361,6 +373,84 @@
         hitThreat(null);
       }
 
+      // ── Medicine fire ────────────────────────────────────────────
+      if (keys.med && !medicineLatch) {
+        medicineLatch = true;
+        const targets = objects.filter(o => o.type === 'infected' && !o._done);
+        if (targets.length > 0) {
+          const nearest = targets.reduce((a, b) =>
+            Math.hypot(a.x - benny.x, a.y - benny.y) <=
+            Math.hypot(b.x - benny.x, b.y - benny.y) ? a : b);
+          medicines.push({ x: benny.x + BENNY_SZ/2, y: benny.y + BENNY_SZ/2, target: nearest });
+        }
+      }
+      if (!keys.med) medicineLatch = false;
+
+      // ── Move medicines + cure on contact ────────────────────────
+      medicines.forEach(m => {
+        if (m.target._done || m.target.x < -60) { m._done = true; return; }
+        const dx = (m.target.x + m.target.sz/2) - m.x;
+        const dy = (m.target.y + m.target.sz/2) - m.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const spd  = Math.min(9, dist);
+        m.x += (dx / dist) * spd;
+        m.y += (dy / dist) * spd;
+        if (dist < 14) {
+          m.target._done = true;
+          m._done = true;
+          companions.push({ x: m.target.x, y: m.target.y, vx: 0, vy: 0, timer: 15 });
+          showInfoPopup('🐝✨', 'Bee cured! Companion joins for 15 s');
+        }
+      });
+      medicines = medicines.filter(m => !m._done);
+
+      // ── Companion AI ─────────────────────────────────────────────
+      companions.forEach(c => {
+        if (c._leaving) {
+          c.vx = Math.min(c.vx + 0.6, 10);
+          c.x += c.vx;
+          if (c.x > CW + 60) c._done = true;
+          return;
+        }
+        c.timer -= dt;
+        if (c.timer <= 0) { c._leaving = true; return; }
+
+        // Target nearest flower
+        let ax = 0, ay = 0;
+        const nearFlower = objects
+          .filter(o => o.type === 'collectible' && !o._done)
+          .sort((a, b) => Math.hypot(a.x - c.x, a.y - c.y) - Math.hypot(b.x - c.x, b.y - c.y))[0];
+        if (nearFlower && Math.hypot(nearFlower.x - c.x, nearFlower.y - c.y) < 110) {
+          const fx = nearFlower.x - c.x, fy = nearFlower.y - c.y;
+          const fd = Math.hypot(fx, fy) || 1;
+          ax += (fx / fd) * 0.9;
+          ay += (fy / fd) * 0.9;
+          // Collect it
+          if (fd < 22) { score += nearFlower.pts; syncHUD(); nearFlower._done = true; }
+        } else {
+          // Drift toward a position beside Benny
+          const hx = benny.x + BENNY_SZ + 28, hy = benny.y - 8;
+          const hd = Math.hypot(hx - c.x, hy - c.y) || 1;
+          if (hd > 18) { ax += (hx - c.x) / hd * 0.5; ay += (hy - c.y) / hd * 0.5; }
+        }
+
+        // Dodge threats
+        objects.filter(o => o.type === 'threat' && !o._done).forEach(t => {
+          const td = Math.hypot(t.x - c.x, t.y - c.y);
+          if (td < 72) { ax -= (t.x - c.x) / td * 1.4; ay -= (t.y - c.y) / td * 1.4; }
+        });
+
+        c.vx = (c.vx + ax) * 0.84;
+        c.vy = (c.vy + ay) * 0.84;
+        c.vx = Math.max(-7, Math.min(7, c.vx));
+        c.vy = Math.max(-7, Math.min(7, c.vy));
+        c.x += c.vx;
+        c.y += c.vy;
+        c.x = Math.max(0, Math.min(CW, c.x));
+        c.y = Math.max(0, Math.min(GROUND_Y - 32, c.y));
+      });
+      companions = companions.filter(c => !c._done);
+
       // Invincibility countdown
       if (invincible && --invTimer <= 0) invincible = false;
 
@@ -400,6 +490,14 @@
       if (iv.wall !== Infinity && --wallT <= 0) {
         spawnWall();
         wallT = iv.wall + Math.floor(Math.random()*55);
+      }
+      // Infected bees — cap at 2 on screen at once
+      const infCount = objects.filter(o => o.type === 'infected' && !o._done).length;
+      if (--infBeeT <= 0 && infCount < 2) {
+        spawnInfectedBee();
+        infBeeT = 240 + Math.floor(Math.random() * 240);
+      } else if (infCount >= 2) {
+        infBeeT = Math.max(infBeeT, 60);
       }
 
       // Collision (Benny hit-box with 8px inset)
@@ -906,9 +1004,49 @@
           return;
         }
 
+        if (o.type === 'infected') {
+          ctx.font = o.sz + 'px serif';
+          ctx.fillText('🐝', o.x, o.y);
+          ctx.font = '14px serif';
+          ctx.fillText('🦠', o.x + o.sz - 12, o.y + 2);
+          return;
+        }
+
         ctx.font = o.sz + 'px serif';
         ctx.fillText(o.emoji, o.x, o.y);
       });
+    }
+
+    function drawCompanions() {
+      companions.forEach(c => {
+        ctx.save();
+        if (c._leaving) ctx.globalAlpha = Math.max(0, c.vx / 10);
+        ctx.font = '30px serif';
+        ctx.textBaseline = 'top';
+        ctx.textAlign    = 'left';
+        ctx.fillText('🐝', c.x - 15, c.y - 15);
+        if (!c._leaving) {
+          // Timer bar (green → draining)
+          const frac = Math.max(0, c.timer / 15);
+          const bw = 32, bh = 4, bx = c.x - 16, by = c.y - 22;
+          ctx.fillStyle = 'rgba(0,0,0,.35)';
+          ctx.fillRect(bx, by, bw, bh);
+          ctx.fillStyle = frac > 0.4 ? '#30e060' : '#e09020';
+          ctx.fillRect(bx, by, Math.round(bw * frac), bh);
+        }
+        ctx.restore();
+      });
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    }
+
+    function drawMedicines() {
+      medicines.forEach(m => {
+        ctx.font = '18px serif';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign    = 'center';
+        ctx.fillText('💊', m.x, m.y);
+      });
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     }
 
     function drawBenny() {
@@ -931,7 +1069,9 @@
     function drawFrame() {
       ctx.clearRect(0, 0, CW, CH);
       drawBg();
+      drawCompanions();
       drawObjects();
+      drawMedicines();
       drawBenny();
     }
 
@@ -1025,13 +1165,17 @@
        {e:'☠️',x:272,y:62},{e:'🦠',x:522,y:140},{e:'🌳',x:472,y:82}].forEach(p => {
         ctx.font='28px serif'; ctx.fillText(p.e, p.x, p.y);
       });
+      // Infected bee preview
+      ctx.font='28px serif'; ctx.fillText('🐝', 158, 168);
+      ctx.font='12px serif'; ctx.fillText('🦠', 178, 170);
+      ctx.font='18px serif'; ctx.fillText('💊', 128, 148);
     }
 
     // ── Start / restart ────────────────────────────────────────────
     function startGame() {
       cancelAnimationFrame(rafId);
       initState();
-      keys.up = keys.down = keys.left = keys.right = false;
+      keys.up = keys.down = keys.left = keys.right = keys.med = false;
       document.getElementById('bd-start').classList.add('bd-hidden');
       document.getElementById('bd-gameover').classList.add('bd-hidden');
       document.getElementById('bd-popup').style.display = 'none';
@@ -1074,12 +1218,14 @@
       if (e.code === 'ArrowDown'  || e.code === 'KeyS') { keys.down  = true; e.preventDefault(); }
       if (e.code === 'ArrowLeft'  || e.code === 'KeyA') { keys.left  = true; e.preventDefault(); }
       if (e.code === 'ArrowRight' || e.code === 'KeyD') { keys.right = true; e.preventDefault(); }
+      if (e.code === 'Space'      || e.code === 'KeyE') { keys.med   = true; e.preventDefault(); }
     });
     document.addEventListener('keyup', e => {
       if (e.code === 'ArrowUp'    || e.code === 'KeyW') keys.up    = false;
       if (e.code === 'ArrowDown'  || e.code === 'KeyS') keys.down  = false;
       if (e.code === 'ArrowLeft'  || e.code === 'KeyA') keys.left  = false;
       if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+      if (e.code === 'Space'      || e.code === 'KeyE') keys.med   = false;
     });
 
     // On-screen D-pad buttons
@@ -1092,6 +1238,15 @@
       window.addEventListener('mouseup',  release);
       window.addEventListener('touchend', release);
     });
+
+    // Medicine (💊) D-pad centre button
+    const medBtn = document.getElementById('bd-btn-med');
+    const medPress   = () => { if (phase === 'playing') keys.med = true;  medBtn.classList.add('bd-active'); };
+    const medRelease = () => { keys.med = false; medBtn.classList.remove('bd-active'); };
+    medBtn.addEventListener('mousedown',  e => { e.preventDefault(); medPress(); });
+    medBtn.addEventListener('touchstart', e => { e.preventDefault(); medPress(); }, { passive: false });
+    window.addEventListener('mouseup',  medRelease);
+    window.addEventListener('touchend', medRelease);
 
     document.getElementById('bd-btn-start').addEventListener('click', startGame);
     document.getElementById('bd-btn-restart').addEventListener('click', startGame);

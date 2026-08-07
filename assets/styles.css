@@ -1958,3 +1958,12 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   background: rgba(255,255,255,.5);
   border-color: rgba(255,255,255,.9);
 }
+.bd-med-btn {
+  background: rgba(20,160,80,.55) !important;
+  border-color: rgba(100,255,160,.6) !important;
+  font-size: 18px !important;
+}
+.bd-med-btn.bd-active {
+  background: rgba(40,210,110,.7) !important;
+  border-color: rgba(180,255,210,.9) !important;
+}
