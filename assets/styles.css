@@ -1790,133 +1790,140 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   z-index: 20;
   pointer-events: none;
 }
+/* ── Overlay shared base ── */
 .bd-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #f8f4ec 0%, #f0ecd8 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  padding: 2rem 1.5rem;
+  padding: 2.5rem 2rem;
   text-align: center;
   overflow-y: auto;
+  /* dark glass over the game-world canvas */
+  background: linear-gradient(170deg, rgba(8,28,18,0.93) 0%, rgba(4,16,10,0.95) 100%);
+}
+/* Game-over gets a slightly different deep-night tint */
+#bd-gameover {
+  background: linear-gradient(170deg, rgba(8,14,28,0.94) 0%, rgba(4,8,18,0.96) 100%);
 }
 .bd-hidden { display: none !important; }
 .bd-sparkles {
-  font-size: 1.4rem;
-  margin-bottom: .3rem;
-  letter-spacing: .3em;
+  font-size: 1.6rem;
+  margin-bottom: .5rem;
+  letter-spacing: .4em;
+  filter: drop-shadow(0 0 8px rgba(248,208,40,.6));
 }
 .bd-hero-bee {
-  font-size: 4.5rem;
+  font-size: 5rem;
   line-height: 1;
-  margin-bottom: .6rem;
+  margin-bottom: .7rem;
   animation: benny-float 2s ease-in-out infinite;
-  filter: drop-shadow(0 4px 10px rgba(20,80,20,.28));
+  filter: drop-shadow(0 4px 14px rgba(248,208,40,.45));
 }
 .bd-title {
   font-family: 'Press Start 2P', monospace;
-  font-size: clamp(.9rem, 2vw + .4rem, 1.25rem);
-  color: #1a6030;
-  text-shadow: 2px 2px 0 #78d858, 4px 4px 0 rgba(20,80,20,.15);
-  line-height: 1.65;
-  margin-bottom: .6rem;
+  font-size: clamp(1rem, 2.2vw + .4rem, 1.45rem);
+  color: #f8d028;
+  text-shadow: 2px 2px 0 #884400, 4px 4px 0 rgba(0,0,0,.5);
+  line-height: 1.7;
+  margin-bottom: .7rem;
 }
 .bd-sub {
-  color: #1e3818;
+  color: rgba(210,240,185,0.88);
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
-  font-size: .95rem;
-  line-height: 1.65;
-  max-width: 370px;
-  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 1.4rem;
 }
 .bd-howto-row {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
   flex-wrap: wrap;
 }
 .bd-howto-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .3rem;
+  gap: .35rem;
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
-  font-size: .78rem;
-  color: #1e3818;
-  background: #e8f5d0;
-  border: 2px solid #4aaa28;
+  font-size: .8rem;
+  color: #c8f0a0;
+  background: rgba(18,58,24,0.75);
+  border: 2px solid #3a8c20;
   border-radius: 12px;
-  box-shadow: 0 4px 0 #2a7018;
-  padding: .65rem .8rem;
+  box-shadow: 0 4px 0 #1a4c10, 0 0 12px rgba(80,200,40,.12);
+  padding: .7rem .9rem;
 }
-.bd-howto-icon { font-size: 1.65rem; }
-.bd-stars { font-size: 2.2rem; margin-bottom: .4rem; }
+.bd-howto-icon { font-size: 1.75rem; }
+.bd-stars { font-size: 2.4rem; margin-bottom: .5rem; filter: drop-shadow(0 0 6px rgba(248,220,40,.5)); }
 .bd-score-big {
   display: flex;
   align-items: baseline;
   gap: .35rem;
   justify-content: center;
-  margin: .75rem 0;
+  margin: .8rem 0;
 }
 .bd-score-big > span:nth-child(1) { font-size: 1.8rem; }
 .bd-score-big > span:nth-child(2) {
   font-family: 'Press Start 2P', monospace;
   font-size: 2.5rem;
-  color: #1a6030;
-  text-shadow: 3px 3px 0 #78d858;
+  color: #f8d028;
+  text-shadow: 3px 3px 0 #884400, 0 0 20px rgba(248,208,40,.4);
 }
 .bd-score-label {
   font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #1e3818;
+  color: rgba(200,230,170,0.85);
 }
-.bd-facts-recap { text-align: left; margin-top: .75rem; max-width: 440px; width: 100%; }
+.bd-facts-recap { text-align: left; margin-top: .8rem; max-width: 460px; width: 100%; }
 .bd-facts-title {
   font-family: 'Press Start 2P', monospace;
   font-size: .58rem;
-  color: #1a6030;
-  margin-bottom: .5rem;
+  color: #a8d878;
+  margin-bottom: .55rem;
   line-height: 1.9;
 }
 .bd-fact-item {
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
-  font-size: .88rem;
-  color: #1e3010;
-  line-height: 1.55;
-  padding: .55rem .85rem;
-  background: #e8f5d0;
-  border: 2px solid #4aaa28;
+  font-size: .9rem;
+  color: #c8f0a0;
+  line-height: 1.6;
+  padding: .6rem .9rem;
+  background: rgba(16,48,18,0.65);
+  border: 2px solid rgba(60,160,30,0.55);
   border-radius: 12px;
-  box-shadow: 0 3px 0 #2a7018;
+  box-shadow: 0 3px 0 rgba(10,40,10,0.6);
   margin-bottom: .5rem;
 }
 
 /* Pixel garden btn override scoped to bd-section */
 .bd-section .btn-bee {
   font-family: 'Press Start 2P', monospace;
-  font-size: .62rem;
-  background: linear-gradient(135deg, #3aaa18, #1e7010);
-  border: 2px solid #0e4808;
+  font-size: .65rem;
+  background: linear-gradient(135deg, #f8d028 0%, #d89010 100%);
+  border: 2px solid #7a4808;
   border-radius: 12px;
-  color: #e8f8c0;
-  box-shadow: 0 5px 0 #0e4808, 0 8px 20px rgba(20,80,10,.28);
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+  color: #1a0c04;
+  box-shadow: 0 5px 0 #7a4808, 0 8px 24px rgba(248,200,40,.30);
+  text-shadow: none;
   letter-spacing: .04em;
   transition: box-shadow .08s, transform .08s;
 }
 .bd-section .btn-bee:hover {
-  background: linear-gradient(135deg, #4ac020, #268018);
+  background: linear-gradient(135deg, #ffe048 0%, #e8a018 100%);
 }
 .bd-section .btn-bee:active {
-  box-shadow: 0 2px 0 #0e4808;
+  box-shadow: 0 2px 0 #7a4808;
   transform: translateY(3px);
 }
 

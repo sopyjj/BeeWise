@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=22" rel="stylesheet">
+    <link href="assets/styles.css?v=23" rel="stylesheet">
   </head>
 
   <body>
@@ -637,6 +637,230 @@
       }
     }
 
+    // ── Pixel-art sprite characters ───────────────────────────────────
+    //
+    // drawSpriteBee(S, wingT)  — draws bee CENTERED at ctx origin (0,0).
+    //   Call inside ctx.save → ctx.translate(cx,cy) → ctx.rotate → ... → ctx.restore.
+    //   S=3 for Benny, S=2 for companions.  wingT = frameN for flap animation.
+    //
+    function drawSpriteBee(S, wingT) {
+      const wf = Math.round(Math.sin(wingT * 0.42) * S * 0.65);
+
+      // --- Wings (semi-transparent, above body, animated) ---
+      ctx.globalAlpha = 0.72;
+      ctx.fillStyle = '#b8dcff';
+      ctx.fillRect(-S*4, -S*6+wf, S*3, S*3); // upper-left wing
+      ctx.fillRect( S*1, -S*6+wf, S*3, S*3); // upper-right wing
+      ctx.fillRect(-S*3, -S*8+wf, S*2, S*2); // UL tip
+      ctx.fillRect( S*1, -S*8+wf, S*2, S*2); // UR tip
+      ctx.fillStyle = '#d8eeff';              // wing highlight
+      ctx.fillRect(-S*3, -S*6+wf, S*2, S*2);
+      ctx.fillRect( S*1, -S*6+wf, S*2, S*2);
+      ctx.globalAlpha = 1;
+
+      // --- Antennae (above head on right side) ---
+      ctx.fillStyle = '#1a0c08';
+      ctx.fillRect(S*3, -S*5, S, S*3);  // antenna L shaft
+      ctx.fillRect(S*2, -S*6, S, S);    // L tip
+      ctx.fillRect(S*5, -S*5, S, S*3);  // antenna R shaft
+      ctx.fillRect(S*6, -S*6, S, S);    // R tip
+
+      // --- Head (amber, right side — bee faces right) ---
+      ctx.fillStyle = '#e89820';
+      ctx.fillRect(S*2, -S*3, S*5, S*6);  // head block
+      ctx.fillRect(S*3, -S*4, S*3, S);    // head top curve
+      ctx.fillStyle = '#1a0c08';           // head outline
+      ctx.fillRect(S*2, -S*4, S*5, S);    // top border
+      ctx.fillRect(S*7, -S*3, S, S*6);    // right border
+      ctx.fillRect(S*2,  S*3, S*5, S);    // bottom border
+
+      // --- Eye (dark + white highlight) ---
+      ctx.fillStyle = '#0c0808';
+      ctx.fillRect(S*5, -S*2, S*2, S*2);
+      ctx.fillStyle = '#f0f0f0';
+      ctx.fillRect(S*5, -S*2, S, S);
+
+      // --- Body (yellow + dark stripes, left-center) ---
+      ctx.fillStyle = '#1a0c08';
+      ctx.fillRect(-S*5, -S*3, S*7, S*6);  // body outline
+      ctx.fillStyle = '#f8d028';             // yellow stripe 1
+      ctx.fillRect(-S*4, -S*2, S*5, S*2);
+      ctx.fillStyle = '#1a0c08';             // dark stripe
+      ctx.fillRect(-S*4,  0,   S*5, S);
+      ctx.fillStyle = '#f8d028';             // yellow stripe 2
+      ctx.fillRect(-S*4,  S,   S*5, S*2);
+
+      // --- Amber connector (body → head) ---
+      ctx.fillStyle = '#e89820';
+      ctx.fillRect(S*1, -S*3, S, S*6);
+      ctx.fillStyle = '#1a0c08';
+      ctx.fillRect(S*1, -S*4, S, S);  // top
+      ctx.fillRect(S*1,  S*3, S, S);  // bottom
+
+      // --- Stinger (left tip) ---
+      ctx.fillStyle = '#1a0c08';
+      ctx.fillRect(-S*6, -S*2, S*2, S*3);
+      ctx.fillRect(-S*7, -S,   S,   S*2);
+    }
+
+    // Varroa mite — oval red-brown body, 8 animated legs
+    function drawSpriteMite(px, py, sz, t) {
+      const S  = Math.max(2, Math.round(sz / 9));
+      const x  = Math.round(px), y = Math.round(py);
+      const lw = Math.round(Math.sin(t * 0.30) * S * 0.5); // leg waggle
+
+      // Legs (4 pairs, alternating waggle)
+      ctx.fillStyle = '#5a0606';
+      ctx.fillRect(x - S*2, y + S   - lw, S*2, S);
+      ctx.fillRect(x - S*2, y + S*3 + lw, S*2, S);
+      ctx.fillRect(x - S*2, y + S*5 - lw, S*2, S);
+      ctx.fillRect(x - S*2, y + S*7 + lw, S*2, S);
+      ctx.fillRect(x + S*8, y + S   - lw, S*2, S);
+      ctx.fillRect(x + S*8, y + S*3 + lw, S*2, S);
+      ctx.fillRect(x + S*8, y + S*5 - lw, S*2, S);
+      ctx.fillRect(x + S*8, y + S*7 + lw, S*2, S);
+
+      // Body outline (dark red)
+      ctx.fillStyle = '#4a0404';
+      ctx.fillRect(x,     y,     S*8, S*9);
+      ctx.fillRect(x+S,   y-S,   S*6, S);    // top bump
+      ctx.fillRect(x+S,   y+S*9, S*6, S);    // bottom bump
+
+      // Body fill (red, 3-tone shading)
+      ctx.fillStyle = '#c02020'; ctx.fillRect(x+S,   y,     S*6, S*9);
+      ctx.fillStyle = '#d83028'; ctx.fillRect(x+S*2, y+S,   S*4, S*3); // highlight
+      ctx.fillStyle = '#e24038'; ctx.fillRect(x+S*3, y+S,   S*2, S*2); // bright center
+
+      // Eyes (two dark spots)
+      ctx.fillStyle = '#0c0808';
+      ctx.fillRect(x+S*2, y+S, S, S);
+      ctx.fillRect(x+S*5, y+S, S, S);
+    }
+
+    // Flying flower collectible (airborne bloom, no stem)
+    function drawSpriteFlower(px, py, sz) {
+      const S = Math.max(2, Math.round(sz / 9));
+      const x = Math.round(px), y = Math.round(py);
+
+      // 4 cardinal petals (magenta)
+      ctx.fillStyle = '#e038a0';
+      ctx.fillRect(x+S*3, y,     S*3, S*3); // top
+      ctx.fillRect(x+S*3, y+S*6, S*3, S*3); // bottom
+      ctx.fillRect(x,     y+S*3, S*3, S*3); // left
+      ctx.fillRect(x+S*6, y+S*3, S*3, S*3); // right
+      // 4 diagonal petals (lighter)
+      ctx.fillStyle = '#f070c0';
+      ctx.fillRect(x+S,   y+S,   S*2, S*2); // TL
+      ctx.fillRect(x+S*6, y+S,   S*2, S*2); // TR
+      ctx.fillRect(x+S,   y+S*6, S*2, S*2); // BL
+      ctx.fillRect(x+S*6, y+S*6, S*2, S*2); // BR
+      // Center (yellow)
+      ctx.fillStyle = '#f8e040';
+      ctx.fillRect(x+S*3, y+S*3, S*3, S*3);
+      ctx.fillStyle = '#d8a808'; ctx.fillRect(x+S*4, y+S*4, S, S); // shadow
+      ctx.fillStyle = '#fff080'; ctx.fillRect(x+S*3, y+S*3, S, S); // highlight
+    }
+
+    // Pesticide skull with toxic aura
+    function drawSpriteSkull(px, py, sz) {
+      const S = Math.max(2, Math.round(sz / 9));
+      const x = Math.round(px), y = Math.round(py);
+
+      // Toxic glow behind
+      ctx.fillStyle = 'rgba(40,200,20,0.15)';
+      ctx.fillRect(x-S, y-S, S*11, S*11);
+
+      // Skull outline
+      ctx.fillStyle = '#181818';
+      ctx.fillRect(x+S,   y,     S*7, S*9);
+      ctx.fillRect(x+S*2, y-S,   S*5, S);   // cranium curve
+      ctx.fillRect(x+S*2, y+S*9, S*5, S);   // jaw bottom
+
+      // Bone fill
+      ctx.fillStyle = '#d0d0b8';
+      ctx.fillRect(x+S*2, y,     S*5, S*5); // cranium
+      ctx.fillRect(x+S,   y+S,   S*7, S*4); // cranium wide
+      ctx.fillStyle = '#b0b098';             // shading
+      ctx.fillRect(x+S*6, y+S,   S*2, S*4);
+
+      // Eye sockets
+      ctx.fillStyle = '#181818';
+      ctx.fillRect(x+S*2, y+S*2, S*2, S*2);
+      ctx.fillRect(x+S*5, y+S*2, S*2, S*2);
+      ctx.fillStyle = '#300808'; // socket depth
+      ctx.fillRect(x+S*2, y+S*2, S, S);
+      ctx.fillRect(x+S*5, y+S*2, S, S);
+
+      // Nose hole + brow shadow
+      ctx.fillStyle = '#181818';
+      ctx.fillRect(x+S*4, y+S*4, S, S*2);    // nose
+      ctx.fillRect(x+S*2, y+S*4, S*5, S);    // brow line
+
+      // Jaw + teeth
+      ctx.fillStyle = '#d0d0b8';
+      ctx.fillRect(x+S*2, y+S*6, S*5, S*2);  // jaw base
+      ctx.fillStyle = '#181818';               // tooth gaps
+      ctx.fillRect(x+S*3, y+S*6, S,   S*2);
+      ctx.fillRect(x+S*5, y+S*6, S,   S*2);
+    }
+
+    // Medicine pill — draws centered at ctx origin (0,0)
+    function drawSpritePill(S) {
+      S = S || 3;
+      const x = -S*4, y = -S*2;  // offset so pill is centered at (0,0)
+
+      // Outline
+      ctx.fillStyle = '#1a0828';
+      ctx.fillRect(x+S,   y,     S*6, S*4);
+      ctx.fillRect(x,     y+S,   S*8, S*2);
+      // White half (left)
+      ctx.fillStyle = '#f0f0e8';
+      ctx.fillRect(x+S,   y+S,   S*3, S*2);
+      ctx.fillRect(x+S*2, y,     S*2, S);
+      ctx.fillRect(x+S*2, y+S*3, S*2, S);
+      // Pink/red half (right)
+      ctx.fillStyle = '#e83060';
+      ctx.fillRect(x+S*4, y+S,   S*3, S*2);
+      ctx.fillRect(x+S*4, y,     S*2, S);
+      ctx.fillRect(x+S*4, y+S*3, S*2, S);
+      // Divider
+      ctx.fillStyle = '#1a0828';
+      ctx.fillRect(x+S*4, y,     S,   S*4);
+      // Highlight
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(x+S*2, y+S, S, S);
+    }
+
+    // Water droplet bonus
+    function drawSpriteWater(px, py, sz) {
+      const S = Math.max(2, Math.round(sz / 10));
+      const x = Math.round(px+sz/2-S*3), y = Math.round(py);
+      ctx.fillStyle = '#2880e0';
+      ctx.fillRect(x+S*2, y,     S*2, S*2);  // tip
+      ctx.fillRect(x+S,   y+S*2, S*4, S*2);
+      ctx.fillRect(x,     y+S*4, S*6, S*3);
+      ctx.fillRect(x+S,   y+S*7, S*4, S*2);
+      ctx.fillRect(x+S*2, y+S*9, S*2, S);
+      ctx.fillStyle = '#58a8f8';  // highlight
+      ctx.fillRect(x+S*2, y+S*4, S, S*3);
+      ctx.fillStyle = '#a8d8ff';
+      ctx.fillRect(x+S*2, y+S*4, S, S);
+    }
+
+    // Log bonus (native habitat)
+    function drawSpriteLog(px, py, sz) {
+      const S = Math.max(2, Math.round(sz / 10));
+      const x = Math.round(px), y = Math.round(py+sz*0.3);
+      ctx.fillStyle = '#7a3808'; ctx.fillRect(x,     y+S, S*10, S*6); // bark
+      ctx.fillStyle = '#9a4c18'; ctx.fillRect(x+S,   y+S, S*8,  S*4); // lighter
+      ctx.fillStyle = '#b86030'; ctx.fillRect(x,     y+S, S*2,  S*6); // left end cap
+      ctx.fillRect(x+S*8, y+S, S*2, S*6);                              // right end cap
+      ctx.fillStyle = '#c87c40'; ctx.fillRect(x+S,   y+S, S,    S*3); // end ring
+      ctx.fillStyle = '#604010';                                         // grain
+      ctx.fillRect(x+S*2, y+S*2, S*6, S);
+      ctx.fillRect(x+S*3, y+S*5, S*4, S);
+    }
+
     // ── Pixel-art draw helpers ─────────────────────────────────────
 
     // 3-puff pixel cloud with interior shading and dark teal-grey shadow
@@ -1064,33 +1288,60 @@
     }
 
     function drawObjects() {
-      ctx.textBaseline = 'top';
       objects.forEach(o => {
         if (o._done) return;
+        const ox = Math.round(o.x), oy = Math.round(o.y), sz = o.sz || 28;
+        const S  = Math.max(2, Math.round(sz / 9));
 
         if (o.type === 'wall') {
           drawStoneWall(o.x, 0,        o.w, o.gapTop);
           drawStoneWall(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
-          // Moss caps at gap edges
           ctx.fillStyle = C.moss;
           ctx.fillRect(o.x, o.gapTop - 5, o.w, 5);
           ctx.fillRect(o.x, o.gapBot,     o.w, 5);
-          ctx.font = '18px serif';
-          ctx.fillText('🏗️', o.x + 8, Math.max(4, o.gapTop - 26));
-          ctx.fillText('🏗️', o.x + 8, o.gapBot + 8);
+          // Pixel hazard stripe (replaces 🏗️ emoji)
+          const sy1 = Math.max(2, o.gapTop - 10), sy2 = o.gapBot;
+          ctx.fillStyle = '#f8c010';
+          ctx.fillRect(o.x, sy1, o.w, 10); ctx.fillRect(o.x, sy2, o.w, 10);
+          ctx.fillStyle = '#1a1010';
+          for (let hx = o.x; hx < o.x + o.w; hx += 8) {
+            ctx.fillRect(hx, sy1, 4, 10); ctx.fillRect(hx, sy2, 4, 10);
+          }
           return;
         }
 
         if (o.type === 'infected') {
-          ctx.font = o.sz + 'px serif';
-          ctx.fillText('🐝', o.x, o.y);
-          ctx.font = '14px serif';
-          ctx.fillText('🦠', o.x + o.sz - 12, o.y + 2);
+          ctx.save();
+          ctx.translate(ox + sz/2, oy + sz/2);
+          drawSpriteBee(Math.max(2, Math.round(sz / 13)), o.t || 0);
+          // Pulsing disease spots
+          const dp = 0.60 + 0.25 * Math.sin((o.t || 0) * 4.0);
+          ctx.globalAlpha = dp;
+          ctx.fillStyle = '#c81010';
+          ctx.fillRect(-S*2, -S*2, S*2, S*2);
+          ctx.fillRect( S*2,  0,   S*2, S*2);
+          ctx.fillRect(-S,    S*2, S*2, S*2);
+          ctx.globalAlpha = 1;
+          ctx.restore();
           return;
         }
 
-        ctx.font = o.sz + 'px serif';
-        ctx.fillText(o.emoji, o.x, o.y);
+        if (o.type === 'collectible') {
+          if (o.emoji === '🌸') {
+            drawSpriteFlower(ox, oy, sz);
+          } else if (o.emoji === '💧') {
+            drawSpriteWater(ox, oy, sz);
+          } else {
+            // 🌳 native tree bonus
+            drawPixelTree(ox + sz/2, oy + sz, Math.round(sz * 0.85), Math.round(sz * 0.5));
+          }
+          return;
+        }
+
+        if (o.type === 'threat') {
+          if (o.key === 'varroa') drawSpriteMite(ox, oy, sz, o.t || 0);
+          else                    drawSpriteSkull(ox, oy, sz);
+        }
       });
     }
 
@@ -1098,49 +1349,37 @@
       companions.forEach(c => {
         ctx.save();
         if (c._leaving) ctx.globalAlpha = Math.max(0, c.vx / 10);
-        ctx.font = '30px serif';
-        ctx.textBaseline = 'top';
-        ctx.textAlign    = 'left';
-        ctx.fillText('🐝', c.x - 15, c.y - 15);
+        ctx.translate(Math.round(c.x), Math.round(c.y));
+        drawSpriteBee(2, frameN + c.x * 0.08);
         if (!c._leaving) {
-          // Timer bar (green → draining)
           const frac = Math.max(0, c.timer / 15);
-          const bw = 32, bh = 4, bx = c.x - 16, by = c.y - 22;
-          ctx.fillStyle = 'rgba(0,0,0,.35)';
+          const bw = 28, bh = 4, bx = -14, by = -30;
+          ctx.fillStyle = 'rgba(0,0,0,.40)';
           ctx.fillRect(bx, by, bw, bh);
           ctx.fillStyle = frac > 0.4 ? '#30e060' : '#e09020';
           ctx.fillRect(bx, by, Math.round(bw * frac), bh);
         }
         ctx.restore();
       });
-      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     }
 
     function drawMedicines() {
       medicines.forEach(m => {
-        ctx.font = '18px serif';
-        ctx.textBaseline = 'middle';
-        ctx.textAlign    = 'center';
-        ctx.fillText('💊', m.x, m.y);
+        ctx.save();
+        ctx.translate(Math.round(m.x), Math.round(m.y));
+        drawSpritePill(3);
+        ctx.restore();
       });
-      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
     }
 
     function drawBenny() {
       if (invincible && frameN % 8 < 4) return;
       ctx.save();
-      const cx = benny.x + BENNY_SZ / 2;
-      const cy = benny.y + BENNY_SZ / 2;
-      ctx.translate(cx, cy);
-      ctx.rotate(Math.max(-0.4, Math.min(0.4, benny.vy * 0.06)));
-      if (benny.vx < -1) ctx.scale(-1, 1);  // face left when flying left
-      ctx.font = '34px serif';
-      ctx.textBaseline = 'middle';
-      ctx.textAlign    = 'center';
-      ctx.fillText('🐝', 0, 0);
+      ctx.translate(Math.round(benny.x + BENNY_SZ/2), Math.round(benny.y + BENNY_SZ/2));
+      ctx.rotate(Math.max(-0.38, Math.min(0.38, benny.vy * 0.055)));
+      if (benny.vx < -1) ctx.scale(-1, 1);
+      drawSpriteBee(3, frameN);
       ctx.restore();
-      ctx.textAlign    = 'left';
-      ctx.textBaseline = 'top';
     }
 
     function drawFrame() {
@@ -1245,17 +1484,33 @@
       for (let gx = 10; gx < CW; gx += 26) {
         drawPixelFlower(gx, GROUND_Y + 6, ftypes4[Math.floor(gx / 26) % ftypes4.length]);
       }
-      // Sprites
-      ctx.textBaseline = 'top';
-      ctx.font = '34px serif'; ctx.fillText('🐝', BENNY_X, CH/2 - 18);
-      [{e:'🌸',x:215,y:108},{e:'🌿',x:345,y:152},{e:'💧',x:398,y:208},
-       {e:'☠️',x:272,y:62},{e:'🦠',x:522,y:140},{e:'🌳',x:472,y:82}].forEach(p => {
-        ctx.font='28px serif'; ctx.fillText(p.e, p.x, p.y);
-      });
+      // Pixel-art sprites (idle preview)
+      ctx.save();
+      ctx.translate(BENNY_X + 18, CH/2);
+      drawSpriteBee(3, 0);
+      ctx.restore();
+      // Collectibles
+      drawSpriteFlower(215, 90,  28);
+      drawSpriteWater( 398, 192, 28);
+      drawPixelTree(490, 112, 48, 28);
+      // Threats
+      drawSpriteSkull(265, 50,  28);
+      drawSpriteMite( 510, 125, 28, 0);
       // Infected bee preview
-      ctx.font='28px serif'; ctx.fillText('🐝', 158, 168);
-      ctx.font='12px serif'; ctx.fillText('🦠', 178, 170);
-      ctx.font='18px serif'; ctx.fillText('💊', 128, 148);
+      ctx.save();
+      ctx.translate(172, 182);
+      drawSpriteBee(2, 0);
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = '#c81010';
+      ctx.fillRect(-8, -8, 8, 8);
+      ctx.fillRect( 6,  0,  8, 8);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+      // Medicine
+      ctx.save();
+      ctx.translate(128, 152);
+      drawSpritePill(3);
+      ctx.restore();
     }
 
     // ── Start / restart ────────────────────────────────────────────
