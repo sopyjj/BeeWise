@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=25" rel="stylesheet">
+    <link href="assets/styles.css?v=26" rel="stylesheet">
   </head>
 
   <body>
@@ -626,7 +626,9 @@
       STARS.forEach(s => {
         const twinkle = 0.6 + 0.4 * Math.sin(frameN * 0.07 + s.x * 0.31);
         ctx.fillStyle = `rgba(255,255,210,${(starAlpha * twinkle).toFixed(3)})`;
-        ctx.fillRect(Math.round(s.x), Math.round(s.y), s.s, s.s);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.s * 0.7, 0, Math.PI * 2);
+        ctx.fill();
       });
       if (moonAlpha > 0) {
         ctx.save();
@@ -639,483 +641,470 @@
       }
     }
 
-    // ── Pixel-art sprite characters ───────────────────────────────────
-    //
-    // drawSpriteBee(S, wingT)  — draws bee CENTERED at ctx origin (0,0).
-    //   Call inside ctx.save → ctx.translate(cx,cy) → ctx.rotate → ... → ctx.restore.
-    //   S=3 for Benny, S=2 for companions.  wingT = frameN for flap animation.
-    //
+    // ── Smooth cartoon sprites ────────────────────────────────────────
+
+    // Rounded-rect path helper — creates path only; call fill/stroke/clip after.
+    function rrect(x, y, w, h, r) {
+      r = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    // Bee — smooth oval body, gradient stripes, arc wings.
+    // Centered at ctx origin (0,0). S=3 for Benny, S=2 for companions.
     function drawSpriteBee(S, wingT) {
-      const wf = Math.round(Math.sin(wingT * 0.42) * S * 0.65);
+      const wb = Math.sin(wingT * 0.42) * S * 2.5;
 
-      // --- Wings (semi-transparent, above body, animated) ---
+      // Wings — semi-transparent animated ellipses
+      ctx.save();
       ctx.globalAlpha = 0.72;
-      ctx.fillStyle = '#b8dcff';
-      ctx.fillRect(-S*4, -S*6+wf, S*3, S*3); // upper-left wing
-      ctx.fillRect( S*1, -S*6+wf, S*3, S*3); // upper-right wing
-      ctx.fillRect(-S*3, -S*8+wf, S*2, S*2); // UL tip
-      ctx.fillRect( S*1, -S*8+wf, S*2, S*2); // UR tip
-      ctx.fillStyle = '#d8eeff';              // wing highlight
-      ctx.fillRect(-S*3, -S*6+wf, S*2, S*2);
-      ctx.fillRect( S*1, -S*6+wf, S*2, S*2);
-      ctx.globalAlpha = 1;
+      const wg = ctx.createRadialGradient(0, -S*4, 0, 0, 0, S*9);
+      wg.addColorStop(0, '#d8eeff'); wg.addColorStop(1, 'rgba(176,220,255,0.15)');
+      ctx.fillStyle = wg;
+      ctx.beginPath(); ctx.ellipse(-S*4, -S*5+wb, S*4, S*2.5, -0.25, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse( S*4, -S*5+wb, S*4, S*2.5,  0.25, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
 
-      // --- Antennae (above head on right side) ---
-      ctx.fillStyle = '#1a0c08';
-      ctx.fillRect(S*3, -S*5, S, S*3);  // antenna L shaft
-      ctx.fillRect(S*2, -S*6, S, S);    // L tip
-      ctx.fillRect(S*5, -S*5, S, S*3);  // antenna R shaft
-      ctx.fillRect(S*6, -S*6, S, S);    // R tip
+      // Stinger
+      ctx.fillStyle = '#7a4010';
+      ctx.beginPath(); ctx.ellipse(-S*6, 0, S*2, S*1.2, 0, 0, Math.PI*2); ctx.fill();
 
-      // --- Head (amber, right side — bee faces right) ---
-      ctx.fillStyle = '#e89820';
-      ctx.fillRect(S*2, -S*3, S*5, S*6);  // head block
-      ctx.fillRect(S*3, -S*4, S*3, S);    // head top curve
-      ctx.fillStyle = '#1a0c08';           // head outline
-      ctx.fillRect(S*2, -S*4, S*5, S);    // top border
-      ctx.fillRect(S*7, -S*3, S, S*6);    // right border
-      ctx.fillRect(S*2,  S*3, S*5, S);    // bottom border
+      // Body outline
+      ctx.fillStyle = '#1a1008';
+      ctx.beginPath(); ctx.ellipse(0, 0, S*5, S*3.4, 0, 0, Math.PI*2); ctx.fill();
 
-      // --- Eye (dark + white highlight) ---
-      ctx.fillStyle = '#0c0808';
-      ctx.fillRect(S*5, -S*2, S*2, S*2);
-      ctx.fillStyle = '#f0f0f0';
-      ctx.fillRect(S*5, -S*2, S, S);
+      // Body fill — radial amber gradient
+      const bg = ctx.createRadialGradient(-S, -S*1.2, 0, 0, 0, S*5);
+      bg.addColorStop(0, '#ffe060'); bg.addColorStop(0.65, '#f8c828'); bg.addColorStop(1, '#c88010');
+      ctx.fillStyle = bg;
+      ctx.beginPath(); ctx.ellipse(0, 0, S*4.6, S*3.1, 0, 0, Math.PI*2); ctx.fill();
 
-      // --- Body (yellow + dark stripes, left-center) ---
-      ctx.fillStyle = '#1a0c08';
-      ctx.fillRect(-S*5, -S*3, S*7, S*6);  // body outline
-      ctx.fillStyle = '#f8d028';             // yellow stripe 1
-      ctx.fillRect(-S*4, -S*2, S*5, S*2);
-      ctx.fillStyle = '#1a0c08';             // dark stripe
-      ctx.fillRect(-S*4,  0,   S*5, S);
-      ctx.fillStyle = '#f8d028';             // yellow stripe 2
-      ctx.fillRect(-S*4,  S,   S*5, S*2);
+      // Dark stripe bands clipped to body
+      ctx.save();
+      ctx.beginPath(); ctx.ellipse(0, 0, S*4.6, S*3.1, 0, 0, Math.PI*2); ctx.clip();
+      ctx.fillStyle = 'rgba(18,8,0,0.62)';
+      ctx.fillRect(-S*5, -S*0.8, S*10, S*1.3);
+      ctx.fillRect(-S*5,  S*1.8, S*10, S*1.3);
+      ctx.restore();
 
-      // --- Amber connector (body → head) ---
-      ctx.fillStyle = '#e89820';
-      ctx.fillRect(S*1, -S*3, S, S*6);
-      ctx.fillStyle = '#1a0c08';
-      ctx.fillRect(S*1, -S*4, S, S);  // top
-      ctx.fillRect(S*1,  S*3, S, S);  // bottom
+      // Head outline
+      ctx.fillStyle = '#1a1008';
+      ctx.beginPath(); ctx.arc(S*5.5, 0, S*3.5, 0, Math.PI*2); ctx.fill();
 
-      // --- Stinger (left tip) ---
-      ctx.fillStyle = '#1a0c08';
-      ctx.fillRect(-S*6, -S*2, S*2, S*3);
-      ctx.fillRect(-S*7, -S,   S,   S*2);
+      // Head — amber radial gradient
+      const hg = ctx.createRadialGradient(S*4.5, -S, 0, S*5.5, 0, S*3.5);
+      hg.addColorStop(0, '#ffe060'); hg.addColorStop(1, '#c87808');
+      ctx.fillStyle = hg;
+      ctx.beginPath(); ctx.arc(S*5.5, 0, S*3.2, 0, Math.PI*2); ctx.fill();
+
+      // Eye
+      ctx.fillStyle = '#1a0808';
+      ctx.beginPath(); ctx.arc(S*6.8, -S, S*1.2, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.beginPath(); ctx.arc(S*6.4, -S*1.4, S*0.55, 0, Math.PI*2); ctx.fill();
+
+      // Antennae
+      ctx.strokeStyle = '#1a1008'; ctx.lineWidth = Math.max(1.2, S*0.55); ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(S*5, -S*3.2); ctx.quadraticCurveTo(S*4, -S*6, S*2.5, -S*7.5); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(S*7, -S*3.2); ctx.quadraticCurveTo(S*9, -S*5.5, S*9.5, -S*7.5); ctx.stroke();
+      ctx.fillStyle = '#1a1008';
+      ctx.beginPath(); ctx.arc(S*2.5, -S*7.5, S*0.9, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(S*9.5, -S*7.5, S*0.9, 0, Math.PI*2); ctx.fill();
+
+      // Smile
+      ctx.strokeStyle = '#8a4010'; ctx.lineWidth = Math.max(1, S*0.5);
+      ctx.beginPath(); ctx.arc(S*6.5, S*0.6, S*1.5, 0.15, Math.PI-0.15); ctx.stroke();
     }
 
-    // Varroa mite — oval red-brown body, 8 animated legs
+    // Varroa mite — rounded oval body, 8 curved legs
     function drawSpriteMite(px, py, sz, t) {
-      const S  = Math.max(2, Math.round(sz / 9));
-      const x  = Math.round(px), y = Math.round(py);
-      const lw = Math.round(Math.sin(t * 0.30) * S * 0.5); // leg waggle
+      const r  = sz * 0.42;
+      const cx = px + sz * 0.5, cy = py + sz * 0.5;
+      const lw = Math.sin(t * 0.30) * sz * 0.08;
 
-      // Legs (4 pairs, alternating waggle)
-      ctx.fillStyle = '#5a0606';
-      ctx.fillRect(x - S*2, y + S   - lw, S*2, S);
-      ctx.fillRect(x - S*2, y + S*3 + lw, S*2, S);
-      ctx.fillRect(x - S*2, y + S*5 - lw, S*2, S);
-      ctx.fillRect(x - S*2, y + S*7 + lw, S*2, S);
-      ctx.fillRect(x + S*8, y + S   - lw, S*2, S);
-      ctx.fillRect(x + S*8, y + S*3 + lw, S*2, S);
-      ctx.fillRect(x + S*8, y + S*5 - lw, S*2, S);
-      ctx.fillRect(x + S*8, y + S*7 + lw, S*2, S);
+      // 8 curved legs
+      ctx.strokeStyle = '#6a0808'; ctx.lineWidth = Math.max(1.5, sz*0.055); ctx.lineCap = 'round';
+      [-1, 1].forEach(side => {
+        for (let li = 0; li < 4; li++) {
+          const ly  = cy - r*0.6 + li * r*0.4;
+          const lx1 = cx + side * r*0.85;
+          const lx2 = cx + side * (r*0.85 + sz*0.28);
+          const off = li % 2 === 0 ? lw : -lw;
+          ctx.beginPath();
+          ctx.moveTo(lx1, ly);
+          ctx.quadraticCurveTo(lx2 - side*sz*0.05, ly + off, lx2, ly + sz*0.06 + off);
+          ctx.stroke();
+        }
+      });
 
-      // Body outline (dark red)
+      // Body outline
       ctx.fillStyle = '#4a0404';
-      ctx.fillRect(x,     y,     S*8, S*9);
-      ctx.fillRect(x+S,   y-S,   S*6, S);    // top bump
-      ctx.fillRect(x+S,   y+S*9, S*6, S);    // bottom bump
+      ctx.beginPath(); ctx.ellipse(cx, cy, r+1.5, r*0.8+1.5, 0, 0, Math.PI*2); ctx.fill();
 
-      // Body fill (red, 3-tone shading)
-      ctx.fillStyle = '#c02020'; ctx.fillRect(x+S,   y,     S*6, S*9);
-      ctx.fillStyle = '#d83028'; ctx.fillRect(x+S*2, y+S,   S*4, S*3); // highlight
-      ctx.fillStyle = '#e24038'; ctx.fillRect(x+S*3, y+S,   S*2, S*2); // bright center
+      // Body gradient
+      const mg = ctx.createRadialGradient(cx-r*0.25, cy-r*0.3, 0, cx, cy, r);
+      mg.addColorStop(0, '#e83830'); mg.addColorStop(0.5, '#c02020'); mg.addColorStop(1, '#8a0c0c');
+      ctx.fillStyle = mg;
+      ctx.beginPath(); ctx.ellipse(cx, cy, r, r*0.78, 0, 0, Math.PI*2); ctx.fill();
 
-      // Eyes (two dark spots)
-      ctx.fillStyle = '#0c0808';
-      ctx.fillRect(x+S*2, y+S, S, S);
-      ctx.fillRect(x+S*5, y+S, S, S);
+      // Eyes
+      ctx.fillStyle = '#1a0404';
+      ctx.beginPath(); ctx.arc(cx-r*0.35, cy-r*0.4, r*0.16, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+r*0.35, cy-r*0.4, r*0.16, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,180,160,0.6)';
+      ctx.beginPath(); ctx.arc(cx-r*0.38, cy-r*0.44, r*0.07, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx+r*0.32, cy-r*0.44, r*0.07, 0, Math.PI*2); ctx.fill();
+
+      // Highlight
+      ctx.fillStyle = 'rgba(255,140,120,0.28)';
+      ctx.beginPath(); ctx.ellipse(cx-r*0.22, cy-r*0.28, r*0.38, r*0.22, -0.4, 0, Math.PI*2); ctx.fill();
     }
 
-    // Flying flower collectible (airborne bloom, no stem)
+    // Flying flower collectible — arc petals with golden centre
     function drawSpriteFlower(px, py, sz) {
-      const S = Math.max(2, Math.round(sz / 9));
-      const x = Math.round(px), y = Math.round(py);
-
-      // 4 cardinal petals (magenta)
-      ctx.fillStyle = '#e038a0';
-      ctx.fillRect(x+S*3, y,     S*3, S*3); // top
-      ctx.fillRect(x+S*3, y+S*6, S*3, S*3); // bottom
-      ctx.fillRect(x,     y+S*3, S*3, S*3); // left
-      ctx.fillRect(x+S*6, y+S*3, S*3, S*3); // right
-      // 4 diagonal petals (lighter)
-      ctx.fillStyle = '#f070c0';
-      ctx.fillRect(x+S,   y+S,   S*2, S*2); // TL
-      ctx.fillRect(x+S*6, y+S,   S*2, S*2); // TR
-      ctx.fillRect(x+S,   y+S*6, S*2, S*2); // BL
-      ctx.fillRect(x+S*6, y+S*6, S*2, S*2); // BR
-      // Center (yellow)
-      ctx.fillStyle = '#f8e040';
-      ctx.fillRect(x+S*3, y+S*3, S*3, S*3);
-      ctx.fillStyle = '#d8a808'; ctx.fillRect(x+S*4, y+S*4, S, S); // shadow
-      ctx.fillStyle = '#fff080'; ctx.fillRect(x+S*3, y+S*3, S, S); // highlight
+      const cx = px + sz*0.5, cy = py + sz*0.5;
+      const pr = sz*0.22, cr = sz*0.20;
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        ctx.fillStyle = i % 2 === 0 ? '#e038a0' : '#f070c0';
+        ctx.beginPath();
+        ctx.ellipse(cx + Math.cos(a)*pr*1.7, cy + Math.sin(a)*pr*1.7, pr, pr*0.52, a, 0, Math.PI*2);
+        ctx.fill();
+      }
+      const cg = ctx.createRadialGradient(cx-cr*0.2, cy-cr*0.2, 0, cx, cy, cr);
+      cg.addColorStop(0, '#fff080'); cg.addColorStop(1, '#f8c020');
+      ctx.fillStyle = cg;
+      ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI*2); ctx.fill();
     }
 
-    // Pesticide skull with toxic aura
+    // Pesticide skull with toxic glow
     function drawSpriteSkull(px, py, sz) {
-      const S = Math.max(2, Math.round(sz / 9));
-      const x = Math.round(px), y = Math.round(py);
+      const cx = px + sz*0.5, cy = py + sz*0.45;
+      const r  = sz * 0.36;
 
-      // Toxic glow behind
-      ctx.fillStyle = 'rgba(40,200,20,0.15)';
-      ctx.fillRect(x-S, y-S, S*11, S*11);
+      // Toxic aura
+      const ag = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*1.6);
+      ag.addColorStop(0, 'rgba(80,220,30,0.22)'); ag.addColorStop(1, 'rgba(40,200,20,0)');
+      ctx.fillStyle = ag;
+      ctx.beginPath(); ctx.arc(cx, cy, r*1.6, 0, Math.PI*2); ctx.fill();
 
-      // Skull outline
-      ctx.fillStyle = '#181818';
-      ctx.fillRect(x+S,   y,     S*7, S*9);
-      ctx.fillRect(x+S*2, y-S,   S*5, S);   // cranium curve
-      ctx.fillRect(x+S*2, y+S*9, S*5, S);   // jaw bottom
+      // Cranium outline
+      ctx.fillStyle = '#2a2a18';
+      ctx.beginPath(); ctx.ellipse(cx, cy-r*0.05, r+2, r*0.92+2, 0, 0, Math.PI*2); ctx.fill();
 
-      // Bone fill
-      ctx.fillStyle = '#d0d0b8';
-      ctx.fillRect(x+S*2, y,     S*5, S*5); // cranium
-      ctx.fillRect(x+S,   y+S,   S*7, S*4); // cranium wide
-      ctx.fillStyle = '#b0b098';             // shading
-      ctx.fillRect(x+S*6, y+S,   S*2, S*4);
+      // Jaw outline
+      ctx.fillStyle = '#2a2a18';
+      rrect(cx-r*0.68, cy+r*0.52, r*1.36, r*0.48, r*0.12); ctx.fill();
+
+      // Cranium fill
+      const sg = ctx.createRadialGradient(cx-r*0.25, cy-r*0.35, 0, cx, cy, r);
+      sg.addColorStop(0, '#e8e8d0'); sg.addColorStop(1, '#b8b8a0');
+      ctx.fillStyle = sg;
+      ctx.beginPath(); ctx.ellipse(cx, cy-r*0.05, r, r*0.9, 0, 0, Math.PI*2); ctx.fill();
+
+      // Jaw fill
+      ctx.fillStyle = '#c8c8b0';
+      rrect(cx-r*0.65, cy+r*0.54, r*1.3, r*0.44, r*0.1); ctx.fill();
 
       // Eye sockets
-      ctx.fillStyle = '#181818';
-      ctx.fillRect(x+S*2, y+S*2, S*2, S*2);
-      ctx.fillRect(x+S*5, y+S*2, S*2, S*2);
-      ctx.fillStyle = '#300808'; // socket depth
-      ctx.fillRect(x+S*2, y+S*2, S, S);
-      ctx.fillRect(x+S*5, y+S*2, S, S);
+      [cx-r*0.34, cx+r*0.34].forEach(ex => {
+        ctx.fillStyle = '#1a1a0a';
+        ctx.beginPath(); ctx.ellipse(ex, cy-r*0.12, r*0.23, r*0.28, 0, 0, Math.PI*2); ctx.fill();
+      });
 
-      // Nose hole + brow shadow
-      ctx.fillStyle = '#181818';
-      ctx.fillRect(x+S*4, y+S*4, S, S*2);    // nose
-      ctx.fillRect(x+S*2, y+S*4, S*5, S);    // brow line
+      // Nose
+      ctx.fillStyle = '#1a1a0a';
+      ctx.beginPath(); ctx.ellipse(cx, cy+r*0.2, r*0.1, r*0.14, 0, 0, Math.PI*2); ctx.fill();
 
-      // Jaw + teeth
-      ctx.fillStyle = '#d0d0b8';
-      ctx.fillRect(x+S*2, y+S*6, S*5, S*2);  // jaw base
-      ctx.fillStyle = '#181818';               // tooth gaps
-      ctx.fillRect(x+S*3, y+S*6, S,   S*2);
-      ctx.fillRect(x+S*5, y+S*6, S,   S*2);
+      // Teeth
+      ctx.fillStyle = '#e8e8d0';
+      [-r*0.38, 0, r*0.38].forEach(tx => {
+        rrect(cx+tx-r*0.12, cy+r*0.56, r*0.22, r*0.28, r*0.06); ctx.fill();
+      });
     }
 
-    // Medicine pill — draws centered at ctx origin (0,0)
+    // Medicine capsule — smooth half-and-half pill, centered at ctx origin
     function drawSpritePill(S) {
       S = S || 3;
-      const x = -S*4, y = -S*2;  // offset so pill is centered at (0,0)
-
+      const W = S*9, H = S*5, R = H/2;
+      const x = -W/2, y = -H/2;
+      function cap(m) {
+        ctx.beginPath();
+        ctx.moveTo(x+R, y+m);
+        ctx.lineTo(x+W-R, y+m);
+        ctx.arc(x+W-R, 0, R-m, -Math.PI/2, Math.PI/2, false);
+        ctx.lineTo(x+R, y+H-m);
+        ctx.arc(x+R,   0, R-m,  Math.PI/2,-Math.PI/2, true);
+        ctx.closePath();
+      }
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.beginPath(); ctx.ellipse(0, H*0.55, W*0.4, H*0.2, 0, 0, Math.PI*2); ctx.fill();
       // Outline
-      ctx.fillStyle = '#1a0828';
-      ctx.fillRect(x+S,   y,     S*6, S*4);
-      ctx.fillRect(x,     y+S,   S*8, S*2);
-      // White half (left)
-      ctx.fillStyle = '#f0f0e8';
-      ctx.fillRect(x+S,   y+S,   S*3, S*2);
-      ctx.fillRect(x+S*2, y,     S*2, S);
-      ctx.fillRect(x+S*2, y+S*3, S*2, S);
-      // Pink/red half (right)
-      ctx.fillStyle = '#e83060';
-      ctx.fillRect(x+S*4, y+S,   S*3, S*2);
-      ctx.fillRect(x+S*4, y,     S*2, S);
-      ctx.fillRect(x+S*4, y+S*3, S*2, S);
+      ctx.fillStyle = '#1a0828'; cap(0); ctx.fill();
+      // White half
+      ctx.save();
+      ctx.beginPath(); ctx.rect(x-1, y-1, W/2+1, H+2); ctx.clip();
+      const wg = ctx.createLinearGradient(x, y, x, y+H);
+      wg.addColorStop(0, '#ffffff'); wg.addColorStop(1, '#d4d4cc');
+      ctx.fillStyle = wg; cap(1.5); ctx.fill();
+      ctx.restore();
+      // Pink half
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, y-1, W/2+2, H+2); ctx.clip();
+      const pg = ctx.createLinearGradient(0, y, 0, y+H);
+      pg.addColorStop(0, '#ff5080'); pg.addColorStop(1, '#c01840');
+      ctx.fillStyle = pg; cap(1.5); ctx.fill();
+      ctx.restore();
       // Divider
-      ctx.fillStyle = '#1a0828';
-      ctx.fillRect(x+S*4, y,     S,   S*4);
-      // Highlight
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(x+S*2, y+S, S, S);
+      ctx.fillStyle = 'rgba(20,8,40,0.55)'; ctx.fillRect(-1.5, y+2, 3, H-4);
+      // Sheen
+      ctx.fillStyle = 'rgba(255,255,255,0.42)';
+      ctx.beginPath(); ctx.ellipse(x+R*1.2, y+H*0.28, W*0.12, H*0.16, -0.3, 0, Math.PI*2); ctx.fill();
     }
 
-    // Water droplet bonus
+    // Water droplet bonus — smooth teardrop
     function drawSpriteWater(px, py, sz) {
-      const S = Math.max(2, Math.round(sz / 10));
-      const x = Math.round(px+sz/2-S*3), y = Math.round(py);
-      ctx.fillStyle = '#2880e0';
-      ctx.fillRect(x+S*2, y,     S*2, S*2);  // tip
-      ctx.fillRect(x+S,   y+S*2, S*4, S*2);
-      ctx.fillRect(x,     y+S*4, S*6, S*3);
-      ctx.fillRect(x+S,   y+S*7, S*4, S*2);
-      ctx.fillRect(x+S*2, y+S*9, S*2, S);
-      ctx.fillStyle = '#58a8f8';  // highlight
-      ctx.fillRect(x+S*2, y+S*4, S, S*3);
-      ctx.fillStyle = '#a8d8ff';
-      ctx.fillRect(x+S*2, y+S*4, S, S);
+      const cx = px+sz*0.5, cy = py+sz*0.4, r = sz*0.32;
+      // Glow
+      ctx.fillStyle = 'rgba(80,180,255,0.18)';
+      ctx.beginPath(); ctx.arc(cx, cy, r*1.4, 0, Math.PI*2); ctx.fill();
+      // Teardrop
+      ctx.beginPath();
+      ctx.moveTo(cx, cy-r*1.5);
+      ctx.bezierCurveTo(cx+r*0.6, cy-r*0.5, cx+r, cy+r*0.3, cx+r, cy+r*0.5);
+      ctx.arc(cx, cy+r*0.5, r, 0, Math.PI);
+      ctx.bezierCurveTo(cx-r, cy+r*0.3, cx-r*0.6, cy-r*0.5, cx, cy-r*1.5);
+      ctx.closePath();
+      const dg = ctx.createRadialGradient(cx-r*0.28, cy-r*0.2, 0, cx, cy+r*0.2, r*1.5);
+      dg.addColorStop(0, '#90d0ff'); dg.addColorStop(0.55, '#3898e8'); dg.addColorStop(1, '#1060c0');
+      ctx.fillStyle = dg; ctx.fill();
+      // Highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.beginPath(); ctx.ellipse(cx-r*0.28, cy-r*0.1, r*0.24, r*0.42, -0.4, 0, Math.PI*2); ctx.fill();
     }
 
-    // Log bonus (native habitat)
+    // Log / native habitat bonus — smooth cylinder
     function drawSpriteLog(px, py, sz) {
-      const S = Math.max(2, Math.round(sz / 10));
-      const x = Math.round(px), y = Math.round(py+sz*0.3);
-      ctx.fillStyle = '#7a3808'; ctx.fillRect(x,     y+S, S*10, S*6); // bark
-      ctx.fillStyle = '#9a4c18'; ctx.fillRect(x+S,   y+S, S*8,  S*4); // lighter
-      ctx.fillStyle = '#b86030'; ctx.fillRect(x,     y+S, S*2,  S*6); // left end cap
-      ctx.fillRect(x+S*8, y+S, S*2, S*6);                              // right end cap
-      ctx.fillStyle = '#c87c40'; ctx.fillRect(x+S,   y+S, S,    S*3); // end ring
-      ctx.fillStyle = '#604010';                                         // grain
-      ctx.fillRect(x+S*2, y+S*2, S*6, S);
-      ctx.fillRect(x+S*3, y+S*5, S*4, S);
+      const lx = px+sz*0.05, ly = py+sz*0.35;
+      const lw = sz*0.9,     lh = sz*0.55, lr = lh/2;
+      const lg = ctx.createLinearGradient(lx, ly, lx, ly+lh);
+      lg.addColorStop(0, '#a05a28'); lg.addColorStop(0.35, '#7a3c12'); lg.addColorStop(1, '#4e2208');
+      ctx.fillStyle = lg; rrect(lx, ly, lw, lh, lr*0.38); ctx.fill();
+      const eg = ctx.createRadialGradient(lx+lr*0.6, ly+lh/2, 0, lx+lr*0.6, ly+lh/2, lr*1.1);
+      eg.addColorStop(0, '#c87838'); eg.addColorStop(0.6, '#8a4818'); eg.addColorStop(1, '#4e2208');
+      ctx.fillStyle = eg;
+      ctx.beginPath(); ctx.ellipse(lx+lr*0.5, ly+lh/2, lr*0.6, lr, 0, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
+      for (let gi = 1; gi < 3; gi++) {
+        const gy = ly + lh*(gi/3);
+        ctx.beginPath();
+        ctx.moveTo(lx+lr*0.5, gy);
+        ctx.bezierCurveTo(lx+lw*0.4, gy-3, lx+lw*0.7, gy+2, lx+lw-lr*0.2, gy);
+        ctx.stroke();
+      }
     }
 
-    // ── Pixel-art draw helpers ─────────────────────────────────────
+    // ── Smooth background helpers ──────────────────────────────────
 
-    // 3-puff pixel cloud with interior shading and dark teal-grey shadow
+    // Smooth 3-puff cloud
     function drawPixelCloud(x, y, s) {
-      // Dark shadow underneath
-      ctx.fillStyle = C.cloudSh;
-      ctx.fillRect(x + s*2, y + s*5, s*7, s);
-      ctx.fillRect(x + s*3, y + s*4, s*5, s);
-      // Darker inner lower body
-      ctx.fillStyle = '#70c0ca';
-      ctx.fillRect(x + s,   y + s*3, s*9, s);
-      // Mid-tone body
-      ctx.fillStyle = '#a8dce8';
-      ctx.fillRect(x,       y + s*2, s*11, s);   // widest row
-      ctx.fillRect(x + s,   y + s,   s*9,  s);
-      // Bright upper body
-      ctx.fillStyle = C.cloud;
-      ctx.fillRect(x + s*2, y,       s*7,  s);
-      // 3 distinct puffs on top
-      ctx.fillRect(x + s*2, y - s,   s*2,  s);   // left puff
-      ctx.fillRect(x + s*4, y - s*2, s*3,  s*2); // centre puff (tallest)
-      ctx.fillRect(x + s*8, y - s,   s*2,  s);   // right puff
-      // Specular highlights
-      ctx.fillStyle = '#f0fcff';
-      ctx.fillRect(x + s*5, y - s*2, s,    s);   // centre top sparkle
-      ctx.fillRect(x + s*3, y,       s,    s);   // left body sparkle
+      const cx = x+s*5.5, cy = y+s*4;
+      ctx.fillStyle = 'rgba(0,0,0,0.07)';
+      ctx.beginPath(); ctx.ellipse(cx, cy+s*3.5, s*5, s*1.2, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#f4faff';
+      [[0,0,s*3.4],[-s*3,s*1.5,s*2.5],[s*3,s*1.5,s*2.5],[0,s*2.2,s*3.8]].forEach(([dx,dy,r]) => {
+        ctx.beginPath(); ctx.arc(cx+dx, cy+dy, r, 0, Math.PI*2); ctx.fill();
+      });
+      ctx.fillStyle = 'rgba(150,180,200,0.18)';
+      [[-s*3,s*1.5,s*2.5],[s*3,s*1.5,s*2.5],[0,s*2.2,s*3.8]].forEach(([dx,dy,r]) => {
+        ctx.beginPath(); ctx.arc(cx+dx, cy+dy+r*0.28, r*0.82, 0, Math.PI); ctx.fill();
+      });
+      ctx.fillStyle = 'rgba(255,255,255,0.88)';
+      ctx.beginPath(); ctx.arc(cx-s, cy-s*0.5, s*1.3, 0, Math.PI*2); ctx.fill();
     }
 
-    // Staircase hill — each horizontal step is STEP px wide = visible pixel edge
+    // Smooth rolling hill — sine wave path with gradient fill
     function drawPixelHill(colorMain, colorTop, baseY, amp, freq, phase) {
-      const STEP = 6;
-      ctx.fillStyle = colorMain;
+      const hg = ctx.createLinearGradient(0, baseY-amp-20, 0, GROUND_Y);
+      hg.addColorStop(0, colorTop); hg.addColorStop(0.45, colorMain); hg.addColorStop(1, colorMain);
+      ctx.fillStyle = hg;
       ctx.beginPath();
       ctx.moveTo(0, GROUND_Y);
-      for (let x = 0; x <= CW; x += STEP) {
-        const hy = Math.round((baseY - amp * (0.5 + 0.5 * Math.sin(x * freq + phase))) / STEP) * STEP;
-        ctx.lineTo(x,        hy);
-        ctx.lineTo(x + STEP, hy);
+      for (let x = 0; x <= CW+2; x += 2) {
+        ctx.lineTo(x, baseY - amp*(0.5 + 0.5*Math.sin(x*freq + phase)));
       }
       ctx.lineTo(CW, GROUND_Y);
       ctx.closePath();
       ctx.fill();
-      // Pixel highlight row along the staircase top
-      ctx.fillStyle = colorTop;
-      for (let x = 0; x <= CW; x += STEP) {
-        const hy = Math.round((baseY - amp * (0.5 + 0.5 * Math.sin(x * freq + phase))) / STEP) * STEP;
-        ctx.fillRect(x, hy, STEP, STEP);
-      }
     }
 
-    // Pixel sun with rays — drawn with S×S blocks
+    // Smooth sun with radial gradient and tapered rays
     function drawPixelSun(cx, cy, r, sunCol, sunHiCol) {
       sunCol   = sunCol   || C.sun;
       sunHiCol = sunHiCol || C.sunHi;
-      const S = 4, rl = 13, rg = 3;
-      // Rays (drawn first, behind body)
-      ctx.fillStyle = sunCol;
-      ctx.fillRect(cx - 2,       cy - r - rl - rg, 4,  rl); // N
-      ctx.fillRect(cx - 2,       cy + r + rg,       4,  rl); // S
-      ctx.fillRect(cx + r + rg,  cy - 2,            rl, 4);  // E
-      ctx.fillRect(cx - r-rl-rg, cy - 2,            rl, 4);  // W
-      const d = Math.round((r + rg + 2) * 0.72);
-      ctx.fillRect(cx + d,     cy - d - 9, 3, 9);  // NE-vert
-      ctx.fillRect(cx + d + 3, cy - d - 9, 5, 3);  // NE-horiz
-      ctx.fillRect(cx - d - 8, cy - d - 9, 5, 3);  // NW-horiz
-      ctx.fillRect(cx - d - 3, cy - d - 6, 3, 6);  // NW-vert
-      ctx.fillRect(cx + d,     cy + d + 2, 3, 9);  // SE-vert
-      ctx.fillRect(cx + d + 3, cy + d + 8, 5, 3);  // SE-horiz
-      ctx.fillRect(cx - d - 8, cy + d + 8, 5, 3);  // SW-horiz
-      ctx.fillRect(cx - d - 3, cy + d + 2, 3, 6);  // SW-vert
-      // Inner ray highlights
-      ctx.fillStyle = sunHiCol;
-      ctx.fillRect(cx - 1, cy - r - rl - rg, 2, rl);
-      ctx.fillRect(cx + r + rg, cy - 1, rl, 2);
-      // Sun body (pixel circle)
-      for (let dy = -r; dy <= r; dy += S) {
-        for (let dx = -r; dx <= r; dx += S) {
-          if (Math.sqrt(dx*dx + dy*dy) <= r) {
-            ctx.fillStyle = Math.sqrt(dx*dx + dy*dy) <= r * 0.5 ? sunHiCol : sunCol;
-            ctx.fillRect(Math.round(cx+dx), Math.round(cy+dy), S, S);
-          }
-        }
+      // Outer glow
+      const gg = ctx.createRadialGradient(cx, cy, r, cx, cy, r*3.5);
+      gg.addColorStop(0, sunCol+'cc'); gg.addColorStop(1, 'rgba(255,220,50,0)');
+      ctx.fillStyle = gg;
+      ctx.beginPath(); ctx.arc(cx, cy, r*3.5, 0, Math.PI*2); ctx.fill();
+      // 8 tapered rays
+      ctx.save(); ctx.translate(cx, cy); ctx.fillStyle = sunCol;
+      for (let i = 0; i < 8; i++) {
+        ctx.save(); ctx.rotate((i/8)*Math.PI*2);
+        ctx.beginPath();
+        ctx.moveTo(-2, -(r+5)); ctx.lineTo(2, -(r+5));
+        ctx.lineTo(1,  -(r+20)); ctx.lineTo(-1, -(r+20));
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
       }
+      ctx.restore();
+      // Sun body
+      const rg = ctx.createRadialGradient(cx-r*0.3, cy-r*0.3, 0, cx, cy, r);
+      rg.addColorStop(0, sunHiCol); rg.addColorStop(0.7, sunCol); rg.addColorStop(1, sunCol);
+      ctx.fillStyle = rg;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
     }
 
     // Pixel bird — larger W-wing silhouette with head and accent
     function drawPixelBird(x, y) {
+      const t = frameN * 0.07;
+      const wFlap = Math.sin(t) * 5;
+      ctx.strokeStyle = C.bird; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+      // Left wing
+      ctx.beginPath();
+      ctx.moveTo(x, y); ctx.quadraticCurveTo(x - 8, y - wFlap - 2, x - 15, y - wFlap + 1);
+      ctx.stroke();
+      // Right wing
+      ctx.beginPath();
+      ctx.moveTo(x, y); ctx.quadraticCurveTo(x + 8, y - wFlap - 2, x + 15, y - wFlap + 1);
+      ctx.stroke();
+      // Body dot
       ctx.fillStyle = C.bird;
-      ctx.fillRect(x - 12, y - 3, 5,  2); // left outer wing
-      ctx.fillRect(x - 7,  y,     6,  3); // left inner wing
-      ctx.fillRect(x - 1,  y - 2, 3,  3); // body
-      ctx.fillRect(x + 2,  y - 4, 3,  2); // head
-      ctx.fillRect(x + 2,  y,     6,  3); // right inner wing
-      ctx.fillRect(x + 8,  y - 3, 5,  2); // right outer wing
-      // Dark accent on wingtips
-      ctx.fillStyle = '#0e3848';
-      ctx.fillRect(x - 12, y - 3, 2, 2);
-      ctx.fillRect(x + 11, y - 3, 2, 2);
+      ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fill();
     }
 
-    // Pixel flower — taller stem with leaves, more detailed petals
+    // Smooth ground flower — stem, leaves, and arc petals
     function drawPixelFlower(x, y, type) {
-      const S = 2;
-      // Stem + two leaves
+      const cx = x + 6, stemBot = y, stemTop = y - 18;
+      // Stem
+      ctx.strokeStyle = C.foliage; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(cx, stemBot); ctx.lineTo(cx, stemTop); ctx.stroke();
+      // Leaves
       ctx.fillStyle = C.foliage;
-      ctx.fillRect(x + 3*S, y - 9*S, S, 9*S);   // tall stem
-      ctx.fillRect(x + 4*S, y - 6*S, 2*S, S);   // right leaf
-      ctx.fillRect(x + S,   y - 5*S, 2*S, S);   // left leaf
-      ctx.fillStyle = C.foliageLt;
-      ctx.fillRect(x + 4*S, y - 6*S, S,   S);   // right leaf highlight
-      ctx.fillRect(x + S,   y - 5*S, S,   S);   // left leaf highlight
-      if (type === 0) {
-        // Sunflower: 8 petals + dark seed centre
-        ctx.fillStyle = C.sfYel;
-        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S); // top
-        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S); // bottom
-        ctx.fillRect(x,       y - 12*S, 2*S, 2*S); // left
-        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S); // right
-        ctx.fillStyle = C.sfOrg;
-        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S); // TL
-        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S); // TR
-        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S); // BL
-        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S); // BR
-        ctx.fillStyle = C.sfCtr;
-        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S); // seed centre
-        ctx.fillStyle = '#b84000';
-        ctx.fillRect(x + 2*S, y - 12*S, S,   S);   // dark accent
-        ctx.fillStyle = '#f0d000';
-        ctx.fillRect(x + 3*S, y - 11*S, S,   S);   // light accent
-      } else if (type === 1) {
-        // Daisy: 8 petals + golden centre
-        ctx.fillStyle = C.daiWht;
-        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S);
-        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S);
-        ctx.fillRect(x,       y - 12*S, 2*S, 2*S);
-        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S);
-        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S);
-        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S);
-        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S);
-        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S);
-        ctx.fillStyle = C.daiYel;
-        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S);
-        ctx.fillStyle = '#c08000';
-        ctx.fillRect(x + 2*S, y - 12*S, S,   S);
-      } else if (type === 2) {
-        // Poppy: bold red with stamens
-        ctx.fillStyle = C.poppy;
-        ctx.fillRect(x + S,   y - 13*S, 4*S, 3*S); // top petal
-        ctx.fillRect(x,       y - 11*S, 6*S, 3*S); // main body
-        ctx.fillRect(x + S,   y - 8*S,  4*S, S);   // bottom
-        ctx.fillStyle = '#c00000';
-        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S); // shadow
-        ctx.fillStyle = C.sfCtr;
-        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 2*S); // dark centre
-        ctx.fillStyle = '#f8f860';
-        ctx.fillRect(x + 2*S, y - 11*S, 2*S, S);   // stamens
-      } else {
-        // Blue cornflower with purple inner
-        ctx.fillStyle = C.flBlue;
-        ctx.fillRect(x + 2*S, y - 13*S, 2*S, 3*S);
-        ctx.fillRect(x + 2*S, y - 9*S,  2*S, 2*S);
-        ctx.fillRect(x,       y - 12*S, 2*S, 2*S);
-        ctx.fillRect(x + 4*S, y - 12*S, 2*S, 2*S);
-        ctx.fillRect(x + S,   y - 13*S, 2*S, 2*S);
-        ctx.fillRect(x + 3*S, y - 13*S, 2*S, 2*S);
-        ctx.fillRect(x + S,   y - 10*S, 2*S, 2*S);
-        ctx.fillRect(x + 3*S, y - 10*S, 2*S, 2*S);
-        ctx.fillStyle = '#f0f040';
-        ctx.fillRect(x + 2*S, y - 12*S, 2*S, 3*S);
-        ctx.fillStyle = '#2040c8';
-        ctx.fillRect(x + 2*S, y - 12*S, S,   S);
+      ctx.beginPath(); ctx.ellipse(cx + 5, stemTop + 10, 5, 2.5, 0.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx - 5, stemTop + 14, 5, 2.5, -0.5, 0, Math.PI*2); ctx.fill();
+      // Flower head
+      const cols = [
+        ['#f0c000','#f8e040','#3a2000'], // sunflower
+        ['#f0f4f8','#ffffff','#e8c000'], // daisy
+        ['#e82828','#ff5050','#1a1a00'], // poppy
+        ['#5870e8','#90a8ff','#f0f040'], // cornflower
+      ];
+      const [petalCol, petalHi, ctrCol] = cols[type % 4];
+      const pr = 4.5, cr = 4;
+      for (let i = 0; i < 8; i++) {
+        const a = (i/8) * Math.PI*2;
+        ctx.fillStyle = i % 2 === 0 ? petalCol : petalHi;
+        ctx.beginPath();
+        ctx.ellipse(cx + Math.cos(a)*(pr+cr*0.5), stemTop + Math.sin(a)*(pr+cr*0.5), pr, 2.2, a, 0, Math.PI*2);
+        ctx.fill();
       }
+      // Centre
+      const cg = ctx.createRadialGradient(cx, stemTop, 0, cx, stemTop, cr);
+      cg.addColorStop(0, '#ffffc0'); cg.addColorStop(1, ctrCol);
+      ctx.fillStyle = cg;
+      ctx.beginPath(); ctx.arc(cx, stemTop, cr, 0, Math.PI*2); ctx.fill();
     }
 
-    // Rounded pixel tree canopy + trunk
+    // Smooth cartoon tree — rounded canopy, tapered trunk
     function drawPixelTree(cx, baseY, totalH, spread) {
-      const S = 4;
-      const r = spread;
       const canopyCY = baseY - totalH * 0.62;
-      // Canopy (pixel circle — dark foreground, lighter top-left)
-      for (let row = -r; row <= r * 0.55; row += S) {
-        const hw = Math.round(Math.sqrt(Math.max(0, r*r - row*row)) / S) * S;
-        if (hw <= 0) continue;
-        const py = Math.round((canopyCY + row) / S) * S;
-        ctx.fillStyle = row < -r * 0.25 ? C.foliageLt : C.foliage;
-        ctx.fillRect(cx - hw, py, hw * 2, S);
-      }
-      // Shadow/dark bottom of canopy
-      ctx.fillStyle = '#123020';
-      for (let row = r * 0.3; row <= r * 0.55; row += S) {
-        const hw = Math.round(Math.sqrt(Math.max(0, r*r - row*row)) / S) * S * 0.7;
-        if (hw <= 0) continue;
-        const py = Math.round((canopyCY + row) / S) * S;
-        ctx.fillRect(cx - hw, py, hw * 2, S);
-      }
+      const r = spread;
       // Trunk
-      const trunkTop = canopyCY + r * 0.5;
-      ctx.fillStyle = '#3a2408';
-      ctx.fillRect(cx - S, trunkTop, S*2, baseY - trunkTop);
-      ctx.fillStyle = '#5c3a10';
-      ctx.fillRect(cx - S, trunkTop, S, baseY - trunkTop);
+      const trunkTop = canopyCY + r * 0.45;
+      const tw = Math.max(5, r * 0.22);
+      const tg = ctx.createLinearGradient(cx - tw, 0, cx + tw, 0);
+      tg.addColorStop(0, '#3a2408'); tg.addColorStop(0.4, '#6a4218'); tg.addColorStop(1, '#3a2408');
+      ctx.fillStyle = tg;
+      ctx.beginPath();
+      ctx.moveTo(cx - tw, baseY);
+      ctx.quadraticCurveTo(cx - tw*0.6, (trunkTop + baseY)*0.5, cx - tw*0.5, trunkTop);
+      ctx.lineTo(cx + tw*0.5, trunkTop);
+      ctx.quadraticCurveTo(cx + tw*0.6, (trunkTop + baseY)*0.5, cx + tw, baseY);
+      ctx.closePath(); ctx.fill();
+      // Canopy shadow blob
+      ctx.fillStyle = 'rgba(0,50,10,0.20)';
+      ctx.beginPath(); ctx.ellipse(cx + r*0.15, canopyCY + r*0.35, r*0.9, r*0.5, 0, 0, Math.PI*2); ctx.fill();
+      // Canopy gradient
+      const cg = ctx.createRadialGradient(cx - r*0.25, canopyCY - r*0.25, 0, cx, canopyCY, r*1.1);
+      cg.addColorStop(0, C.foliageLt); cg.addColorStop(0.55, C.foliage); cg.addColorStop(1, '#1a4810');
+      ctx.fillStyle = cg;
+      ctx.beginPath(); ctx.arc(cx, canopyCY, r, 0, Math.PI*2); ctx.fill();
+      // Highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.beginPath(); ctx.ellipse(cx - r*0.2, canopyCY - r*0.22, r*0.45, r*0.3, -0.4, 0, Math.PI*2); ctx.fill();
     }
 
-    // Small rounded hedge bush
+    // Smooth cartoon bush — 3 overlapping arcs with gradient
     function drawPixelBush(x, baseY, w, h) {
-      const S = 4;
-      const third = Math.floor(w / 3);
-      ctx.fillStyle = C.foliage;
-      ctx.fillRect(x, baseY - h, w, h);
-      // 3 rounded bumps along top
+      const cy = baseY - h * 0.55;
+      const bg = ctx.createLinearGradient(x, cy - h*0.5, x, baseY);
+      bg.addColorStop(0, C.foliageLt); bg.addColorStop(0.5, C.foliage); bg.addColorStop(1, '#1a4810');
+      ctx.fillStyle = bg;
+      // 3 overlapping bumps
+      const third = w / 3;
       [0, 1, 2].forEach(b => {
-        const bx = x + b * third;
-        ctx.fillRect(bx + S,       baseY - h - S,   third - S*2, S);
-        if (b === 1) ctx.fillRect(bx + S*2, baseY - h - S*2, third - S*4, S);
+        const bx = x + b * third + third * 0.5;
+        const br = third * 0.68 + (b === 1 ? h * 0.08 : 0);
+        const bcy = cy - (b === 1 ? h * 0.12 : 0);
+        ctx.beginPath(); ctx.arc(bx, bcy, br, Math.PI, 0); ctx.fill();
       });
-      // Top highlight stripe
-      ctx.fillStyle = C.foliageLt;
-      ctx.fillRect(x + S, baseY - h, w - S*2, S);
+      // Flat base fill
+      ctx.fillRect(x, cy, w, baseY - cy);
+      // Highlight overlay
+      ctx.fillStyle = 'rgba(255,255,255,0.13)';
       [0, 1, 2].forEach(b => {
-        const bx = x + b * third;
-        ctx.fillRect(bx + S, baseY - h - S, third - S*2, S);
+        const bx = x + b * third + third * 0.5;
+        ctx.beginPath(); ctx.ellipse(bx - third*0.12, cy - (b===1?h*0.05:0) - h*0.22, third*0.28, h*0.15, -0.3, 0, Math.PI*2); ctx.fill();
       });
-      // Base shadow
-      ctx.fillStyle = '#123020';
-      ctx.fillRect(x, baseY - S, w, S);
     }
 
     function drawStoneWall(x, y, w, h) {
       if (h <= 0) return;
-      ctx.fillStyle = C.stoneMd;
+      // Base wall fill with gradient
+      const wg = ctx.createLinearGradient(x, y, x + w, y);
+      wg.addColorStop(0, C.stone); wg.addColorStop(0.5, C.stoneLt); wg.addColorStop(1, C.stoneDk);
+      ctx.fillStyle = wg;
       ctx.fillRect(x, y, w, h);
-      const SH = 11, GAP = 2;
-      for (let row = 0; row * (SH + GAP) < h; row++) {
-        const ry = y + row * (SH + GAP);
-        const rh = Math.min(SH, y + h - ry);
+      // Smooth brick rows with rounded corners
+      const BH = 12, GAP = 2, BR = 2;
+      for (let row = 0; row * (BH + GAP) < h; row++) {
+        const ry = y + row * (BH + GAP);
+        const rh = Math.min(BH, y + h - ry);
         if (rh <= 0) break;
-        const off = (row % 2) * 12;
-        for (let sx = x - off; sx < x + w; sx += 24 + GAP) {
-          const rx = Math.max(x, sx), rw2 = Math.min(x + w, sx + 24) - rx;
-          if (rw2 <= 0) continue;
-          ctx.fillStyle = row % 3 === 0 ? C.stone : row % 3 === 1 ? '#7e7c6e' : C.stoneMd;
-          ctx.fillRect(rx, ry, rw2, rh);
-          ctx.fillStyle = C.stoneLt;
-          ctx.fillRect(rx, ry, rw2, Math.min(2, rh));
-          ctx.fillStyle = C.stoneDk;
-          ctx.fillRect(rx + rw2 - 2, ry, 2, rh);
-        }
-        if (ry + SH < y + h) {
-          ctx.fillStyle = C.stoneDk;
-          ctx.fillRect(x, ry + SH, w, GAP);
+        const off = (row % 2) * 14;
+        for (let sx = x - off; sx < x + w; sx += 28 + GAP) {
+          const rx = Math.max(x, sx), rw2 = Math.min(x + w, sx + 28) - rx;
+          if (rw2 <= 4) continue;
+          ctx.fillStyle = row % 3 === 0 ? C.stoneMd : row % 3 === 1 ? C.stone : C.stoneLt;
+          rrect(rx + 1, ry + 1, rw2 - 2, rh - 1, BR); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.22)';
+          rrect(rx + 1, ry + 1, rw2 - 2, 3, BR); ctx.fill();
         }
       }
-      ctx.fillStyle = 'rgba(0,0,0,.18)';
+      ctx.fillStyle = 'rgba(0,0,0,.12)';
       ctx.fillRect(x + w - 4, y, 4, h);
     }
 
@@ -1200,87 +1189,60 @@
       // Clouds
       clouds.forEach(c => drawPixelCloud(c.x, c.y, Math.max(4, Math.round(c.w / 8))));
 
-      // Warm wood picket fence (3 rails + pointed posts)
-      const PGAP = 64, PW = 7, PH = 28;
-      ctx.fillStyle = C.fence;
-      ctx.fillRect(0, GROUND_Y - 22, CW, 5);
-      ctx.fillRect(0, GROUND_Y - 13, CW, 5);
-      ctx.fillRect(0, GROUND_Y - 4,  CW, 5);
-      ctx.fillStyle = C.fenceLt;
-      ctx.fillRect(0, GROUND_Y - 22, CW, 2);
-      ctx.fillRect(0, GROUND_Y - 13, CW, 2);
-      ctx.fillRect(0, GROUND_Y - 4,  CW, 2);
-      ctx.fillStyle = C.fenceDk;
-      ctx.fillRect(0, GROUND_Y - 17, CW, 1);
-      ctx.fillRect(0, GROUND_Y - 8,  CW, 1);
+      // Smooth picket fence — rounded rails + pointed posts
+      const PGAP = 64, PW = 8, PH = 28;
+      // Three rails
+      [GROUND_Y - 22, GROUND_Y - 13, GROUND_Y - 4].forEach(ry => {
+        const rg = ctx.createLinearGradient(0, ry, 0, ry + 5);
+        rg.addColorStop(0, C.fenceLt); rg.addColorStop(0.4, C.fence); rg.addColorStop(1, C.fenceDk);
+        ctx.fillStyle = rg;
+        rrect(0, ry, CW, 5, 2); ctx.fill();
+      });
+      // Posts with pointed tops
       for (let fx = -(fenceX % PGAP); fx < CW + PGAP; fx += PGAP) {
-        ctx.fillStyle = C.fence;
-        ctx.fillRect(fx, GROUND_Y - PH - 3, PW, PH + 3);
-        ctx.fillRect(fx + 1, GROUND_Y - PH - 6, PW - 2, 3);
-        ctx.fillRect(fx + 2, GROUND_Y - PH - 8, PW - 4, 2);
-        ctx.fillStyle = C.fenceLt;
-        ctx.fillRect(fx, GROUND_Y - PH - 8, 2, PH + 8);
-        ctx.fillStyle = C.fenceDk;
-        ctx.fillRect(fx + PW - 2, GROUND_Y - PH - 3, 2, PH + 3);
-        ctx.fillStyle = '#6a4810';
-        ctx.fillRect(fx + 1, GROUND_Y - PH + 3,  5, 1);
-        ctx.fillRect(fx + 1, GROUND_Y - PH + 11, 5, 1);
-        ctx.fillRect(fx + 1, GROUND_Y - PH + 19, 5, 1);
+        const pg = ctx.createLinearGradient(fx, 0, fx + PW, 0);
+        pg.addColorStop(0, C.fenceLt); pg.addColorStop(0.5, C.fence); pg.addColorStop(1, C.fenceDk);
+        ctx.fillStyle = pg;
+        rrect(fx, GROUND_Y - PH - 3, PW, PH + 3, 3); ctx.fill();
+        // Pointed top
+        ctx.beginPath();
+        ctx.moveTo(fx, GROUND_Y - PH - 3);
+        ctx.lineTo(fx + PW/2, GROUND_Y - PH - 10);
+        ctx.lineTo(fx + PW, GROUND_Y - PH - 3);
+        ctx.closePath(); ctx.fill();
       }
 
-      // Ground — vivid lime grass band with varied tufts
+      // Ground — smooth grass band with sine-edge top
+      const gsoilY = GROUND_Y + 12;
+      const grassG = ctx.createLinearGradient(0, GROUND_Y - 6, 0, gsoilY);
+      grassG.addColorStop(0, C.grassHi); grassG.addColorStop(0.4, C.grassLt); grassG.addColorStop(1, C.grass);
+      ctx.fillStyle = grassG;
+      ctx.beginPath(); ctx.moveTo(0, gsoilY);
+      for (let gx = 0; gx <= CW; gx += 3) {
+        const ht = 6 + 5 * Math.sin(gx * 0.18 + hedgeX * 0.04);
+        ctx.lineTo(gx, GROUND_Y - ht);
+      }
+      ctx.lineTo(CW, gsoilY); ctx.closePath(); ctx.fill();
+      // Grass flat base
       ctx.fillStyle = C.grass;
       ctx.fillRect(0, GROUND_Y, CW, 12);
-      ctx.fillStyle = C.grassLt;
-      ctx.fillRect(0, GROUND_Y, CW, 6);
-      ctx.fillStyle = C.grassHi;
-      ctx.fillRect(0, GROUND_Y, CW, 2);
-      // Varied pixel tufts — different heights every 4px
-      const tuftH = [11, 7, 14, 5, 9, 13, 6, 10, 8, 12, 4, 15, 7, 11, 9, 6];
-      for (let gx = 0; gx < CW; gx += 4) {
-        const h = tuftH[Math.floor(gx / 4) % tuftH.length];
-        const col = gx % 20 === 0 ? C.grassHi : gx % 10 === 0 ? C.grassLt : C.grass;
-        ctx.fillStyle = col;
-        ctx.fillRect(gx, GROUND_Y - h, 3, h);
-      }
-      // Bright tip highlights on tallest tufts
-      ctx.fillStyle = C.grassHi;
-      for (let gx = 2; gx < CW; gx += 20) {
-        ctx.fillRect(gx, GROUND_Y - 15, 2, 3);
-      }
 
-      // Warm brown soil with pebbles and root lines
-      ctx.fillStyle = C.soil;
+      // Soil — smooth gradient with ellipse pebbles
+      const soilG = ctx.createLinearGradient(0, GROUND_Y + 12, 0, GROUND_Y + 30);
+      soilG.addColorStop(0, C.soilMd); soilG.addColorStop(0.5, C.soil); soilG.addColorStop(1, C.soilLt);
+      ctx.fillStyle = soilG;
       ctx.fillRect(0, GROUND_Y + 12, CW, 18);
-      ctx.fillStyle = C.soilMd;
-      ctx.fillRect(0, GROUND_Y + 12, CW, 4);
-      // Pebbles (amber + dark)
       ctx.fillStyle = C.soilLt;
       for (let sx = 6; sx < CW; sx += 36) {
-        ctx.fillRect(sx,      GROUND_Y + 18, 7, 5);
-        ctx.fillRect(sx + 17, GROUND_Y + 22, 5, 4);
-        ctx.fillRect(sx + 30, GROUND_Y + 16, 4, 4);
-      }
-      ctx.fillStyle = C.soilMd;
-      for (let sx = 18; sx < CW; sx += 36) {
-        ctx.fillRect(sx, GROUND_Y + 24, 4, 3);
+        ctx.beginPath(); ctx.ellipse(sx + 3,  GROUND_Y + 20, 4, 2.5, 0, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(sx + 20, GROUND_Y + 24, 3, 2, 0.3, 0, Math.PI*2); ctx.fill();
       }
 
-      // Purple bottom strip with richer texture
-      ctx.fillStyle = C.soilPurp;
+      // Deep clay layer
+      const clayG = ctx.createLinearGradient(0, GROUND_Y + 30, 0, CH);
+      clayG.addColorStop(0, C.soilPLt); clayG.addColorStop(0.3, C.soilPurp); clayG.addColorStop(1, C.soilPDk);
+      ctx.fillStyle = clayG;
       ctx.fillRect(0, GROUND_Y + 30, CW, CH - GROUND_Y - 30);
-      ctx.fillStyle = C.soilPLt;
-      ctx.fillRect(0, GROUND_Y + 30, CW, 4);
-      ctx.fillStyle = C.soilPDk;
-      for (let sx = 6; sx < CW; sx += 30) {
-        ctx.fillRect(sx,      GROUND_Y + 37, 6, 4);
-        ctx.fillRect(sx + 15, GROUND_Y + 42, 5, 3);
-        ctx.fillRect(sx + 24, GROUND_Y + 36, 3, 3);
-      }
-      ctx.fillStyle = C.soilPLt;
-      for (let sx = 12; sx < CW; sx += 48) {
-        ctx.fillRect(sx, GROUND_Y + 32, 3, 2);
-      }
 
       // Ground flowers — denser and varied
       const ftypes4 = [0, 1, 2, 1, 0, 3, 2, 1, 0, 1, 3, 2];
@@ -1298,17 +1260,25 @@
         if (o.type === 'wall') {
           drawStoneWall(o.x, 0,        o.w, o.gapTop);
           drawStoneWall(o.x, o.gapBot, o.w, GROUND_Y - o.gapBot);
+          // Moss ledge (smooth rrect)
           ctx.fillStyle = C.moss;
-          ctx.fillRect(o.x, o.gapTop - 5, o.w, 5);
-          ctx.fillRect(o.x, o.gapBot,     o.w, 5);
-          // Pixel hazard stripe (replaces 🏗️ emoji)
-          const sy1 = Math.max(2, o.gapTop - 10), sy2 = o.gapBot;
-          ctx.fillStyle = '#f8c010';
-          ctx.fillRect(o.x, sy1, o.w, 10); ctx.fillRect(o.x, sy2, o.w, 10);
-          ctx.fillStyle = '#1a1010';
-          for (let hx = o.x; hx < o.x + o.w; hx += 8) {
-            ctx.fillRect(hx, sy1, 4, 10); ctx.fillRect(hx, sy2, 4, 10);
-          }
+          rrect(o.x, o.gapTop - 6, o.w, 6, 3); ctx.fill();
+          rrect(o.x, o.gapBot, o.w, 6, 3); ctx.fill();
+          // Smooth hazard stripe — diagonal clip pattern
+          const sy1 = Math.max(2, o.gapTop - 12), sy2 = o.gapBot;
+          [sy1, sy2].forEach(sy => {
+            ctx.save();
+            rrect(o.x, sy, o.w, 12, 4); ctx.clip();
+            ctx.fillStyle = '#f8c820'; ctx.fillRect(o.x, sy, o.w, 12);
+            ctx.fillStyle = '#1a1010';
+            for (let hx = o.x - 12; hx < o.x + o.w + 12; hx += 10) {
+              ctx.beginPath();
+              ctx.moveTo(hx, sy); ctx.lineTo(hx + 5, sy);
+              ctx.lineTo(hx + 5 + 12, sy + 12); ctx.lineTo(hx + 12, sy + 12);
+              ctx.closePath(); ctx.fill();
+            }
+            ctx.restore();
+          });
           return;
         }
 
@@ -1316,13 +1286,13 @@
           ctx.save();
           ctx.translate(ox + sz/2, oy + sz/2);
           drawSpriteBee(Math.max(2, Math.round(sz / 13)), o.t || 0);
-          // Pulsing disease spots
+          // Pulsing disease spots (smooth arcs)
           const dp = 0.60 + 0.25 * Math.sin((o.t || 0) * 4.0);
           ctx.globalAlpha = dp;
           ctx.fillStyle = '#c81010';
-          ctx.fillRect(-S*2, -S*2, S*2, S*2);
-          ctx.fillRect( S*2,  0,   S*2, S*2);
-          ctx.fillRect(-S,    S*2, S*2, S*2);
+          [[-S*2.5, -S*2], [S*2.5, S*0.5], [-S*0.5, S*2.5]].forEach(([dx, dy]) => {
+            ctx.beginPath(); ctx.arc(dx, dy, S*0.9, 0, Math.PI*2); ctx.fill();
+          });
           ctx.globalAlpha = 1;
           ctx.restore();
           return;
@@ -1355,11 +1325,12 @@
         drawSpriteBee(2, frameN + c.x * 0.08);
         if (!c._leaving) {
           const frac = Math.max(0, c.timer / 15);
-          const bw = 28, bh = 4, bx = -14, by = -30;
-          ctx.fillStyle = 'rgba(0,0,0,.40)';
-          ctx.fillRect(bx, by, bw, bh);
+          const bw = 28, bh = 5, bx = -14, by = -32;
+          ctx.fillStyle = 'rgba(0,0,0,.35)';
+          rrect(bx, by, bw, bh, 2.5); ctx.fill();
           ctx.fillStyle = frac > 0.4 ? '#30e060' : '#e09020';
-          ctx.fillRect(bx, by, Math.round(bw * frac), bh);
+          const fw = Math.max(5, Math.round(bw * frac));
+          rrect(bx, by, fw, bh, 2.5); ctx.fill();
         }
         ctx.restore();
       });
@@ -1437,82 +1408,67 @@
       drawPixelCloud(200, 22, 8);
       drawPixelCloud(390, 14, 11);
       drawPixelCloud(510, 20, 7);
-      // Fence (3 rails)
-      const PGAP = 64, PW = 7, PH = 28;
-      ctx.fillStyle = C.fence;
-      ctx.fillRect(0, GROUND_Y-22, CW, 5); ctx.fillRect(0, GROUND_Y-13, CW, 5); ctx.fillRect(0, GROUND_Y-4, CW, 5);
-      ctx.fillStyle = C.fenceLt;
-      ctx.fillRect(0, GROUND_Y-22, CW, 2); ctx.fillRect(0, GROUND_Y-13, CW, 2); ctx.fillRect(0, GROUND_Y-4, CW, 2);
-      ctx.fillStyle = C.fenceDk;
-      ctx.fillRect(0, GROUND_Y-17, CW, 1); ctx.fillRect(0, GROUND_Y-8, CW, 1);
+      // Smooth picket fence (idle)
+      const PGAP = 64, PW = 8, PH = 28;
+      [GROUND_Y - 22, GROUND_Y - 13, GROUND_Y - 4].forEach(ry => {
+        const rg2 = ctx.createLinearGradient(0, ry, 0, ry + 5);
+        rg2.addColorStop(0, C.fenceLt); rg2.addColorStop(0.4, C.fence); rg2.addColorStop(1, C.fenceDk);
+        ctx.fillStyle = rg2; rrect(0, ry, CW, 5, 2); ctx.fill();
+      });
       for (let fx = 8; fx < CW; fx += PGAP) {
-        ctx.fillStyle = C.fence;
-        ctx.fillRect(fx, GROUND_Y-PH-3, PW, PH+3);
-        ctx.fillRect(fx+1, GROUND_Y-PH-6, PW-2, 3); ctx.fillRect(fx+2, GROUND_Y-PH-8, PW-4, 2);
-        ctx.fillStyle = C.fenceLt; ctx.fillRect(fx, GROUND_Y-PH-8, 2, PH+8);
-        ctx.fillStyle = C.fenceDk; ctx.fillRect(fx+PW-2, GROUND_Y-PH-3, 2, PH+3);
-        ctx.fillStyle = '#6a4810';
-        ctx.fillRect(fx+1, GROUND_Y-PH+3, 5, 1); ctx.fillRect(fx+1, GROUND_Y-PH+11, 5, 1);
-        ctx.fillRect(fx+1, GROUND_Y-PH+19, 5, 1);
+        const pg2 = ctx.createLinearGradient(fx, 0, fx + PW, 0);
+        pg2.addColorStop(0, C.fenceLt); pg2.addColorStop(0.5, C.fence); pg2.addColorStop(1, C.fenceDk);
+        ctx.fillStyle = pg2;
+        rrect(fx, GROUND_Y - PH - 3, PW, PH + 3, 3); ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(fx, GROUND_Y - PH - 3); ctx.lineTo(fx + PW/2, GROUND_Y - PH - 10);
+        ctx.lineTo(fx + PW, GROUND_Y - PH - 3); ctx.closePath(); ctx.fill();
       }
-      // Ground with varied tufts
+      // Smooth grass (idle)
+      const gsoilY2 = GROUND_Y + 12;
+      const grassG2 = ctx.createLinearGradient(0, GROUND_Y - 6, 0, gsoilY2);
+      grassG2.addColorStop(0, C.grassHi); grassG2.addColorStop(0.4, C.grassLt); grassG2.addColorStop(1, C.grass);
+      ctx.fillStyle = grassG2;
+      ctx.beginPath(); ctx.moveTo(0, gsoilY2);
+      for (let gx = 0; gx <= CW; gx += 3) {
+        ctx.lineTo(gx, GROUND_Y - 6 - 5 * Math.sin(gx * 0.18));
+      }
+      ctx.lineTo(CW, gsoilY2); ctx.closePath(); ctx.fill();
       ctx.fillStyle = C.grass; ctx.fillRect(0, GROUND_Y, CW, 12);
-      ctx.fillStyle = C.grassLt; ctx.fillRect(0, GROUND_Y, CW, 6);
-      ctx.fillStyle = C.grassHi; ctx.fillRect(0, GROUND_Y, CW, 2);
-      const tuftH = [11, 7, 14, 5, 9, 13, 6, 10, 8, 12, 4, 15, 7, 11, 9, 6];
-      for (let gx = 0; gx < CW; gx += 4) {
-        const h = tuftH[Math.floor(gx / 4) % tuftH.length];
-        ctx.fillStyle = gx % 20 === 0 ? C.grassHi : gx % 10 === 0 ? C.grassLt : C.grass;
-        ctx.fillRect(gx, GROUND_Y - h, 3, h);
-      }
-      ctx.fillStyle = C.grassHi;
-      for (let gx = 2; gx < CW; gx += 20) { ctx.fillRect(gx, GROUND_Y-15, 2, 3); }
-      // Brown soil
-      ctx.fillStyle = C.soil; ctx.fillRect(0, GROUND_Y+12, CW, 18);
-      ctx.fillStyle = C.soilMd; ctx.fillRect(0, GROUND_Y+12, CW, 4);
+      // Soil (idle)
+      const soilG2 = ctx.createLinearGradient(0, GROUND_Y + 12, 0, GROUND_Y + 30);
+      soilG2.addColorStop(0, C.soilMd); soilG2.addColorStop(0.5, C.soil); soilG2.addColorStop(1, C.soilLt);
+      ctx.fillStyle = soilG2; ctx.fillRect(0, GROUND_Y + 12, CW, 18);
       ctx.fillStyle = C.soilLt;
       for (let sx = 6; sx < CW; sx += 36) {
-        ctx.fillRect(sx, GROUND_Y+18, 7, 5); ctx.fillRect(sx+17, GROUND_Y+22, 5, 4);
+        ctx.beginPath(); ctx.ellipse(sx + 3, GROUND_Y + 20, 4, 2.5, 0, 0, Math.PI*2); ctx.fill();
       }
-      // Purple strip
-      ctx.fillStyle = C.soilPurp; ctx.fillRect(0, GROUND_Y+30, CW, CH-GROUND_Y-30);
-      ctx.fillStyle = C.soilPLt;  ctx.fillRect(0, GROUND_Y+30, CW, 4);
-      ctx.fillStyle = C.soilPDk;
-      for (let sx = 6; sx < CW; sx += 30) {
-        ctx.fillRect(sx, GROUND_Y+37, 6, 4); ctx.fillRect(sx+15, GROUND_Y+42, 5, 3);
-      }
+      // Clay (idle)
+      const clayG2 = ctx.createLinearGradient(0, GROUND_Y + 30, 0, CH);
+      clayG2.addColorStop(0, C.soilPLt); clayG2.addColorStop(0.3, C.soilPurp); clayG2.addColorStop(1, C.soilPDk);
+      ctx.fillStyle = clayG2; ctx.fillRect(0, GROUND_Y + 30, CW, CH - GROUND_Y - 30);
       // Flowers (denser)
       const ftypes4 = [0, 1, 2, 1, 0, 3, 2, 1, 0, 1, 3, 2];
       for (let gx = 10; gx < CW; gx += 26) {
         drawPixelFlower(gx, GROUND_Y + 6, ftypes4[Math.floor(gx / 26) % ftypes4.length]);
       }
-      // Pixel-art sprites (idle preview)
-      ctx.save();
-      ctx.translate(BENNY_X + 18, CH/2);
-      drawSpriteBee(3, 0);
-      ctx.restore();
-      // Collectibles
+      // Smooth sprites (idle preview)
+      ctx.save(); ctx.translate(BENNY_X + 18, CH/2); drawSpriteBee(3, 0); ctx.restore();
       drawSpriteFlower(215, 90,  28);
       drawSpriteWater( 398, 192, 28);
       drawPixelTree(490, 112, 48, 28);
-      // Threats
       drawSpriteSkull(265, 50,  28);
       drawSpriteMite( 510, 125, 28, 0);
-      // Infected bee preview
-      ctx.save();
-      ctx.translate(172, 182);
+      // Infected bee preview (smooth spots)
+      ctx.save(); ctx.translate(172, 182);
       drawSpriteBee(2, 0);
-      ctx.globalAlpha = 0.55;
-      ctx.fillStyle = '#c81010';
-      ctx.fillRect(-8, -8, 8, 8);
-      ctx.fillRect( 6,  0,  8, 8);
-      ctx.globalAlpha = 1;
-      ctx.restore();
+      ctx.globalAlpha = 0.55; ctx.fillStyle = '#c81010';
+      [[-8, -8], [6, 0]].forEach(([dx, dy]) => {
+        ctx.beginPath(); ctx.arc(dx, dy, 4.5, 0, Math.PI*2); ctx.fill();
+      });
+      ctx.globalAlpha = 1; ctx.restore();
       // Medicine
-      ctx.save();
-      ctx.translate(128, 152);
-      drawSpritePill(3);
-      ctx.restore();
+      ctx.save(); ctx.translate(128, 152); drawSpritePill(3); ctx.restore();
     }
 
     // ── Start / restart ────────────────────────────────────────────
