@@ -90,7 +90,7 @@
               <div id="bd-hud">
                 <span id="bd-score-display">🌸 0</span>
                 <span id="bd-temp-display">🌡️ 35°C</span>
-                <span id="bd-lives-display">❤️❤️❤️</span>
+                <span id="bd-lives-display">❤️❤️❤️❤️❤️</span>
                 <span id="bd-timer-display">⏱ —:——</span>
               </div>
               <div id="bd-popup"></div>
@@ -168,7 +168,7 @@
       benny        = { x: BENNY_X, y: CH / 2, vx: 0, vy: 0 };
       objects      = [];
       score        = 0;
-      lives        = 3;
+      lives        = 5;
       // Random round length: 5–8 minutes (300–480 s)
       gameDuration = 300 + Math.floor(Math.random() * 181);
       timeLeft     = gameDuration;
@@ -304,7 +304,7 @@
     function syncHUD() {
       document.getElementById('bd-score-display').textContent = '🌸 ' + score;
       document.getElementById('bd-lives-display').textContent =
-        '❤️'.repeat(lives) + '🖤'.repeat(Math.max(0, 3 - lives));
+        '❤️'.repeat(lives) + '🖤'.repeat(Math.max(0, 5 - lives));
       const s = Math.ceil(timeLeft);
       const m = Math.floor(s / 60);
       const ss = (s % 60).toString().padStart(2, '0');
@@ -1280,7 +1280,7 @@
       const survived = phase === 'timeup' && lives > 0;
       const stars = score >= gameDuration * 0.5 ? '⭐⭐⭐'
                   : score >= gameDuration * 0.25 ? '⭐⭐' : '⭐';
-      const title = lives <= 0 ? 'The colony needs help…' : 'You survived the night! 🌙';
+      const title = lives <= 0 ? 'Game Over 🐝💔' : 'You survived the night! 🌙';
 
       document.getElementById('bd-stars').textContent       = stars;
       document.getElementById('bd-go-title').textContent    = title;
