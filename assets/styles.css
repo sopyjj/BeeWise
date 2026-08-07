@@ -1734,7 +1734,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
    ═══════════════════════════════════════════════════════════ */
 /* ── Bee Dash — pixel garden (reference.png style) ── */
 .bd-section {
-  background: linear-gradient(145deg, #1a7888 0%, #145e70 50%, #0e4858 100%);
+  background: linear-gradient(160deg, #87D8EE 0%, #5EC8E0 55%, #48B8D0 100%);
   min-height: calc(100vh - 118px);
   padding: 2rem 0 3.5rem;
 }
@@ -1742,10 +1742,10 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   position: relative;
   max-width: 860px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  border: 3px solid #9a6818;
-  box-shadow: 0 6px 0 #684010, 0 18px 40px rgba(16,40,56,.4);
+  border: 3px solid rgba(255,255,255,0.70);
+  box-shadow: 0 8px 0 rgba(0,80,120,0.18), 0 20px 50px rgba(0,60,100,0.22);
 }
 #bd-canvas-wrap { position: relative; }
 #bd-canvas {
@@ -1763,11 +1763,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   justify-content: space-between;
   align-items: center;
   padding: .5rem 1rem;
-  background: linear-gradient(90deg, #0e3020, #1a5030, #0e3020);
-  border-bottom: 2px solid #0a2018;
+  background: rgba(254,252,243,0.94);
+  border-bottom: 3px solid rgba(0,120,160,0.20);
   font-family: 'Press Start 2P', monospace;
-  font-size: .62rem;
-  color: #e8d848;
+  font-size: .68rem;
+  color: #0D4858;
   user-select: none;
   letter-spacing: .02em;
 }
@@ -1777,16 +1777,17 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   bottom: 52px;
   left: 50%;
   transform: translateX(-50%);
-  background: #f8f4e8;
-  border: 2px solid #2a7830;
-  border-radius: 14px;
-  box-shadow: 0 4px 0 #1a5020, 0 8px 24px rgba(20,60,20,.22);
+  background: #FEFCF3;
+  border: none;
+  border-left: 5px solid #3898E8;
+  border-radius: 16px;
+  box-shadow: 0 6px 0 rgba(0,80,140,0.15), 0 10px 28px rgba(0,60,120,0.18);
   padding: .7rem 1.1rem;
   max-width: 300px;
   width: max-content;
   font-size: .85rem;
   line-height: 1.5;
-  color: #1a3010;
+  color: #0D4858;
   z-index: 20;
   pointer-events: none;
 }
@@ -1802,12 +1803,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   padding: 2.5rem 2rem;
   text-align: center;
   overflow-y: auto;
-  /* dark glass over the game-world canvas */
-  background: linear-gradient(170deg, rgba(8,28,18,0.93) 0%, rgba(4,16,10,0.95) 100%);
+  background: linear-gradient(160deg, #FEFCF3 0%, #F5F0E2 100%);
 }
-/* Game-over gets a slightly different deep-night tint */
+/* Game-over gets a light cool-white for differentiation */
 #bd-gameover {
-  background: linear-gradient(170deg, rgba(8,14,28,0.94) 0%, rgba(4,8,18,0.96) 100%);
+  background: linear-gradient(160deg, #F4FAFE 0%, #EAF4FA 100%);
 }
 .bd-hidden { display: none !important; }
 .bd-sparkles {
@@ -1826,13 +1826,13 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .bd-title {
   font-family: 'Press Start 2P', monospace;
   font-size: clamp(1rem, 2.2vw + .4rem, 1.45rem);
-  color: #f8d028;
-  text-shadow: 2px 2px 0 #884400, 4px 4px 0 rgba(0,0,0,.5);
+  color: #1A6830;
+  text-shadow: 2px 2px 0 #A8E878, 4px 4px 0 rgba(0,0,0,0.10);
   line-height: 1.7;
   margin-bottom: .7rem;
 }
 .bd-sub {
-  color: rgba(210,240,185,0.88);
+  color: #0D4858;
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
   font-size: 1rem;
@@ -1855,15 +1855,25 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
   font-size: .8rem;
-  color: #c8f0a0;
-  background: rgba(18,58,24,0.75);
-  border: 2px solid #3a8c20;
+  color: #0D4858;
+  background: #E8F5E9;
+  border: 2px solid #4CAF50;
   border-radius: 12px;
-  box-shadow: 0 4px 0 #1a4c10, 0 0 12px rgba(80,200,40,.12);
+  box-shadow: 0 4px 0 #2E7D32;
   padding: .7rem .9rem;
 }
+.bd-howto-item:nth-child(2) {
+  background: #FFF3E0;
+  border-color: #FF7043;
+  box-shadow: 0 4px 0 #E64A19;
+}
+.bd-howto-item:nth-child(3) {
+  background: #E3F2FD;
+  border-color: #3898E8;
+  box-shadow: 0 4px 0 #1565C0;
+}
 .bd-howto-icon { font-size: 1.75rem; }
-.bd-stars { font-size: 2.4rem; margin-bottom: .5rem; filter: drop-shadow(0 0 6px rgba(248,220,40,.5)); }
+.bd-stars { font-size: 2.4rem; margin-bottom: .5rem; filter: drop-shadow(0 0 8px rgba(248,200,40,0.6)); }
 .bd-score-big {
   display: flex;
   align-items: baseline;
@@ -1875,20 +1885,20 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .bd-score-big > span:nth-child(2) {
   font-family: 'Press Start 2P', monospace;
   font-size: 2.5rem;
-  color: #f8d028;
-  text-shadow: 3px 3px 0 #884400, 0 0 20px rgba(248,208,40,.4);
+  color: #1A6830;
+  text-shadow: 3px 3px 0 #A8E878, 0 0 16px rgba(40,200,80,0.3);
 }
 .bd-score-label {
   font-family: 'Nunito', sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: rgba(200,230,170,0.85);
+  color: #0D4858;
 }
 .bd-facts-recap { text-align: left; margin-top: .8rem; max-width: 460px; width: 100%; }
 .bd-facts-title {
   font-family: 'Press Start 2P', monospace;
   font-size: .58rem;
-  color: #a8d878;
+  color: #0D4858;
   margin-bottom: .55rem;
   line-height: 1.9;
 }
@@ -1896,13 +1906,13 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   font-family: 'Nunito', sans-serif;
   font-weight: 600;
   font-size: .9rem;
-  color: #c8f0a0;
+  color: #0D4858;
   line-height: 1.6;
   padding: .6rem .9rem;
-  background: rgba(16,48,18,0.65);
-  border: 2px solid rgba(60,160,30,0.55);
+  background: #F0FAF0;
+  border: 2px solid #A8DCA8;
   border-radius: 12px;
-  box-shadow: 0 3px 0 rgba(10,40,10,0.6);
+  box-shadow: 0 3px 0 #A8DCA8;
   margin-bottom: .5rem;
 }
 
@@ -1910,20 +1920,20 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 .bd-section .btn-bee {
   font-family: 'Press Start 2P', monospace;
   font-size: .65rem;
-  background: linear-gradient(135deg, #f8d028 0%, #d89010 100%);
-  border: 2px solid #7a4808;
+  background: linear-gradient(135deg, #3AAA28 0%, #1E7810 100%);
+  border: 2px solid #0E4808;
   border-radius: 12px;
-  color: #1a0c04;
-  box-shadow: 0 5px 0 #7a4808, 0 8px 24px rgba(248,200,40,.30);
+  color: #FFFFFF;
+  box-shadow: 0 5px 0 #0E4808, 0 8px 20px rgba(20,130,10,0.30);
   text-shadow: none;
   letter-spacing: .04em;
   transition: box-shadow .08s, transform .08s;
 }
 .bd-section .btn-bee:hover {
-  background: linear-gradient(135deg, #ffe048 0%, #e8a018 100%);
+  background: linear-gradient(135deg, #4AC438 0%, #2A9820 100%);
 }
 .bd-section .btn-bee:active {
-  box-shadow: 0 2px 0 #7a4808;
+  box-shadow: 0 2px 0 #0E4808;
   transform: translateY(3px);
 }
 
@@ -1938,18 +1948,18 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   bottom: 14px;
   right: 14px;
   display: grid;
-  grid-template-columns: repeat(3, 44px);
-  grid-template-rows: repeat(3, 44px);
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: repeat(3, 50px);
   gap: 4px;
   z-index: 15;
   pointer-events: auto;
 }
 .bd-dpad-btn {
-  background: rgba(0,0,0,.28);
-  border: 2px solid rgba(255,255,255,.45);
-  border-radius: 10px;
+  background: rgba(60,180,220,0.35);
+  border: 2px solid rgba(255,255,255,0.65);
+  border-radius: 14px;
   color: rgba(255,255,255,.9);
-  font-size: 16px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1966,8 +1976,8 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   border-color: rgba(255,255,255,.9);
 }
 .bd-med-btn {
-  background: rgba(20,160,80,.55) !important;
-  border-color: rgba(100,255,160,.6) !important;
+  background: rgba(40,160,70,0.60) !important;
+  border-color: rgba(140,255,160,0.70) !important;
   font-size: 18px !important;
 }
 .bd-med-btn.bd-active {
