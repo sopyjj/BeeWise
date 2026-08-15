@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=30" rel="stylesheet">
+    <link href="assets/styles.css?v=31" rel="stylesheet">
   </head>
 
   <body>
@@ -544,49 +544,49 @@
       syncHUD();
     }
 
-    // ── Sunny Hive palette ──────────────────────────────────────────
+    // ── Soft Paper Garden palette ────────────────────────────────────
     const C = {
-      skyTop:    '#fdf0c8',  // pale honey cream
-      skyMid:    '#fae8b0',  // warm golden cream
-      skyBot:    '#f5dfa0',  // amber horizon
-      sun:       '#f5c040',  // warm golden sun
+      skyTop:    '#d8eef8',  // soft powder blue
+      skyMid:    '#e8f4f0',  // pale mint horizon
+      skyBot:    '#f2f8e8',  // light celery green
+      sun:       '#f8d060',  // soft golden yellow
       sunHi:     '#fffde8',
-      bird:      '#8a6040',  // warm brown bird
-      cloud:     '#fffef0',  // cream cloud
-      cloudSh:   '#f0d888',  // warm golden shadow
-      hillFar:   '#8ab878',  // muted sage far
-      hillFTop:  '#aad098',  // pale sage top
-      hillMid:   '#78a868',  // medium sage
-      hillMTop:  '#98c888',  // light sage top
-      hillNr:    '#689858',  // near sage
-      hillNTop:  '#88b878',  // near top highlight
-      fence:     '#c8902a',  // warm honey wood
-      fenceLt:   '#e8c060',  // pale amber highlight
-      fenceDk:   '#7a5018',  // dark wood
-      grass:     '#90c870',  // muted lime grass
-      grassLt:   '#b0e090',  // light grass
-      grassHi:   '#d0f0b0',  // pale tip
-      soil:      '#c89050',  // warm amber soil
-      soilMd:    '#a87038',  // medium earth
-      soilLt:    '#e0b870',  // light earth
-      soilPurp:  '#a08050',  // deep warm earth
-      soilPDk:   '#705830',  // dark earth
-      soilPLt:   '#c8a060',  // light warm earth
-      stone:     '#b0a888',  // warm grey stone
-      stoneLt:   '#d8d0b0',  // pale warm stone
-      stoneDk:   '#807858',  // shadow stone
-      stoneMd:   '#988870',  // mid warm stone
-      sfYel:     '#f8d040',  // honey yellow
-      sfOrg:     '#e89820',  // amber orange
-      sfCtr:     '#3a2000',  // dark seed
-      daiWht:    '#fffef0',  // cream white
-      daiYel:    '#f8d838',  // warm yellow
-      poppy:     '#e83820',  // warm red
-      flBlue:    '#7888d0',  // soft periwinkle
-      foliage:   '#5a8840',  // warm foliage
-      foliageLt: '#80b060',  // light foliage
-      vine:      '#5a8840',
-      moss:      '#70a050',
+      bird:      '#7090a8',  // slate blue-grey bird
+      cloud:     '#ffffff',  // pure white cloud
+      cloudSh:   '#c8dce8',  // cool blue-grey shadow
+      hillFar:   '#b0c8a0',  // dusty sage far
+      hillFTop:  '#cce0b8',  // pale sage top
+      hillMid:   '#8ab898',  // muted teal-green mid
+      hillMTop:  '#aed0b8',  // soft teal top
+      hillNr:    '#d0a878',  // warm dusty rose-tan near
+      hillNTop:  '#e8c898',  // pale peach top
+      fence:     '#c8845a',  // muted terracotta wood
+      fenceLt:   '#e8b090',  // pale blush highlight
+      fenceDk:   '#7a4830',  // dark terracotta
+      grass:     '#a0c878',  // soft sage green
+      grassLt:   '#c0e098',  // pale grass
+      grassHi:   '#dcf0b8',  // very pale tip
+      soil:      '#d0a878',  // dusty peach soil
+      soilMd:    '#b08860',  // medium earth
+      soilLt:    '#e8c8a0',  // pale earth
+      soilPurp:  '#c09880',  // warm dusty mauve earth
+      soilPDk:   '#8a6850',  // deeper earth
+      soilPLt:   '#deb898',  // light warm earth
+      stone:     '#a8b8c8',  // cool blue-grey stone
+      stoneLt:   '#d0dce8',  // pale blue-grey
+      stoneDk:   '#7888a0',  // deeper blue-grey
+      stoneMd:   '#90a0b8',  // mid blue-grey
+      sfYel:     '#f8d060',  // soft sunflower
+      sfOrg:     '#f0a048',  // muted orange
+      sfCtr:     '#5a3010',  // dark centre
+      daiWht:    '#f8f4f0',  // warm white
+      daiYel:    '#f8d060',  // soft yellow
+      poppy:     '#e06858',  // muted coral-red
+      flBlue:    '#8898d0',  // soft periwinkle
+      foliage:   '#6a9870',  // muted leaf green
+      foliageLt: '#90b888',  // soft sage highlight
+      vine:      '#6a9870',
+      moss:      '#80a878',
     };
 
     // ── Day / night colour helpers ──────────────────────────────────
@@ -1125,17 +1125,17 @@
     function drawBg() {
       const f = progressFrac();
 
-      // Sky gradient — warm honey → golden → orange-red → purple → night
+      // Sky gradient — soft blue → warm peach → orange-red → purple → night
       const skyTop = gradColor([
-        [0.00,'#fdf0c8'],[0.38,'#f5d080'],[0.52,'#e8a040'],
+        [0.00,'#d8eef8'],[0.38,'#f0c878'],[0.52,'#e8a040'],
         [0.65,'#c84020'],[0.78,'#3c1c58'],[1.00,'#100818'],
       ], f);
       const skyMid = gradColor([
-        [0.00,'#fae8b0'],[0.38,'#f0c860'],[0.52,'#d86828'],
+        [0.00,'#e8f4f0'],[0.38,'#f0d888'],[0.52,'#d86828'],
         [0.65,'#a82c12'],[0.78,'#2a1040'],[1.00,'#080514'],
       ], f);
       const skyBot = gradColor([
-        [0.00,'#f5dfa0'],[0.38,'#e8b840'],[0.52,'#c05020'],
+        [0.00,'#f2f8e8'],[0.38,'#e8c870'],[0.52,'#c05020'],
         [0.65,'#901c08'],[0.78,'#1c0828'],[1.00,'#040210'],
       ], f);
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
