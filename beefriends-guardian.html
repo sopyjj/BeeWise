@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=28" rel="stylesheet">
+    <link href="assets/styles.css?v=29" rel="stylesheet">
   </head>
 
   <body>
@@ -544,49 +544,49 @@
       syncHUD();
     }
 
-    // ── Glossy 3D Bubble palette ────────────────────────────────
+    // ── Sunny Hive palette ──────────────────────────────────────────
     const C = {
-      skyTop:    '#1a9de8',
-      skyMid:    '#38b8f8',
-      skyBot:    '#70d8ff',
-      sun:       '#ffe620',
-      sunHi:     '#ffffff',
-      bird:      '#1a6090',
-      cloud:     '#ffffff',
-      cloudSh:   '#c0e8f8',
-      hillFar:   '#4ac848',
-      hillFTop:  '#80e870',
-      hillMid:   '#38b030',
-      hillMTop:  '#68d858',
-      hillNr:    '#28a020',
-      hillNTop:  '#58c848',
-      fence:     '#c87820',
-      fenceLt:   '#f0c040',
-      fenceDk:   '#7a4810',
-      grass:     '#38d028',
-      grassLt:   '#68e850',
-      grassHi:   '#a0ff78',
-      soil:      '#c07828',
-      soilMd:    '#a05818',
-      soilLt:    '#e8a840',
-      soilPurp:  '#8c5820',
-      soilPDk:   '#5a3410',
-      soilPLt:   '#c88030',
-      stone:     '#8898b8',
-      stoneLt:   '#c0d0e8',
-      stoneDk:   '#4a5870',
-      stoneMd:   '#6878a0',
-      sfYel:     '#ffe030',
-      sfOrg:     '#ff9820',
-      sfCtr:     '#3a1800',
-      daiWht:    '#ffffff',
-      daiYel:    '#ffe020',
-      poppy:     '#ff2820',
-      flBlue:    '#4878ff',
-      foliage:   '#28882a',
-      foliageLt: '#50c048',
-      vine:      '#28882a',
-      moss:      '#40a838',
+      skyTop:    '#fdf0c8',  // pale honey cream
+      skyMid:    '#fae8b0',  // warm golden cream
+      skyBot:    '#f5dfa0',  // amber horizon
+      sun:       '#f5c040',  // warm golden sun
+      sunHi:     '#fffde8',
+      bird:      '#8a6040',  // warm brown bird
+      cloud:     '#fffef0',  // cream cloud
+      cloudSh:   '#f0d888',  // warm golden shadow
+      hillFar:   '#8ab878',  // muted sage far
+      hillFTop:  '#aad098',  // pale sage top
+      hillMid:   '#78a868',  // medium sage
+      hillMTop:  '#98c888',  // light sage top
+      hillNr:    '#689858',  // near sage
+      hillNTop:  '#88b878',  // near top highlight
+      fence:     '#c8902a',  // warm honey wood
+      fenceLt:   '#e8c060',  // pale amber highlight
+      fenceDk:   '#7a5018',  // dark wood
+      grass:     '#90c870',  // muted lime grass
+      grassLt:   '#b0e090',  // light grass
+      grassHi:   '#d0f0b0',  // pale tip
+      soil:      '#c89050',  // warm amber soil
+      soilMd:    '#a87038',  // medium earth
+      soilLt:    '#e0b870',  // light earth
+      soilPurp:  '#a08050',  // deep warm earth
+      soilPDk:   '#705830',  // dark earth
+      soilPLt:   '#c8a060',  // light warm earth
+      stone:     '#b0a888',  // warm grey stone
+      stoneLt:   '#d8d0b0',  // pale warm stone
+      stoneDk:   '#807858',  // shadow stone
+      stoneMd:   '#988870',  // mid warm stone
+      sfYel:     '#f8d040',  // honey yellow
+      sfOrg:     '#e89820',  // amber orange
+      sfCtr:     '#3a2000',  // dark seed
+      daiWht:    '#fffef0',  // cream white
+      daiYel:    '#f8d838',  // warm yellow
+      poppy:     '#e83820',  // warm red
+      flBlue:    '#7888d0',  // soft periwinkle
+      foliage:   '#5a8840',  // warm foliage
+      foliageLt: '#80b060',  // light foliage
+      vine:      '#5a8840',
+      moss:      '#70a050',
     };
 
     // ── Day / night colour helpers ──────────────────────────────────
@@ -668,7 +668,7 @@
       ctx.save();
       ctx.globalAlpha = 0.72;
       const wg = ctx.createRadialGradient(0, -S*4, 0, 0, 0, S*9);
-      wg.addColorStop(0, '#e8f8ff'); wg.addColorStop(0.4, 'rgba(200,235,255,0.70)'); wg.addColorStop(1, 'rgba(180,220,255,0.10)');
+      wg.addColorStop(0, '#fff8e0'); wg.addColorStop(0.4, 'rgba(255,230,160,0.60)'); wg.addColorStop(1, 'rgba(255,220,140,0.08)');
       ctx.fillStyle = wg;
       ctx.beginPath(); ctx.ellipse(-S*4, -S*5+wb, S*4, S*2.5, -0.25, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.ellipse( S*4, -S*5+wb, S*4, S*2.5,  0.25, 0, Math.PI*2); ctx.fill();
@@ -953,43 +953,32 @@
 
     // ── Smooth background helpers ──────────────────────────────────
 
-    // Watercolor cloud — soft wash base + puffs
+    // Warm honey cloud — cream puffs with golden shadow
     function drawPixelCloud(x, y, s) {
-      // Shadow
-      ctx.fillStyle = 'rgba(160,210,240,0.35)';
-      ctx.beginPath(); ctx.ellipse(x+s*0.5, y+s*1.2, s*4.5, s*1.0, 0, 0, Math.PI*2); ctx.fill();
-      // Cloud puffs — glossy 3D
-      const puffs = [{dx:0,dy:0,r:s*2.8},{dx:-s*2.2,dy:s*0.8,r:s*2.0},{dx:s*2.2,dy:s*0.8,r:s*2.0},{dx:-s*1.0,dy:s*1.5,r:s*1.6},{dx:s*1.0,dy:s*1.5,r:s*1.6}];
+      ctx.fillStyle = 'rgba(200,170,80,0.20)';
+      ctx.beginPath(); ctx.ellipse(x+s*0.5, y+s*1.1, s*4.2, s*0.9, 0, 0, Math.PI*2); ctx.fill();
+      const puffs = [{dx:0,dy:0,r:s*2.6},{dx:-s*2.0,dy:s*0.9,r:s*1.9},{dx:s*2.0,dy:s*0.9,r:s*1.9},{dx:-s*0.9,dy:s*1.4,r:s*1.5},{dx:s*0.9,dy:s*1.4,r:s*1.5}];
       puffs.forEach(p => {
-        ctx.save();
-        ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(100,160,210,0.30)';
-        const cg = ctx.createRadialGradient(x+p.dx-p.r*0.28, y+p.dy-p.r*0.28, 0, x+p.dx, y+p.dy, p.r);
-        cg.addColorStop(0, '#ffffff'); cg.addColorStop(0.6, '#f0f8ff'); cg.addColorStop(1, '#d8eef8');
+        const cg = ctx.createRadialGradient(x+p.dx-p.r*0.25, y+p.dy-p.r*0.25, 0, x+p.dx, y+p.dy, p.r);
+        cg.addColorStop(0, '#fffef8'); cg.addColorStop(0.65, '#fdf8e8'); cg.addColorStop(1, '#f0e8c8');
         ctx.fillStyle = cg;
         ctx.beginPath(); ctx.arc(x+p.dx, y+p.dy, p.r, 0, Math.PI*2); ctx.fill();
-        ctx.restore();
       });
-      // Specular highlights
-      puffs.slice(0,3).forEach(p => {
-        ctx.fillStyle = 'rgba(255,255,255,0.65)';
-        ctx.beginPath(); ctx.ellipse(x+p.dx-p.r*0.22, y+p.dy-p.r*0.28, p.r*0.38, p.r*0.22, -0.4, 0, Math.PI*2); ctx.fill();
-      });
+      ctx.fillStyle = 'rgba(255,255,248,0.55)';
+      ctx.beginPath(); ctx.ellipse(x-s*0.8, y-s*0.6, s*1.2, s*0.65, -0.3, 0, Math.PI*2); ctx.fill();
     }
 
-    // Glossy 3D hill — gradient fill + sheen strip
+    // Warm sage hill — gradient fill + warm sheen
     function drawPixelHill(colorMain, colorTop, baseY, amp, freq, phase) {
       const hg = ctx.createLinearGradient(0, baseY-amp-20, 0, GROUND_Y);
-      hg.addColorStop(0, colorTop); hg.addColorStop(0.4, colorMain); hg.addColorStop(1, colorMain+'cc');
-      ctx.save();
-      ctx.shadowBlur = 12; ctx.shadowColor = 'rgba(0,80,0,0.20)';
+      hg.addColorStop(0, colorTop); hg.addColorStop(0.4, colorMain); hg.addColorStop(1, colorMain);
       ctx.fillStyle = hg;
       ctx.beginPath(); ctx.moveTo(0, GROUND_Y);
       for (let x = 0; x <= CW+2; x += 2) {
         ctx.lineTo(x, baseY - amp*(0.5 + 0.5*Math.sin(x*freq + phase)));
       }
       ctx.lineTo(CW, GROUND_Y); ctx.closePath(); ctx.fill();
-      ctx.restore();
-      ctx.strokeStyle = 'rgba(255,255,255,0.28)'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      ctx.strokeStyle = 'rgba(255,255,220,0.35)'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
       ctx.beginPath();
       for (let x = 0; x <= CW+2; x += 2) {
         const hy = baseY - amp*(0.5 + 0.5*Math.sin(x*freq + phase));
@@ -998,144 +987,129 @@
       ctx.stroke();
     }
 
-    // Glossy 3D sun — glow shadow + specular
+    // Warm honey sun — soft glow + specular
     function drawPixelSun(cx, cy, r, sunCol, sunHiCol) {
       sunCol   = sunCol   || C.sun;
       sunHiCol = sunHiCol || C.sunHi;
-      ctx.save();
-      ctx.shadowBlur = 28; ctx.shadowColor = 'rgba(255,230,0,0.55)';
+      const gg = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*3.2);
+      gg.addColorStop(0, 'rgba(248,210,80,0.30)');
+      gg.addColorStop(1, 'rgba(248,210,80,0)');
+      ctx.fillStyle = gg;
+      ctx.beginPath(); ctx.arc(cx, cy, r*3.2, 0, Math.PI*2); ctx.fill();
       ctx.save(); ctx.translate(cx, cy); ctx.fillStyle = sunCol;
       for (let i = 0; i < 8; i++) {
         ctx.save(); ctx.rotate((i/8)*Math.PI*2);
         ctx.beginPath();
-        ctx.moveTo(-3, -(r+5)); ctx.lineTo(3, -(r+5));
-        ctx.lineTo(1.5, -(r+24)); ctx.lineTo(-1.5, -(r+24));
+        ctx.moveTo(-2.5, -(r+5)); ctx.lineTo(2.5, -(r+5));
+        ctx.lineTo(1.5, -(r+22)); ctx.lineTo(-1.5, -(r+22));
         ctx.closePath(); ctx.fill();
         ctx.restore();
       }
       ctx.restore();
-      const rg = ctx.createRadialGradient(cx-r*0.35, cy-r*0.4, 0, cx, cy, r);
-      rg.addColorStop(0, '#ffffff'); rg.addColorStop(0.3, sunHiCol);
-      rg.addColorStop(0.75, sunCol); rg.addColorStop(1, '#e89000');
+      const rg = ctx.createRadialGradient(cx-r*0.3, cy-r*0.35, 0, cx, cy, r);
+      rg.addColorStop(0, sunHiCol); rg.addColorStop(0.6, sunCol); rg.addColorStop(1, '#d89010');
       ctx.fillStyle = rg;
       ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
-      ctx.restore();
-      ctx.fillStyle = 'rgba(255,255,255,0.60)';
-      ctx.beginPath(); ctx.ellipse(cx-r*0.28, cy-r*0.32, r*0.38, r*0.22, -0.5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,240,0.50)';
+      ctx.beginPath(); ctx.ellipse(cx-r*0.25, cy-r*0.3, r*0.35, r*0.20, -0.5, 0, Math.PI*2); ctx.fill();
     }
 
-    // Glossy bird — bold strokes with body dot
+    // Warm brown bird — soft wing strokes
     function drawPixelBird(x, y) {
       const t = frameN * 0.07;
       const wFlap = Math.sin(t) * 5;
-      ctx.strokeStyle = '#1a5878'; ctx.lineWidth = 2.8; ctx.lineCap = 'round';
+      ctx.strokeStyle = '#7a5030'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo(x, y); ctx.quadraticCurveTo(x-7, y-wFlap-2, x-14, y-wFlap+1); ctx.stroke();
+      ctx.moveTo(x, y); ctx.quadraticCurveTo(x-7, y-wFlap-1, x-13, y-wFlap+2); ctx.stroke();
       ctx.beginPath();
-      ctx.moveTo(x, y); ctx.quadraticCurveTo(x+7, y-wFlap-2, x+14, y-wFlap+1); ctx.stroke();
-      ctx.fillStyle = '#1a5878';
-      ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.moveTo(x, y); ctx.quadraticCurveTo(x+7, y-wFlap-1, x+13, y-wFlap+2); ctx.stroke();
+      ctx.fillStyle = '#7a5030';
+      ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fill();
     }
 
-    // Glossy ground flower — gradient petals + specular centre
+    // Warm ground flower — sage stem, soft petals
     function drawPixelFlower(x, y, type) {
-      const cx = x + 6, stemBot = y, stemTop = y - 20;
-      const sg = ctx.createLinearGradient(cx-1, stemTop, cx+3, stemTop);
-      sg.addColorStop(0, '#50d040'); sg.addColorStop(1, '#208820');
-      ctx.strokeStyle = sg; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      const cx = x + 6, stemBot = y, stemTop = y - 19;
+      ctx.strokeStyle = '#5a8840'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(cx, stemBot); ctx.lineTo(cx, stemTop); ctx.stroke();
-      ctx.fillStyle = '#38c030';
-      ctx.beginPath(); ctx.ellipse(cx+5, stemTop+10, 6, 3, 0.5, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#60e050';
-      ctx.beginPath(); ctx.ellipse(cx+4, stemTop+10, 3, 1.5, 0.5, 0, Math.PI*2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(cx-5, stemTop+14, 6, 3, -0.5, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#6a9848';
+      ctx.beginPath(); ctx.ellipse(cx+5, stemTop+10, 5.5, 2.8, 0.5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx-5, stemTop+14, 5.5, 2.8, -0.5, 0, Math.PI*2); ctx.fill();
       const palettes = [
-        ['#ff9800','#ffc107','#3e1000'],
-        ['#f5f5f5','#ffffff','#ffd600'],
-        ['#f44336','#ff7043','#1a0800'],
-        ['#3f51b5','#7986cb','#ffe000'],
+        ['rgba(248,200,40,0.85)', 'rgba(255,230,120,0.60)', '#3a2000'],
+        ['rgba(255,252,240,0.90)', 'rgba(255,255,255,0.65)', '#e8c020'],
+        ['rgba(232,56,32,0.80)',   'rgba(255,100,70,0.55)',  '#200800'],
+        ['rgba(120,136,208,0.80)', 'rgba(170,185,235,0.55)', '#f8e020'],
       ];
-      const [pc, ph, cc] = palettes[type % 4];
-      const pr = 5, cr = 4.5;
+      const [pc, po, cc] = palettes[type % 4];
+      const pr = 4.5, cr = 4;
       for (let i = 0; i < 8; i++) {
         const a = (i/8)*Math.PI*2;
-        const pg = ctx.createRadialGradient(
-          cx+Math.cos(a)*(pr+cr*0.5), stemTop+Math.sin(a)*(pr+cr*0.5), 0,
-          cx+Math.cos(a)*(pr+cr*0.5), stemTop+Math.sin(a)*(pr+cr*0.5), pr*1.2
-        );
-        pg.addColorStop(0, ph); pg.addColorStop(1, pc);
-        ctx.fillStyle = pg;
+        ctx.fillStyle = i % 2 === 0 ? pc : po;
         ctx.beginPath();
-        ctx.ellipse(cx+Math.cos(a)*(pr+cr*0.5), stemTop+Math.sin(a)*(pr+cr*0.5), pr, 2.5, a, 0, Math.PI*2);
+        ctx.ellipse(cx+Math.cos(a)*(pr+cr*0.5), stemTop+Math.sin(a)*(pr+cr*0.5), pr, 2.2, a, 0, Math.PI*2);
         ctx.fill();
       }
       const cg = ctx.createRadialGradient(cx-cr*0.3, stemTop-cr*0.3, 0, cx, stemTop, cr*1.1);
-      cg.addColorStop(0, '#ffffff'); cg.addColorStop(0.4, cc); cg.addColorStop(1, cc+'aa');
+      cg.addColorStop(0, '#fffde0'); cg.addColorStop(1, cc);
       ctx.fillStyle = cg;
       ctx.beginPath(); ctx.arc(cx, stemTop, cr, 0, Math.PI*2); ctx.fill();
     }
 
-    // Glossy 3D tree — radial gradient canopy + specular
+    // Warm sage tree — muted foliage + amber trunk
     function drawPixelTree(cx, baseY, totalH, spread) {
       const canopyCY = baseY - totalH * 0.62;
       const r = spread;
       const trunkTop = canopyCY + r * 0.45;
-      const tw = Math.max(6, r * 0.25);
-      ctx.save();
-      ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(0,0,0,0.25)';
+      const tw = Math.max(5, r * 0.22);
       const tg = ctx.createLinearGradient(cx-tw, 0, cx+tw, 0);
-      tg.addColorStop(0, '#5a2e08'); tg.addColorStop(0.35, '#a06020'); tg.addColorStop(1, '#4a2208');
+      tg.addColorStop(0, '#5a3810'); tg.addColorStop(0.4, '#a07030'); tg.addColorStop(1, '#4a2c08');
       ctx.fillStyle = tg;
       ctx.beginPath();
       ctx.moveTo(cx-tw, baseY);
-      ctx.quadraticCurveTo(cx-tw*0.5, (trunkTop+baseY)*0.5, cx-tw*0.5, trunkTop);
+      ctx.quadraticCurveTo(cx-tw*0.6, (trunkTop+baseY)*0.5, cx-tw*0.5, trunkTop);
       ctx.lineTo(cx+tw*0.5, trunkTop);
-      ctx.quadraticCurveTo(cx+tw*0.5, (trunkTop+baseY)*0.5, cx+tw, baseY);
+      ctx.quadraticCurveTo(cx+tw*0.6, (trunkTop+baseY)*0.5, cx+tw, baseY);
       ctx.closePath(); ctx.fill();
-      ctx.restore();
-      ctx.save();
-      ctx.shadowBlur = 14; ctx.shadowColor = 'rgba(0,80,0,0.35)';
-      const cg = ctx.createRadialGradient(cx-r*0.3, canopyCY-r*0.3, 0, cx, canopyCY, r*1.1);
-      cg.addColorStop(0, '#90ee70'); cg.addColorStop(0.45, '#48c838'); cg.addColorStop(0.85, '#28a020'); cg.addColorStop(1, '#186010');
+      ctx.fillStyle = 'rgba(60,80,30,0.15)';
+      ctx.beginPath(); ctx.ellipse(cx+r*0.12, canopyCY+r*0.35, r*0.88, r*0.50, 0, 0, Math.PI*2); ctx.fill();
+      const cg = ctx.createRadialGradient(cx-r*0.28, canopyCY-r*0.28, 0, cx, canopyCY, r*1.08);
+      cg.addColorStop(0, C.hillFTop); cg.addColorStop(0.5, C.foliageLt); cg.addColorStop(1, C.foliage);
       ctx.fillStyle = cg;
       ctx.beginPath(); ctx.arc(cx, canopyCY, r, 0, Math.PI*2); ctx.fill();
-      ctx.restore();
-      ctx.fillStyle = 'rgba(255,255,255,0.30)';
-      ctx.beginPath(); ctx.ellipse(cx-r*0.22, canopyCY-r*0.25, r*0.42, r*0.28, -0.4, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,220,0.22)';
+      ctx.beginPath(); ctx.ellipse(cx-r*0.2, canopyCY-r*0.22, r*0.44, r*0.28, -0.4, 0, Math.PI*2); ctx.fill();
     }
 
-    // Glossy 3D bush — radial gradient bumps + specular
+    // Warm sage bush — muted foliage bumps
     function drawPixelBush(x, baseY, w, h) {
       const cy = baseY - h*0.55;
       const third = w/3;
-      ctx.save();
-      ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(0,80,0,0.30)';
       [0,1,2].forEach(b => {
         const bx = x + b*third + third*0.5;
-        const br = third*0.7 + (b===1 ? h*0.1 : 0);
-        const bcy = cy - (b===1 ? h*0.14 : 0);
-        const bg = ctx.createRadialGradient(bx-br*0.3, bcy-br*0.3, 0, bx, bcy, br*1.1);
-        bg.addColorStop(0, '#80ee60'); bg.addColorStop(0.5, '#40c030'); bg.addColorStop(1, '#208018');
+        const br = third*0.68 + (b===1 ? h*0.08 : 0);
+        const bcy = cy - (b===1 ? h*0.12 : 0);
+        const bg = ctx.createRadialGradient(bx-br*0.25, bcy-br*0.25, 0, bx, bcy, br*1.1);
+        bg.addColorStop(0, C.hillMTop); bg.addColorStop(0.5, C.hillMid); bg.addColorStop(1, C.foliage);
         ctx.fillStyle = bg;
         ctx.beginPath(); ctx.arc(bx, bcy, br, Math.PI, 0); ctx.fill();
       });
-      ctx.restore();
-      ctx.fillStyle = '#30a028';
+      ctx.fillStyle = C.foliage;
       ctx.fillRect(x, cy, w, baseY-cy);
+      ctx.fillStyle = 'rgba(255,255,220,0.16)';
       [0,1,2].forEach(b => {
         const bx = x + b*third + third*0.5;
-        const br = third*0.7 + (b===1 ? h*0.1 : 0);
-        const bcy = cy - (b===1 ? h*0.14 : 0);
-        ctx.fillStyle = 'rgba(255,255,255,0.22)';
-        ctx.beginPath(); ctx.ellipse(bx-br*0.18, bcy-br*0.25, br*0.38, br*0.22, -0.3, 0, Math.PI*2); ctx.fill();
+        const br = third*0.68 + (b===1 ? h*0.08 : 0);
+        const bcy = cy - (b===1 ? h*0.12 : 0);
+        ctx.beginPath(); ctx.ellipse(bx-br*0.14, bcy-br*0.22, br*0.36, br*0.20, -0.3, 0, Math.PI*2); ctx.fill();
       });
     }
 
-    // Glossy stone wall — gradient base + specular bricks
+    // Warm-toned stone wall — sandy/earthy bricks
     function drawStoneWall(x, y, w, h) {
       if (h <= 0) return;
-      const wg = ctx.createLinearGradient(x, y, x+w, y+h);
-      wg.addColorStop(0, '#8898b8'); wg.addColorStop(0.5, '#a8b8d0'); wg.addColorStop(1, '#6878a0');
+      const wg = ctx.createLinearGradient(0, y, 0, y+h);
+      wg.addColorStop(0, C.stoneLt); wg.addColorStop(0.5, C.stone); wg.addColorStop(1, C.stoneDk);
       ctx.fillStyle = wg; ctx.fillRect(x, y, w, h);
       const BH = 12, GAP = 2, BR = 3;
       for (let row = 0; row*(BH+GAP) < h; row++) {
@@ -1146,36 +1120,32 @@
         for (let sx = x-off; sx < x+w; sx += 28+GAP) {
           const rx = Math.max(x,sx), rw2 = Math.min(x+w, sx+28)-rx;
           if (rw2 <= 4) continue;
-          ctx.save();
-          ctx.shadowBlur = 4; ctx.shadowColor = 'rgba(0,0,0,0.20)';
-          const bg = ctx.createLinearGradient(rx, ry, rx, ry+rh);
-          bg.addColorStop(0, row%2===0 ? '#b0c0d8' : '#98aac0');
-          bg.addColorStop(0.5, row%2===0 ? '#8898b8' : '#7888a8');
-          bg.addColorStop(1, '#5a6888');
-          ctx.fillStyle = bg; rrect(rx+1, ry+1, rw2-2, rh-1, BR); ctx.fill();
-          ctx.restore();
-          ctx.fillStyle = 'rgba(255,255,255,0.30)';
-          rrect(rx+1, ry+1, rw2-2, 4, BR); ctx.fill();
+          ctx.fillStyle = row%3===0 ? C.stoneMd : row%3===1 ? C.stone : C.stoneLt;
+          rrect(rx+1, ry+1, rw2-2, rh-1, BR); ctx.fill();
+          ctx.fillStyle = 'rgba(255,250,220,0.28)';
+          rrect(rx+1, ry+1, rw2-2, 3, BR); ctx.fill();
+          ctx.strokeStyle = 'rgba(100,80,40,0.20)'; ctx.lineWidth = 0.8;
+          rrect(rx+1, ry+1, rw2-2, rh-1, BR); ctx.stroke();
         }
       }
-      ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(x+w-4, y, 4, h);
+      ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.fillRect(x+w-4, y, 4, h);
     }
 
     // ── Draw ───────────────────────────────────────────────────────
     function drawBg() {
       const f = progressFrac();
 
-      // Sky gradient — teal → golden → orange-red → purple → night
+      // Sky gradient — warm honey → golden → orange-red → purple → night
       const skyTop = gradColor([
-        [0.00,'#46c4cc'],[0.38,'#72acd8'],[0.52,'#e8a040'],
+        [0.00,'#fdf0c8'],[0.38,'#f5d080'],[0.52,'#e8a040'],
         [0.65,'#c84020'],[0.78,'#3c1c58'],[1.00,'#100818'],
       ], f);
       const skyMid = gradColor([
-        [0.00,'#5cd0d8'],[0.38,'#88bce0'],[0.52,'#d86828'],
+        [0.00,'#fae8b0'],[0.38,'#f0c860'],[0.52,'#d86828'],
         [0.65,'#a82c12'],[0.78,'#2a1040'],[1.00,'#080514'],
       ], f);
       const skyBot = gradColor([
-        [0.00,'#7cdcdc'],[0.38,'#a8cce8'],[0.52,'#c05020'],
+        [0.00,'#f5dfa0'],[0.38,'#e8b840'],[0.52,'#c05020'],
         [0.65,'#901c08'],[0.78,'#1c0828'],[1.00,'#040210'],
       ], f);
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
@@ -1185,11 +1155,33 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, CW, GROUND_Y);
 
-      // Atmospheric depth haze at horizon
+      // Faint honeycomb hex grid overlay
+      if (f < 0.55) {
+        const R = 18, HW = Math.sqrt(3) * R, rowH = R * 1.5;
+        ctx.save();
+        ctx.globalAlpha = 0.055 * (1 - f / 0.55);
+        ctx.strokeStyle = '#a06010';
+        ctx.lineWidth = 1;
+        for (let row = -1; row * rowH < GROUND_Y + R*2; row++) {
+          for (let col = -1; col * HW < CW + HW; col++) {
+            const hcx = col * HW + (row % 2 !== 0 ? HW/2 : 0);
+            const hcy = row * rowH;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+              const a = Math.PI/6 + (Math.PI/3)*i;
+              const hpx = hcx + R*Math.cos(a), hpy = hcy + R*Math.sin(a);
+              i === 0 ? ctx.moveTo(hpx, hpy) : ctx.lineTo(hpx, hpy);
+            }
+            ctx.closePath(); ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+      // Warm horizon haze
       if (f < 0.50) {
-        const hazeG = ctx.createLinearGradient(0, GROUND_Y*0.6, 0, GROUND_Y);
-        hazeG.addColorStop(0, 'rgba(180,230,255,0)');
-        hazeG.addColorStop(1, 'rgba(180,230,255,0.22)');
+        const hazeG = ctx.createLinearGradient(0, GROUND_Y*0.5, 0, GROUND_Y);
+        hazeG.addColorStop(0, 'rgba(255,220,100,0)');
+        hazeG.addColorStop(1, 'rgba(255,200,80,0.14)');
         ctx.fillStyle = hazeG; ctx.fillRect(0, 0, CW, GROUND_Y);
       }
 
@@ -1457,6 +1449,19 @@
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
       grad.addColorStop(0, C.skyTop); grad.addColorStop(0.55, C.skyMid); grad.addColorStop(1, C.skyBot);
       ctx.fillStyle = grad; ctx.fillRect(0, 0, CW, GROUND_Y);
+      // Faint honeycomb hex grid (idle)
+      { const R = 18, HW = Math.sqrt(3)*R, rowH = R*1.5;
+        ctx.save(); ctx.globalAlpha = 0.055; ctx.strokeStyle = '#a06010'; ctx.lineWidth = 1;
+        for (let row = -1; row*rowH < GROUND_Y+R*2; row++) {
+          for (let col = -1; col*HW < CW+HW; col++) {
+            const hcx = col*HW + (row%2!==0 ? HW/2 : 0), hcy = row*rowH;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) { const a = Math.PI/6+(Math.PI/3)*i; i===0?ctx.moveTo(hcx+R*Math.cos(a),hcy+R*Math.sin(a)):ctx.lineTo(hcx+R*Math.cos(a),hcy+R*Math.sin(a)); }
+            ctx.closePath(); ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
       drawPixelSun(CW - 54, 38, 20);
       // Hills + background trees (static phases)
       drawPixelHill(C.hillFar, C.hillFTop, GROUND_Y - 68, 28, 0.016, 0);
