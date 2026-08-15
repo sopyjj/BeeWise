@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=32" rel="stylesheet">
+    <link href="assets/styles.css?v=33" rel="stylesheet">
   </head>
 
   <body>
@@ -546,20 +546,20 @@
 
     // ── Bright Paper Garden palette ──────────────────────────────────
     const C = {
-      skyTop:    '#b8e2f8',  // vivid sky blue
-      skyMid:    '#c8eef0',  // bright mint horizon
-      skyBot:    '#d8f5d0',  // fresh celery green
+      skyTop:    '#78c8f8',  // deep vivid sky blue
+      skyMid:    '#a8dff8',  // bright blue horizon
+      skyBot:    '#c8f0f8',  // pale blue-cyan base
       sun:       '#fcc820',  // bright golden yellow
       sunHi:     '#fffae0',
       bird:      '#5880a8',  // slate blue bird
       cloud:     '#ffffff',  // white cloud
       cloudSh:   '#b0d0e8',  // blue-grey shadow
-      hillFar:   '#8dc870',  // vivid sage far
-      hillFTop:  '#b0dc88',  // bright sage top
-      hillMid:   '#60b888',  // vivid teal-green mid
-      hillMTop:  '#84cc98',  // bright teal top
-      hillNr:    '#c89050',  // warm amber-tan near
-      hillNTop:  '#e0b870',  // golden peach top
+      hillFar:   '#6090c8',  // blue-slate far (atmospheric)
+      hillFTop:  '#88b8e8',  // pale blue-grey far top
+      hillMid:   '#4898b8',  // blue-teal mid
+      hillMTop:  '#70c0d8',  // bright blue-teal top
+      hillNr:    '#58a878',  // blue-green near
+      hillNTop:  '#80d0a0',  // bright blue-green top
       fence:     '#c87040',  // vivid terracotta wood
       fenceLt:   '#e8946a',  // warm blush highlight
       fenceDk:   '#7a3820',  // dark terracotta
@@ -1125,17 +1125,17 @@
     function drawBg() {
       const f = progressFrac();
 
-      // Sky gradient — soft blue → warm peach → orange-red → purple → night
+      // Sky gradient — deep blue → warm peach → orange-red → purple → night
       const skyTop = gradColor([
-        [0.00,'#d8eef8'],[0.38,'#f0c878'],[0.52,'#e8a040'],
+        [0.00,'#4ab0f0'],[0.38,'#f0c878'],[0.52,'#e8a040'],
         [0.65,'#c84020'],[0.78,'#3c1c58'],[1.00,'#100818'],
       ], f);
       const skyMid = gradColor([
-        [0.00,'#e8f4f0'],[0.38,'#f0d888'],[0.52,'#d86828'],
+        [0.00,'#80ccf8'],[0.38,'#f0d888'],[0.52,'#d86828'],
         [0.65,'#a82c12'],[0.78,'#2a1040'],[1.00,'#080514'],
       ], f);
       const skyBot = gradColor([
-        [0.00,'#f2f8e8'],[0.38,'#e8c870'],[0.52,'#c05020'],
+        [0.00,'#b0e8f8'],[0.38,'#e8c870'],[0.52,'#c05020'],
         [0.65,'#901c08'],[0.78,'#1c0828'],[1.00,'#040210'],
       ], f);
       const grad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);

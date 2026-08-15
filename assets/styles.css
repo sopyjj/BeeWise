@@ -1734,7 +1734,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
    ═══════════════════════════════════════════════════════════ */
 /* ── Bee Dash — pixel garden (reference.png style) ── */
 .bd-section {
-  background: linear-gradient(160deg, #b8e2f8 0%, #c8eef0 55%, #d8f5d0 100%);
+  background: linear-gradient(160deg, #78c8f8 0%, #a8dff8 55%, #c8f0f8 100%);
   min-height: calc(100vh - 118px);
   padding: 2rem 0 3.5rem;
 }
