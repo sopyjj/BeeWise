@@ -1734,7 +1734,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
    ═══════════════════════════════════════════════════════════ */
 /* ── Bee Dash — pixel garden (reference.png style) ── */
 .bd-section {
-  background: linear-gradient(160deg, #d8eef8 0%, #e8f4f0 55%, #f2f8e8 100%);
+  background: linear-gradient(160deg, #b8e2f8 0%, #c8eef0 55%, #d8f5d0 100%);
   min-height: calc(100vh - 118px);
   padding: 2rem 0 3.5rem;
 }
@@ -1763,13 +1763,13 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   justify-content: space-between;
   align-items: center;
   padding: .5rem 1rem;
-  background: rgba(255,252,235,0.95);
-  border-bottom: 3px solid rgba(180,130,30,0.25);
+  background: rgba(240,252,255,0.96);
+  border-bottom: 3px solid rgba(80,140,180,0.22);
   font-family: 'Nunito', sans-serif;
   font-size: .75rem;
   font-weight: 800;
-  color: #4a3010;
-  box-shadow: 0 2px 8px rgba(120,70,10,0.12);
+  color: #2a4858;
+  box-shadow: 0 2px 8px rgba(40,100,140,0.12);
   user-select: none;
   letter-spacing: .02em;
 }
@@ -1805,11 +1805,11 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   padding: 2.5rem 2rem;
   text-align: center;
   overflow-y: auto;
-  background: linear-gradient(160deg, #f8fdff 0%, #eef8f4 100%);
+  background: linear-gradient(160deg, #f0faff 0%, #e0f8f0 100%);
 }
 /* Game-over */
 #bd-gameover {
-  background: linear-gradient(160deg, #f8fdff 0%, #eef8f4 100%);
+  background: linear-gradient(160deg, #f0faff 0%, #e0f8f0 100%);
   padding: 1.6rem 2rem 1.8rem;
   gap: 0;
 }

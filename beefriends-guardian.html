@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=31" rel="stylesheet">
+    <link href="assets/styles.css?v=32" rel="stylesheet">
   </head>
 
   <body>
@@ -544,49 +544,49 @@
       syncHUD();
     }
 
-    // ── Soft Paper Garden palette ────────────────────────────────────
+    // ── Bright Paper Garden palette ──────────────────────────────────
     const C = {
-      skyTop:    '#d8eef8',  // soft powder blue
-      skyMid:    '#e8f4f0',  // pale mint horizon
-      skyBot:    '#f2f8e8',  // light celery green
-      sun:       '#f8d060',  // soft golden yellow
-      sunHi:     '#fffde8',
-      bird:      '#7090a8',  // slate blue-grey bird
-      cloud:     '#ffffff',  // pure white cloud
-      cloudSh:   '#c8dce8',  // cool blue-grey shadow
-      hillFar:   '#b0c8a0',  // dusty sage far
-      hillFTop:  '#cce0b8',  // pale sage top
-      hillMid:   '#8ab898',  // muted teal-green mid
-      hillMTop:  '#aed0b8',  // soft teal top
-      hillNr:    '#d0a878',  // warm dusty rose-tan near
-      hillNTop:  '#e8c898',  // pale peach top
-      fence:     '#c8845a',  // muted terracotta wood
-      fenceLt:   '#e8b090',  // pale blush highlight
-      fenceDk:   '#7a4830',  // dark terracotta
-      grass:     '#a0c878',  // soft sage green
-      grassLt:   '#c0e098',  // pale grass
-      grassHi:   '#dcf0b8',  // very pale tip
-      soil:      '#d0a878',  // dusty peach soil
-      soilMd:    '#b08860',  // medium earth
-      soilLt:    '#e8c8a0',  // pale earth
-      soilPurp:  '#c09880',  // warm dusty mauve earth
-      soilPDk:   '#8a6850',  // deeper earth
-      soilPLt:   '#deb898',  // light warm earth
-      stone:     '#a8b8c8',  // cool blue-grey stone
-      stoneLt:   '#d0dce8',  // pale blue-grey
-      stoneDk:   '#7888a0',  // deeper blue-grey
-      stoneMd:   '#90a0b8',  // mid blue-grey
-      sfYel:     '#f8d060',  // soft sunflower
-      sfOrg:     '#f0a048',  // muted orange
-      sfCtr:     '#5a3010',  // dark centre
-      daiWht:    '#f8f4f0',  // warm white
-      daiYel:    '#f8d060',  // soft yellow
-      poppy:     '#e06858',  // muted coral-red
-      flBlue:    '#8898d0',  // soft periwinkle
-      foliage:   '#6a9870',  // muted leaf green
-      foliageLt: '#90b888',  // soft sage highlight
-      vine:      '#6a9870',
-      moss:      '#80a878',
+      skyTop:    '#b8e2f8',  // vivid sky blue
+      skyMid:    '#c8eef0',  // bright mint horizon
+      skyBot:    '#d8f5d0',  // fresh celery green
+      sun:       '#fcc820',  // bright golden yellow
+      sunHi:     '#fffae0',
+      bird:      '#5880a8',  // slate blue bird
+      cloud:     '#ffffff',  // white cloud
+      cloudSh:   '#b0d0e8',  // blue-grey shadow
+      hillFar:   '#8dc870',  // vivid sage far
+      hillFTop:  '#b0dc88',  // bright sage top
+      hillMid:   '#60b888',  // vivid teal-green mid
+      hillMTop:  '#84cc98',  // bright teal top
+      hillNr:    '#c89050',  // warm amber-tan near
+      hillNTop:  '#e0b870',  // golden peach top
+      fence:     '#c87040',  // vivid terracotta wood
+      fenceLt:   '#e8946a',  // warm blush highlight
+      fenceDk:   '#7a3820',  // dark terracotta
+      grass:     '#84c050',  // bright grass green
+      grassLt:   '#aade70',  // vivid light grass
+      grassHi:   '#c8f088',  // bright tip
+      soil:      '#c89058',  // warm amber soil
+      soilMd:    '#a87040',  // medium earth
+      soilLt:    '#e0b880',  // light earth
+      soilPurp:  '#b88868',  // warm mauve earth
+      soilPDk:   '#885840',  // deeper earth
+      soilPLt:   '#d8a880',  // light warm earth
+      stone:     '#98aec8',  // blue-grey stone
+      stoneLt:   '#c0d4e8',  // pale blue-grey
+      stoneDk:   '#6878a0',  // deeper blue-grey
+      stoneMd:   '#8098b8',  // mid blue-grey
+      sfYel:     '#fcc820',  // bright sunflower
+      sfOrg:     '#f08020',  // vivid orange
+      sfCtr:     '#5a2808',  // dark centre
+      daiWht:    '#fff8f0',  // warm white
+      daiYel:    '#fcc820',  // bright yellow
+      poppy:     '#f04060',  // bright rose-red
+      flBlue:    '#6070d8',  // vivid periwinkle
+      foliage:   '#489858',  // bright leaf green
+      foliageLt: '#6ac070',  // vivid highlight green
+      vine:      '#489858',
+      moss:      '#68b060',
     };
 
     // ── Day / night colour helpers ──────────────────────────────────
@@ -779,18 +779,18 @@
     function drawSpriteFlower(px, py, sz) {
       const cx = px + sz*0.5, cy = py + sz*0.5;
       const pr = sz*0.22, cr = sz*0.20;
-      pShadow(2, 2, 0, 'rgba(150,0,80,0.22)');
+      pShadow(2, 2, 0, 'rgba(180,0,100,0.28)');
       for (let i = 0; i < 8; i++) {
         const a = (i / 8) * Math.PI * 2;
-        ctx.fillStyle = i % 2 === 0 ? '#ff80c8' : '#e040a8';
+        ctx.fillStyle = i % 2 === 0 ? '#ff50c0' : '#f010a0';
         ctx.beginPath();
         ctx.ellipse(cx + Math.cos(a)*pr*1.7, cy + Math.sin(a)*pr*1.7, pr, pr*0.52, a, 0, Math.PI*2);
         ctx.fill();
       }
       pClear();
-      ctx.fillStyle = '#f0c830';
+      ctx.fillStyle = '#ffd020';
       ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI*2); ctx.fill();
-      ctx.strokeStyle = '#a07010'; ctx.lineWidth = 1;
+      ctx.strokeStyle = '#c08010'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(cx, cy, cr, 0, Math.PI*2); ctx.stroke();
     }
 
@@ -1014,12 +1014,12 @@
       ctx.fillStyle = '#6a9848';
       ctx.beginPath(); ctx.ellipse(cx+5, stemTop+10, 5.5, 2.8, 0.5, 0, Math.PI*2); ctx.fill();
       ctx.beginPath(); ctx.ellipse(cx-5, stemTop+14, 5.5, 2.8, -0.5, 0, Math.PI*2); ctx.fill();
-      // Flat petal colors
+      // Flat petal colors — pink-first palette
       const palettes = [
-        ['#f8c828', '#ffe880', '#3a2000'],
-        ['#fffcf0', '#fff0c0', '#e8c020'],
-        ['#e83820', '#ff6040', '#200800'],
-        ['#7888d0', '#aab8e8', '#f8e020'],
+        ['#ff50c0', '#ff90e0', '#c00060'],  // hot pink
+        ['#ff90d8', '#ffc0ee', '#ffd020'],  // soft pink / daisy
+        ['#e820a0', '#ff50c8', '#800040'],  // deep magenta-pink
+        ['#7888d0', '#aab8f0', '#ffd020'],  // periwinkle (variety)
       ];
       const [pc, po, cc] = palettes[type % 4];
       const pr = 4.5, cr = 4;
