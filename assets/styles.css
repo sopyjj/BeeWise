@@ -1740,7 +1740,7 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 }
 .bd-wrap {
   position: relative;
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   border-radius: 28px;
   overflow: hidden;
