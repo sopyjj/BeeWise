@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="assets/styles.css?v=35" rel="stylesheet">
+    <link href="assets/styles.css?v=36" rel="stylesheet">
   </head>
 
   <body>
@@ -172,7 +172,7 @@
       score        = 0;
       lives        = 5;
       // Random round length: 5–8 minutes (300–480 s)
-      gameDuration = 300 + Math.floor(Math.random() * 181);
+      gameDuration = 300;
       timeLeft     = gameDuration;
       elapsed      = 0;
       temperature  = 35;
@@ -209,9 +209,9 @@
     }
 
     // ── Physics constants ──────────────────────────────────────────
-    const THRUST  = 0.55;   // acceleration per frame
+    const THRUST  = 0.72;   // acceleration per frame
     const DRAG    = 0.88;   // velocity friction per frame
-    const MAX_SPD = 7;      // max px/frame in any direction
+    const MAX_SPD = 9;      // max px/frame in any direction
 
     // Directional input state — shared by keyboard and D-pad
     const keys = { up: false, down: false, left: false, right: false, med: false };
@@ -222,16 +222,16 @@
 
     function scrollSpd() {
       const f = progressFrac();
-      if (f < 1/3) return 2.8;
-      if (f < 2/3) return 3.8;
-      return 5.0;
+      if (f < 1/3) return 4.5;
+      if (f < 2/3) return 6.5;
+      return 9.0;
     }
 
     function spawnIntervals() {
       const f = progressFrac();
-      if (f < 1/3) return { flower:70,  obst:130, bonus:300, wall:Infinity };
-      if (f < 2/3) return { flower:58,  obst:100, bonus:240, wall:270 };
-      return               { flower:46,  obst:78,  bonus:190, wall:195 };
+      if (f < 1/3) return { flower:52,  obst:95,  bonus:260, wall:Infinity };
+      if (f < 2/3) return { flower:40,  obst:72,  bonus:200, wall:220 };
+      return               { flower:28,  obst:52,  bonus:160, wall:150 };
     }
 
     // 0 at start (35°C), 1 at peak (42°C)
