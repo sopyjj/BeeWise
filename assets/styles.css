@@ -1734,18 +1734,16 @@ html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
    ═══════════════════════════════════════════════════════════ */
 /* ── Bee Dash — pixel garden (reference.png style) ── */
 .bd-section {
-  background: linear-gradient(160deg, #a8dcf8 0%, #c4ecfa 55%, #daf6fc 100%);
-  min-height: calc(100vh - 118px);
-  padding: 2rem 0 3.5rem;
+  background: #0a0c14;
+  padding: 0;
 }
 .bd-wrap {
   position: relative;
-  max-width: 1100px;
-  margin: 0 auto;
-  border-radius: 28px;
+  width: 100%;
+  border-radius: 0;
   overflow: hidden;
-  border: 3px solid rgba(255,255,255,0.80);
-  box-shadow: 0 8px 0 rgba(80,100,120,0.18), 0 20px 50px rgba(60,80,100,0.20);
+  border: none;
+  box-shadow: none;
 }
 #bd-canvas-wrap { position: relative; }
 #bd-canvas {
